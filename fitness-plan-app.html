@@ -3,319 +3,713 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Fitness Plan Generator</title>
+<title>ReBourne — Reinvent Your Potential</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --ink:#0f1117;--ink2:#3a3d47;--ink3:#7a7e8a;
-  --paper:#f8f6f1;--paper2:#eeeae0;--paper3:#e2ddd0;
-  --accent:#c8611a;--accent-bg:#fdf4ef;
-  --green:#2d6a4f;--red:#9b2335;--card:#fff;--r:10px;--rl:14px;
+  --midnight:#07101D;
+  --midnight2:#0d1929;
+  --midnight3:#132236;
+  --steel:#3A5F96;
+  --steel2:#7E98BC;
+  --silver:#F5F5F5;
+  --silver2:#b8c4d4;
+  --charcoal:#0E1117;
+  --white:#F5F5F5;
+  --ink:#F5F5F5;
+  --ink2:#D6D8DC;
+  --ink3:#7E98BC;
+  --card:#0d1929;
+  --card2:#132236;
+  --border:rgba(122,152,188,0.15);
+  --border2:rgba(122,152,188,0.28);
+  --accent:#3A5F96;
+  --accent-light:#7E98BC;
+  --gold:#c9a96e;
+  --r:8px;--rl:12px;--rxl:16px;
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh}
-.wrap{max-width:640px;margin:0 auto;padding:32px 20px 80px}
-h1{font-size:28px;font-weight:600;margin-bottom:4px}
-.sub{font-size:14px;color:var(--ink3);margin-bottom:1.5rem;line-height:1.6}
-.prog-track{height:3px;background:var(--paper3);border-radius:2px;margin-bottom:6px;overflow:hidden}
-.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .4s}
-.prog-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--ink3);margin-bottom:1.5rem}
-.card{background:var(--card);border:1px solid var(--paper3);border-radius:var(--rl);padding:28px;margin-bottom:1rem}
-.card-title{font-size:20px;font-weight:600;margin-bottom:4px}
-.card-sub{font-size:13px;color:var(--ink3);margin-bottom:1.25rem;line-height:1.5}
-label{display:block;font-size:12px;font-weight:600;color:var(--ink2);margin-bottom:6px;letter-spacing:.04em;text-transform:uppercase}
+html{scroll-behavior:smooth}
+body{font-family:'Montserrat',sans-serif;background:var(--midnight);color:var(--ink);min-height:100vh;line-height:1.6}
+
+/* ── TYPOGRAPHY ─────────────────────────────────────── */
+h1,h2,h3{font-family:'Playfair Display',serif;font-weight:600}
+.serif-italic{font-family:'Playfair Display',serif;font-style:italic;font-weight:400}
+
+/* ── LAYOUT ─────────────────────────────────────────── */
+.wrap{max-width:680px;margin:0 auto;padding:0 20px 80px}
+
+/* ── HEADER ─────────────────────────────────────────── */
+.site-header{background:var(--charcoal);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo-mark{display:flex;align-items:center;gap:12px}
+.splash-wordmark{font-size:32px;letter-spacing:.32em;margin-bottom:12px;line-height:1}
+.splash-re{font-weight:300;color:#7E98BC}
+.splash-bourne{font-weight:700;color:#F5F5F5}
+.splash-tagline-row{display:flex;align-items:center;gap:14px;margin-bottom:52px}
+.splash-line{width:40px;height:1px;background:#3A5F96;flex-shrink:0}
+.splash-tag{font-size:9px;font-weight:500;letter-spacing:.28em;color:#7E98BC;text-transform:uppercase;white-space:nowrap}
+.splash-divider{width:1px;height:40px;background:linear-gradient(to bottom,#3A5F96,transparent);margin-bottom:40px}
+.splash-headline{font-family:'Playfair Display',serif;font-size:22px;font-weight:400;font-style:italic;color:#F5F5F5;line-height:1.6;margin-bottom:40px;max-width:420px}
+.splash-btn{background:transparent;border:1px solid #3A5F96;color:#F5F5F5;font-size:11px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;padding:16px 48px;border-radius:2px;cursor:pointer;transition:all .3s;font-family:inherit;margin-bottom:16px}
+.splash-sub{font-size:10px;font-weight:400;letter-spacing:.18em;color:#3A5F96;text-transform:uppercase;margin-top:12px}
+
+/* ── LANDING ─────────────────────────────────────────── */
+.hero{text-align:center;padding:64px 0 48px;position:relative}
+.hero::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:40px;background:linear-gradient(to bottom,transparent,var(--steel2))}
+.hero-label{font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--steel2);margin-bottom:16px;margin-top:48px}
+.hero h1{font-size:42px;line-height:1.1;margin-bottom:8px;color:var(--white)}
+.hero-tag{font-size:11px;font-weight:500;letter-spacing:.25em;text-transform:uppercase;color:var(--silver2);margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:12px}
+.hero-tag::before,.hero-tag::after{content:'';flex:40px 0 0;height:1px;background:var(--steel)}
+.hero-sub{font-size:15px;color:var(--ink3);line-height:1.8;max-width:480px;margin:0 auto 48px}
+
+/* Feature pills */
+.feat-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:48px}
+.feat-pill{display:flex;align-items:center;gap:7px;padding:8px 14px;border:1px solid var(--border2);border-radius:100px;font-size:12px;color:var(--silver);background:var(--card)}
+.feat-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--steel2);flex-shrink:0}
+
+/* Plan type cards */
+.section-label{font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--steel2);margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.plan-type-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:32px}
+.pt-card{border:1px solid var(--border);border-radius:var(--rl);padding:20px 16px;cursor:pointer;background:var(--card);transition:all .2s;position:relative;overflow:hidden}
+.pt-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--steel);opacity:0;transition:opacity .2s}
+.pt-card:hover{border-color:var(--border2);background:var(--card2)}
+.pt-card.sel{border-color:var(--steel2);background:var(--card2)}
+.pt-card.sel::before{opacity:1}
+.pt-card-icon{font-size:22px;margin-bottom:8px}
+.pt-card-title{font-size:14px;font-weight:600;color:var(--white);margin-bottom:3px}
+.pt-card-desc{font-size:11px;color:var(--ink3);line-height:1.5}
+.pt-card-tag{display:inline-block;margin-top:8px;font-size:10px;font-weight:600;letter-spacing:.06em;padding:2px 8px;border-radius:100px;background:rgba(50,73,109,.4);color:var(--steel2)}
+
+/* Duration cards */
+.dur-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:32px}
+.dur-card{border:1px solid var(--border);border-radius:var(--r);padding:16px 10px;cursor:pointer;text-align:center;background:var(--card);transition:all .2s;position:relative}
+.dur-card.sel{border-color:var(--steel2);background:var(--card2)}
+.dur-pop{position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(--steel);color:var(--white);font-size:9px;font-weight:700;letter-spacing:.08em;padding:2px 9px;border-radius:100px;white-space:nowrap;text-transform:uppercase}
+.dur-num{font-family:'Playfair Display',serif;font-size:28px;color:var(--white);margin-bottom:2px}
+.dur-label{font-size:11px;font-weight:500;color:var(--silver);margin-bottom:2px}
+.dur-desc{font-size:10px;color:var(--ink3)}
+
+/* CTA */
+.cta-btn{width:100%;padding:16px;border-radius:var(--r);border:none;background:var(--steel);color:var(--white);font-family:'Montserrat',sans-serif;font-size:14px;font-weight:600;letter-spacing:.06em;cursor:pointer;text-transform:uppercase;transition:all .2s;margin-top:8px}
+.cta-btn:hover{background:var(--steel2)}
+.cta-btn:disabled{opacity:.35;cursor:not-allowed}
+
+/* ── PROGRESS ────────────────────────────────────────── */
+.prog-wrap{padding:20px 0 4px}
+.prog-track{height:2px;background:var(--border);border-radius:1px;overflow:hidden}
+.prog-fill{height:100%;background:var(--steel2);border-radius:1px;transition:width .4s}
+.prog-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--ink3);margin-top:8px;font-weight:500;letter-spacing:.04em}
+
+/* ── FORM CARD ───────────────────────────────────────── */
+.form-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:28px;margin:20px 0}
+.form-card-title{font-size:22px;color:var(--white);margin-bottom:6px}
+.form-card-sub{font-size:13px;color:var(--ink3);margin-bottom:24px;line-height:1.6}
 .field{margin-bottom:1rem}
-input,select,textarea{width:100%;padding:11px 13px;border:1.5px solid var(--paper3);border-radius:var(--r);font-family:inherit;font-size:14px;color:var(--ink);background:var(--paper);outline:none;transition:border-color .2s;-webkit-appearance:none;appearance:none}
-input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(200,97,26,.1)}
-textarea{min-height:72px;resize:vertical}
+.field label{display:block;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--silver2);margin-bottom:8px}
+.field-hint{font-size:11px;color:var(--ink3);margin-top:5px;line-height:1.5}
+input[type=text],input[type=number],select,textarea{
+  width:100%;padding:12px 14px;
+  border:1px solid var(--border2);border-radius:var(--r);
+  font-family:'Montserrat',sans-serif;font-size:13px;
+  color:var(--white);background:var(--midnight2);
+  outline:none;transition:border-color .2s;-webkit-appearance:none;appearance:none
+}
+input:focus,select:focus,textarea:focus{border-color:var(--steel2);box-shadow:0 0 0 3px rgba(50,73,109,.25)}
+textarea{min-height:88px;resize:vertical}
+select option{background:var(--midnight)}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-.goal-card{border:1.5px solid var(--paper3);border-radius:var(--rl);padding:16px 12px;cursor:pointer;text-align:center;background:var(--paper);user-select:none;transition:border-color .15s}
-.goal-card.sel{border:2px solid var(--accent);background:var(--accent-bg)}
-.goal-icon{font-size:24px;margin-bottom:6px}
-.goal-label{font-size:13px;font-weight:600}
-.goal-desc{font-size:11px;color:var(--ink3);margin-top:3px}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:.75rem}
-.chip{padding:7px 14px;border-radius:100px;border:1.5px solid var(--paper3);font-size:13px;cursor:pointer;background:var(--paper);color:var(--ink2);user-select:none;transition:all .15s}
-.chip.sel{background:var(--accent);border-color:var(--accent);color:#fff}
-.sec-lbl{font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin:1.25rem 0 .75rem;display:flex;align-items:center;gap:8px}
-.sec-lbl::after{content:'';flex:1;height:1px;background:var(--paper3)}
-.sl-wrap{position:relative;padding-top:22px;margin-bottom:.5rem}
-.sl-val{position:absolute;right:0;top:0;font-size:13px;font-weight:600;color:var(--accent)}
-input[type=range]{padding:0;border:none;background:var(--paper3);height:4px;border-radius:2px;accent-color:var(--accent);box-shadow:none}
-.btn-row{display:flex;gap:10px;margin-top:1.5rem}
-.btn{padding:12px 24px;border-radius:var(--r);font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;border:1.5px solid var(--paper3);background:var(--paper);color:var(--ink2)}
-.btn-p{background:var(--accent);border-color:var(--accent);color:#fff;flex:1}
+
+/* Activity selector */
+.act-list{display:flex;flex-direction:column;gap:8px}
+.act-opt{border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;cursor:pointer;background:var(--midnight2);display:flex;align-items:flex-start;gap:12px;transition:all .15s}
+.act-opt:hover{border-color:var(--border2)}
+.act-opt.sel{border-color:var(--steel2);background:var(--card2)}
+.act-dot{width:7px;height:7px;border-radius:50%;background:var(--border2);margin-top:5px;flex-shrink:0;transition:background .15s}
+.act-opt.sel .act-dot{background:var(--steel2)}
+.act-title{font-size:13px;font-weight:600;color:var(--white)}
+.act-desc{font-size:12px;color:var(--ink3);margin-top:2px;line-height:1.4}
+.act-ex{font-size:11px;color:var(--steel2);margin-top:3px;font-style:italic}
+
+/* Goal cards */
+.goal-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:1rem}
+.goal-card{border:1px solid var(--border);border-radius:var(--r);padding:14px 10px;cursor:pointer;text-align:center;background:var(--midnight2);transition:all .15s}
+.goal-card:hover{border-color:var(--border2)}
+.goal-card.sel{border-color:var(--steel2);background:var(--card2)}
+.goal-icon{font-size:20px;margin-bottom:6px}
+.goal-label{font-size:12px;font-weight:600;color:var(--white)}
+.goal-desc{font-size:10px;color:var(--ink3);margin-top:2px}
+
+/* Intensity */
+.intensity-box{margin-top:14px;padding:16px;background:var(--midnight2);border-radius:var(--r);border:1px solid var(--border)}
+.intensity-title{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--silver2);margin-bottom:12px}
+.int-opts{display:flex;flex-direction:column;gap:7px}
+.int-opt{border:1px solid var(--border);border-radius:var(--r);padding:11px 13px;cursor:pointer;background:var(--card);display:flex;justify-content:space-between;align-items:center;transition:all .15s}
+.int-opt:hover{border-color:var(--border2)}
+.int-opt.sel{border-color:var(--steel2);background:var(--card2)}
+.int-label{font-size:13px;font-weight:600;color:var(--white)}
+.int-kcal{font-size:11px;color:var(--ink3);font-weight:400;margin-left:6px}
+.int-detail{font-size:11px;color:var(--ink3);margin-top:2px}
+.int-badge{font-size:10px;font-weight:600;padding:3px 9px;border-radius:100px;flex-shrink:0;margin-left:10px}
+.b-mild{background:rgba(16,185,129,.15);color:#6ee7b7}
+.b-mod{background:rgba(245,158,11,.15);color:#fcd34d}
+.b-agg{background:rgba(239,68,68,.15);color:#fca5a5}
+.b-lean{background:rgba(59,130,246,.15);color:#93c5fd}
+.b-fast{background:rgba(139,92,246,.15);color:#c4b5fd}
+
+/* Diet cards */
+.diet-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:1rem}
+.diet-card{border:1px solid var(--border);border-radius:var(--r);padding:12px 10px;cursor:pointer;text-align:center;background:var(--midnight2);transition:all .15s}
+.diet-card:hover{border-color:var(--border2)}
+.diet-card.sel{border-color:var(--steel2);background:var(--card2)}
+.diet-label{font-size:12px;font-weight:600;color:var(--white)}
+.diet-desc{font-size:10px;color:var(--ink3);margin-top:2px}
+
+/* Chips */
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:.75rem}
+.chip{padding:7px 13px;border-radius:100px;border:1px solid var(--border);font-size:12px;font-weight:500;cursor:pointer;background:var(--midnight2);color:var(--ink3);transition:all .15s;font-family:'Montserrat',sans-serif}
+.chip:hover{border-color:var(--border2);color:var(--silver)}
+.chip.sel{background:var(--steel);border-color:var(--steel2);color:var(--white)}
+.sec-lbl{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--silver2);margin:1.25rem 0 .75rem;display:flex;align-items:center;gap:10px}
+.sec-lbl::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* Slider */
+.sl-wrap{position:relative;padding-top:24px;margin-bottom:.5rem}
+.sl-val{position:absolute;right:0;top:0;font-size:13px;font-weight:600;color:var(--steel2)}
+input[type=range]{padding:0;border:none;background:var(--border);height:3px;border-radius:2px;accent-color:var(--steel2);box-shadow:none;width:100%}
+
+/* Plan-specific training cards */
+.train-card{border:1px solid var(--border);border-radius:var(--r);padding:14px;cursor:pointer;background:var(--midnight2);transition:all .15s;margin-bottom:8px;display:flex;align-items:center;gap:14px}
+.train-card:hover{border-color:var(--border2)}
+.train-card.sel{border-color:var(--steel2);background:var(--card2)}
+.train-icon{font-size:20px;flex-shrink:0}
+.train-title{font-size:13px;font-weight:600;color:var(--white)}
+.train-desc{font-size:11px;color:var(--ink3);margin-top:2px}
+
+/* Cardio specific */
+.cardio-sub{background:var(--midnight2);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-top:12px}
+.cardio-sub-title{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--silver2);margin-bottom:12px}
+
+/* Stats */
 .stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:1rem}
-.stat{background:var(--paper);border-radius:var(--r);padding:14px;border:1px solid var(--paper3)}
-.stat.hi{background:var(--accent);border-color:var(--accent)}
-.stat-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--ink3);margin-bottom:4px}
-.stat.hi .stat-lbl{color:rgba(255,255,255,.75)}
-.stat-val{font-size:22px;font-weight:700;color:var(--ink)}
-.stat.hi .stat-val{color:#fff}
-.stat-unit{font-size:11px;color:var(--ink3);margin-top:2px}
-.stat.hi .stat-unit{color:rgba(255,255,255,.7)}
-.mbar-labels{display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:5px}
-.mbar-track{height:6px;background:var(--paper3);border-radius:3px;overflow:hidden;display:flex;margin-bottom:1rem}
+.stat{background:var(--midnight2);border-radius:var(--r);padding:14px;border:1px solid var(--border)}
+.stat.hi{background:var(--steel);border-color:var(--steel2)}
+.stat-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);margin-bottom:4px}
+.stat.hi .stat-lbl{color:rgba(255,255,255,.7)}
+.stat-val{font-size:22px;font-weight:600;color:var(--white);font-family:'Playfair Display',serif}
+.stat-unit{font-size:10px;color:var(--ink3);margin-top:2px}
+.stat.hi .stat-unit{color:rgba(255,255,255,.65)}
+.mbar-labels{display:flex;justify-content:space-between;font-size:11px;font-weight:600;margin-bottom:5px}
+.mbar-track{height:5px;background:var(--border);border-radius:3px;overflow:hidden;display:flex;margin-bottom:1rem}
 .mbar-seg{height:100%}
-.spin-wrap{display:flex;flex-direction:column;align-items:center;gap:14px;padding:3rem 0;color:var(--ink3);font-size:14px}
-.spinner{width:38px;height:38px;border:3px solid var(--paper3);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.err-box{background:#fef2f2;border:1px solid #fecaca;border-radius:var(--r);padding:14px;font-size:13px;color:var(--red);margin-bottom:1rem}
-.day-block{border:1px solid var(--paper3);border-radius:var(--r);margin-bottom:8px;overflow:hidden}
-.day-hd{padding:10px 14px;background:var(--paper2);display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:600}
+
+/* Summary badges */
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1rem}
+.bdg{font-size:11px;font-weight:600;padding:4px 11px;border-radius:100px;letter-spacing:.04em}
+.bdg-steel{background:rgba(50,73,109,.5);color:var(--steel2);border:1px solid rgba(50,73,109,.4)}
+.bdg-gold{background:rgba(201,169,110,.15);color:var(--gold);border:1px solid rgba(201,169,110,.25)}
+.bdg-red{background:rgba(239,68,68,.1);color:#fca5a5;border:1px solid rgba(239,68,68,.2)}
+
+/* Coach note */
+.coach-note{border-left:2px solid var(--steel2);padding:14px 18px;background:var(--midnight2);border-radius:0 var(--r) var(--r) 0;font-size:14px;color:var(--ink2);line-height:1.8;margin-bottom:1.5rem;font-style:italic}
+
+/* Plan output */
+.week-header{background:var(--steel);border-radius:var(--r);padding:12px 18px;margin:20px 0 10px;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--white)}
+.day-block{border:1px solid var(--border);border-radius:var(--r);margin-bottom:7px;overflow:hidden}
+.day-hd{padding:10px 14px;background:var(--midnight2);display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--silver)}
 .day-body{padding:12px 14px}
-.meal-row{display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--paper3)}
+.meal-row{display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--border)}
 .meal-row:last-child{border-bottom:none}
-.meal-type{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--accent)}
-.meal-name{font-size:13px;font-weight:500;color:var(--ink);margin-top:2px}
+.meal-type{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--steel2)}
+.meal-name{font-size:13px;font-weight:500;color:var(--white);margin-top:2px}
 .meal-macros{font-size:11px;color:var(--ink3);margin-top:2px}
-.meal-cals{font-size:13px;font-weight:600;flex-shrink:0;margin-left:12px}
-.ex-item{padding:5px 0;display:flex;gap:8px;border-bottom:1px solid var(--paper3);font-size:13px;color:var(--ink2)}
+.meal-cals{font-size:13px;font-weight:600;color:var(--white);flex-shrink:0;margin-left:12px}
+.ex-item{padding:5px 0;display:flex;gap:9px;border-bottom:1px solid var(--border);font-size:12px;color:var(--ink2)}
 .ex-item:last-child{border-bottom:none}
-.ex-arr{color:var(--accent);font-weight:700;flex-shrink:0}
-.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:100px;font-size:11px;font-weight:600}
-.b-or{background:var(--accent-bg);color:var(--accent)}
-.b-gr{background:#d1fae5;color:var(--green)}
-.b-rd{background:#fee2e2;color:var(--red)}
-.badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem}
-.coach-note{border-left:3px solid var(--accent);padding:12px 16px;background:var(--paper2);border-radius:0 var(--r) var(--r) 0;font-size:14px;color:var(--ink2);line-height:1.7;margin-bottom:1.5rem;font-style:italic}
-.plan-title{font-size:16px;font-weight:600;margin:1.5rem 0 .75rem}
-.disclaimer{background:#fffbeb;border:1px solid #fde68a;border-radius:var(--r);padding:12px 14px;font-size:12px;color:#78350f;margin-bottom:1rem;line-height:1.6}
-.dl-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:var(--r);border:none;background:var(--accent);color:#fff;font-size:14px;font-weight:600;cursor:pointer;margin-top:.75rem;font-family:inherit}
-.reset-btn{display:flex;align-items:center;justify-content:center;width:100%;padding:12px;border-radius:var(--r);border:1.5px solid var(--paper3);background:var(--paper);color:var(--ink3);font-size:14px;font-weight:600;cursor:pointer;margin-top:.5rem;font-family:inherit}
-@media(max-width:480px){.row2,.stat-grid{grid-template-columns:1fr 1fr}.row3{grid-template-columns:1fr 1fr 1fr}}
+.ex-arr{color:var(--steel2);font-weight:700;flex-shrink:0}
+.plan-title{font-size:15px;font-weight:600;color:var(--white);margin:1.25rem 0 .75rem;letter-spacing:.02em}
+
+/* Buttons */
+.btn-row{display:flex;gap:10px;margin-top:1.5rem}
+.nav-btn{padding:12px 22px;border-radius:var(--r);border:1px solid var(--border2);background:transparent;cursor:pointer;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;color:var(--ink3);letter-spacing:.04em;transition:all .15s}
+.nav-btn:hover{color:var(--white);border-color:var(--silver2)}
+.pri-btn{flex:1;background:var(--steel);border:none;border-radius:var(--r);padding:13px;font-size:13px;font-weight:700;color:var(--white);cursor:pointer;font-family:'Montserrat',sans-serif;letter-spacing:.08em;text-transform:uppercase;transition:background .15s}
+.pri-btn:hover{background:var(--steel2)}
+
+/* Spinner */
+.spin-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;padding:3rem 0;color:var(--ink3);font-size:14px}
+.spinner{width:36px;height:36px;border:2px solid var(--border);border-top-color:var(--steel2);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.err-box{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);border-radius:var(--r);padding:14px;font-size:13px;color:#fca5a5;margin-bottom:1rem}
+.disclaimer{background:rgba(201,169,110,.08);border:1px solid rgba(201,169,110,.2);border-radius:var(--r);padding:12px 14px;font-size:11px;color:var(--gold);margin-bottom:1rem;line-height:1.6}
+
+/* Download */
+.dl-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:var(--r);border:1px solid var(--steel2);background:var(--steel);color:var(--white);font-size:13px;font-weight:700;cursor:pointer;margin-top:.875rem;font-family:'Montserrat',sans-serif;letter-spacing:.06em;text-transform:uppercase;transition:background .15s}
+.dl-btn:hover{background:var(--steel2)}
+.reset-btn{display:flex;align-items:center;justify-content:center;width:100%;padding:12px;border-radius:var(--r);border:1px solid var(--border);background:transparent;color:var(--ink3);font-size:12px;font-weight:600;cursor:pointer;margin-top:.5rem;font-family:'Montserrat',sans-serif;letter-spacing:.06em;text-transform:uppercase;transition:all .15s}
+.reset-btn:hover{border-color:var(--border2);color:var(--silver)}
+
+@media(max-width:500px){.plan-type-grid,.dur-grid,.row2,.row3,.goal-grid,.diet-grid,.stat-grid{grid-template-columns:1fr 1fr}.dur-grid{grid-template-columns:1fr 1fr 1fr}}
 </style>
 </head>
 <body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="logo-mark">
+    <!-- Exact ReBourne R monogram from brand SVG file -->
+    <svg width="46" height="46" viewBox="140 150 540 510" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
+      <defs>
+        <linearGradient id="steelBlue" x1="180" y1="120" x2="650" y2="680" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#7E98BC"/>
+          <stop offset="45%" stop-color="#3A5F96"/>
+          <stop offset="100%" stop-color="#162A46"/>
+        </linearGradient>
+      </defs>
+      <path fill="url(#steelBlue)" fill-rule="evenodd" d="
+        M205 170 L475 170
+        C565 170 625 223 625 306
+        C625 372 586 421 521 438
+        L657 630 L534 630 L412 452 L362 452
+        L362 630 L240 630 L240 240 L205 170 Z
+        M362 260 L362 372 L470 372
+        C510 372 535 351 535 316
+        C535 282 510 260 470 260 L362 260 Z
+        M205 170 L363 347 L318 347 L165 170 L205 170 Z
+      "/>
+    </svg>
+    <!-- Wordmark + tagline -->
+    <div style="display:flex;flex-direction:column;gap:4px;margin-left:8px">
+      <div style="font-family:'Montserrat',sans-serif;font-size:16px;letter-spacing:.24em;line-height:1;white-space:nowrap">
+        <span style="font-weight:300;color:#7E98BC">RE</span><span style="font-weight:700;color:#F5F5F5">BOURNE</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <div style="width:20px;height:1px;background:#3A5F96;flex-shrink:0"></div>
+        <div style="font-family:'Montserrat',sans-serif;font-size:6.5px;font-weight:500;letter-spacing:.22em;color:#7E98BC;text-transform:uppercase;white-space:nowrap">Reinvent Your Potential</div>
+        <div style="width:20px;height:1px;background:#3A5F96;flex-shrink:0"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
 <div class="wrap" id="app"></div>
+
 <script>
-var step = 0, plan = null, calc = null, loading = false, apiErr = null;
+var step = -2, calc = null, loading = false, apiErr = null;
+var allWeeks = [], generatingWeek = 0;
 
 var form = {
-  name:'', age:'', sex:'male', weight:'', height:'', activity:'moderate',
-  goal:'',
-  meals:'3', snacks:'1', allergies:[], dislikes:[],
-  trainingDays:'3', injuries:['None'], steps:'8000', cardio:[], notes:''
+  planType:'', planWeeks:0,
+  name:'', age:'', sex:'male', weight:'', height:'', activity:'',
+  goal:'', deficitLevel:'moderate_loss', surplusLevel:'lean_gain',
+  dietType:'standard', allergies:'', dislikes:'',
+  meals:'3', snacks:'1',
+  trainingDays:'3', steps:'8000',
+  equipment:[], cardioTypes:[],
+  runningDays:'3', hasDistanceGoal:false, distanceGoal:'',
+  specificCardio:'', injuries:'', notes:''
 };
 
-var ALLERGIES = ['Gluten','Dairy','Eggs','Nuts','Peanuts','Shellfish','Soy','Fish','Sesame'];
-var DISLIKES  = ['Mushrooms','Onions','Spicy food','Seafood','Lamb','Brussels sprouts','Aubergine','Tofu','Liver'];
-var INJURIES  = ['Lower back','Knee','Shoulder','Hip','Wrist / elbow','Neck','Ankle','Hamstring','None'];
-var CARDIO    = ['Running','Cycling','Swimming','Rowing','Walking','HIIT','Jump rope','Elliptical'];
+var PLAN_TYPES = [
+  {k:'beginner',   icon:'&#127775;', title:'Beginner Foundations', desc:'New to the gym? Build strength and confidence with fundamental movements and progressive overload.', tag:'Gym-based'},
+  {k:'intermediate',icon:'&#128170;', title:'Intermediate',         desc:'You have the basics dialled in. Take your training to the next level with structured programming.', tag:'Gym-based'},
+  {k:'advanced',   icon:'&#9889;',   title:'Advanced',             desc:'High-intensity, high-volume programming for experienced athletes pushing performance limits.', tag:'Gym-based'},
+  {k:'hyrox',      icon:'&#127939;', title:'Hyrox Specific',       desc:'Race-ready preparation combining functional fitness and running. Built around your race date.', tag:'Race prep'},
+  {k:'running',    icon:'&#128099;', title:'Running Specific',      desc:'Structured run training around your goal — 5K, 10K, half marathon or marathon.', tag:'Run focused'},
+  {k:'hybrid',     icon:'&#9881;',   title:'Hybrid Athlete',       desc:'The perfect balance of strength and endurance. Get strong and fit at the same time.', tag:'Strength + cardio'},
+  {k:'booty',      icon:'&#127919;', title:'Booty Builder',        desc:'Glute-focused programming with targeted lower body hypertrophy and progressive loading.', tag:'Glute focused'}
+];
+
+var DURATIONS = [
+  {w:4, l:'4 Weeks', d:'Foundation block', pop:false},
+  {w:8, l:'8 Weeks', d:'Real results', pop:true},
+  {w:12,l:'12 Weeks',d:'Transformation', pop:false}
+];
+
+var ACTIVITY_OPTS = [
+  {k:'sedentary',   title:'Sedentary',        desc:'Little to no movement outside of daily tasks.',       ex:'Desk job, driving, evenings on the sofa'},
+  {k:'light',       title:'Lightly active',   desc:'Some light movement or exercise a few times a week.', ex:'Occasional walks, housework, 1-2 gym sessions'},
+  {k:'moderate',    title:'Moderately active',desc:'Regular exercise or an active lifestyle most days.',  ex:'3-4 workouts per week, active job, cycling commute'},
+  {k:'active',      title:'Very active',      desc:'Hard training or a physically demanding job daily.',  ex:'5-6 intense sessions per week, manual labour'},
+  {k:'very_active', title:'Extremely active', desc:'Athlete-level training or two-a-day sessions.',      ex:'Elite sport, twice-daily training, very heavy labour'}
+];
+
+var DIETS = [
+  {k:'standard',l:'Standard',d:'No restrictions'},{k:'vegetarian',l:'Vegetarian',d:'No meat or fish'},
+  {k:'vegan',l:'Vegan',d:'No animal products'},{k:'keto',l:'Keto',d:'High fat, low carb'},
+  {k:'paleo',l:'Paleo',d:'Whole foods only'},{k:'mediterranean',l:'Mediterranean',d:'Heart-healthy'}
+];
+
+var EQUIPMENT = ['Full gym','Home weights','Resistance bands','Pull-up bar','Kettlebells','No equipment'];
+
+var CARDIO_OPTS = [
+  {k:'running',     label:'Running'},
+  {k:'walking',     label:'Walking'},
+  {k:'incline_walk',label:'Incline walking'},
+  {k:'stairmaster', label:'Stairmaster'},
+  {k:'rowing',      label:'Rowing machine'},
+  {k:'cycling',     label:'Cycling'},
+  {k:'swimming',    label:'Swimming'},
+  {k:'elliptical',  label:'Elliptical'},
+  {k:'hiit',        label:'HIIT'}
+];
+
+var RUNNING_GOALS = [
+  {k:'5k',   label:'5K'},
+  {k:'10k',  label:'10K'},
+  {k:'half', label:'Half marathon'},
+  {k:'full', label:'Full marathon'},
+  {k:'none', label:'No specific race'}
+];
+
+var DEFICIT_OPTS = [
+  {k:'mild_loss',      label:'Mild deficit',      kcal:'-250 kcal/day', detail:'Slow, sustainable fat loss',        badge:'b-mild', rate:'~0.25 kg/wk'},
+  {k:'moderate_loss',  label:'Moderate deficit',  kcal:'-500 kcal/day', detail:'Steady progress, manageable hunger', badge:'b-mod',  rate:'~0.5 kg/wk'},
+  {k:'aggressive_loss',label:'Aggressive deficit',kcal:'-750 kcal/day', detail:'Faster loss, requires discipline',   badge:'b-agg',  rate:'~0.75 kg/wk'}
+];
+
+var SURPLUS_OPTS = [
+  {k:'lean_gain',     label:'Lean bulk',      kcal:'+200 kcal/day', detail:'Minimal fat gain, slow muscle build', badge:'b-lean', rate:'~0.15 kg/wk'},
+  {k:'moderate_gain', label:'Moderate bulk',  kcal:'+400 kcal/day', detail:'Balanced muscle and some fat gain',   badge:'b-mod',  rate:'~0.3 kg/wk'},
+  {k:'fast_gain',     label:'Aggressive bulk',kcal:'+600 kcal/day', detail:'Maximum muscle, expect some fat',     badge:'b-fast', rate:'~0.5 kg/wk'}
+];
+
 var ACT = {sedentary:1.2,light:1.375,moderate:1.55,active:1.725,very_active:1.9};
+var STEPS_LABELS = ['Select plan','About you','Your goal','Diet & food','Training','Your numbers'];
 
-function g(id){ return document.getElementById(id); }
+function g(id){return document.getElementById(id);}
+function tog(arr,v){var i=arr.indexOf(v);if(i===-1)arr.push(v);else arr.splice(i,1);}
+function bind(id,fn){var e=g(id);if(e)e.onclick=fn;}
 
-function tog(arr, v){
-  var i = arr.indexOf(v);
-  if(i === -1) arr.push(v); else arr.splice(i,1);
+function getAdj(){
+  if(form.goal==='lose'){var d={mild_loss:-250,moderate_loss:-500,aggressive_loss:-750};return d[form.deficitLevel]||-500;}
+  if(form.goal==='gain'){var s={lean_gain:200,moderate_gain:400,fast_gain:600};return s[form.surplusLevel]||300;}
+  return 0;
 }
 
 function doCalc(){
-  var w=parseFloat(form.weight), h=parseFloat(form.height), a=parseInt(form.age);
-  var bmr = form.sex==='male' ? 10*w+6.25*h-5*a+5 : 10*w+6.25*h-5*a-161;
-  var tdee = Math.round(bmr * ACT[form.activity] + parseInt(form.steps)*0.02);
-  var target = tdee;
-  if(form.goal==='lose') target = tdee-500;
-  if(form.goal==='gain') target = tdee+300;
-  var protein = Math.round(w*2);
-  var fat = Math.round(target*0.25/9);
-  var carbs = Math.round((target - protein*4 - fat*9)/4);
-  return {bmr:Math.round(bmr), tdee:tdee, target:target, protein:protein, fat:fat, carbs:carbs};
+  var w=parseFloat(form.weight),h=parseFloat(form.height),a=parseInt(form.age);
+  var bmr=form.sex==='male'?10*w+6.25*h-5*a+5:10*w+6.25*h-5*a-161;
+  var tdee=Math.round(bmr*ACT[form.activity||'moderate']+parseInt(form.steps)*0.02);
+  var target=Math.max(1200,tdee+getAdj());
+  var protein=Math.round(w*2),fat=Math.round(target*0.25/9);
+  var carbs=Math.round((target-protein*4-fat*9)/4);
+  return{bmr:Math.round(bmr),tdee:tdee,target:target,protein:protein,fat:fat,carbs:carbs};
 }
 
 function mbar(p,c,f){
-  var tot=p*4+c*4+f*9||1;
-  var pp=Math.round(p*4/tot*100), cp=Math.round(c*4/tot*100), fp=100-pp-cp;
-  return '<div class="mbar-labels">'
-    +'<span style="color:#c8611a">Protein '+pp+'%</span>'
-    +'<span style="color:#2d6a4f">Carbs '+cp+'%</span>'
-    +'<span style="color:#7a7e8a">Fat '+fp+'%</span>'
-    +'</div>'
-    +'<div class="mbar-track">'
-    +'<div class="mbar-seg" style="width:'+pp+'%;background:#c8611a"></div>'
-    +'<div class="mbar-seg" style="width:'+cp+'%;background:#52b788"></div>'
-    +'<div class="mbar-seg" style="width:'+fp+'%;background:#d1cfc8"></div>'
-    +'</div>';
+  var tot=p*4+c*4+f*9||1,pp=Math.round(p*4/tot*100),cp=Math.round(c*4/tot*100),fp=100-pp-cp;
+  return '<div class="mbar-labels"><span style="color:#3d5a85">Protein '+pp+'%</span><span style="color:#6ee7b7">Carbs '+cp+'%</span><span style="color:var(--ink3)">Fat '+fp+'%</span></div>'
+    +'<div class="mbar-track"><div class="mbar-seg" style="width:'+pp+'%;background:var(--steel2)"></div><div class="mbar-seg" style="width:'+cp+'%;background:#6ee7b7"></div><div class="mbar-seg" style="width:'+fp+'%;background:var(--border2)"></div></div>';
 }
 
-function renderChips(list, field){
-  var html = '<div class="chips">';
-  for(var i=0; i<list.length; i++){
-    var sel = form[field].indexOf(list[i]) !== -1 ? ' sel' : '';
-    html += '<div class="chip'+sel+'" id="chip-'+field+'-'+i+'">'+list[i]+'</div>';
+function renderChips(list,field){
+  var h='<div class="chips">';
+  for(var i=0;i<list.length;i++){
+    var v=typeof list[i]==='object'?list[i].label:list[i];
+    var k=typeof list[i]==='object'?list[i].k:list[i];
+    var arr=form[field]||[];
+    var sel=arr.indexOf(k)!==-1?' sel':'';
+    h+='<div class="chip'+sel+'" id="chip-'+field+'-'+i+'">'+v+'</div>';
   }
-  return html+'</div>';
+  return h+'</div>';
 }
 
-function bindChips(list, field){
-  for(var i=0; i<list.length; i++){
+function bindChips(list,field){
+  for(var i=0;i<list.length;i++){
     (function(idx){
-      var el = g('chip-'+field+'-'+idx);
-      if(el) el.onclick = function(){
-        tog(form[field], list[idx]);
-        render();
-      };
+      var k=typeof list[idx]==='object'?list[idx].k:list[idx];
+      var el=g('chip-'+field+'-'+idx);
+      if(el)el.onclick=function(){tog(form[field],k);render();};
     })(i);
   }
 }
 
-function goStep(s){
-  if(s===4) calc = doCalc();
-  step = s;
-  render();
-}
+function goStep(s){if(s===4||s===5)calc=doCalc();step=s;render();window.scrollTo(0,0);}
 
-function nextFromBio(){
-  var name = g('f-name').value.trim();
-  var age  = g('f-age').value.trim();
-  var w    = g('f-weight').value.trim();
-  var h    = g('f-height').value.trim();
-  if(!name||!age||!w||!h){ alert('Please fill in all fields.'); return; }
-  form.name=name; form.age=age; form.weight=w; form.height=h;
-  form.sex      = g('f-sex').value;
-  form.activity = g('f-activity').value;
-  goStep(1);
-}
-
-function nextFromFood(){
-  form.meals  = g('f-meals').value;
-  form.snacks = g('f-snacks').value;
-  goStep(3);
-}
-
-function nextFromTraining(){
-  form.notes = g('f-notes').value;
-  goStep(4);
+function planLabel(){
+  var pt=PLAN_TYPES.find(function(p){return p.k===form.planType;});
+  return pt?pt.title:'';
 }
 
 function render(){
-  var STEPS = ['About you','Your goal','Food preferences','Training','Your numbers','Your plans'];
-  var pct = Math.round(step/5*100);
-  var prog = step < 5
-    ? '<div class="prog-track"><div class="prog-fill" style="width:'+pct+'%"></div></div>'
-      +'<div class="prog-meta"><span>'+STEPS[step]+'</span><span>Step '+(step+1)+' of 6</span></div>'
-    : '';
+  var app=g('app');
 
-  var body = '';
+  // ── SPLASH PAGE ──────────────────────────────────────────────────────────
+  if(step===-2){
+    var splash = document.createElement('div');
+    splash.style.cssText = 'min-height:90vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;position:relative';
 
+    splash.innerHTML = [
+      '<div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:60px;background:linear-gradient(to bottom,transparent,#3A5F96)"></div>',
+      '<svg width="160" height="160" viewBox="140 150 540 510" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:32px;filter:drop-shadow(0 0 32px rgba(58,95,150,0.35))">',
+        '<defs>',
+          '<linearGradient id="splashGrad" x1="180" y1="120" x2="650" y2="680" gradientUnits="userSpaceOnUse">',
+            '<stop offset="0%" stop-color="#7E98BC"/>',
+            '<stop offset="45%" stop-color="#3A5F96"/>',
+            '<stop offset="100%" stop-color="#162A46"/>',
+          '</linearGradient>',
+        '</defs>',
+        '<path fill="url(#splashGrad)" fill-rule="evenodd" d="M205 170 L475 170 C565 170 625 223 625 306 C625 372 586 421 521 438 L657 630 L534 630 L412 452 L362 452 L362 630 L240 630 L240 240 L205 170 Z M362 260 L362 372 L470 372 C510 372 535 351 535 316 C535 282 510 260 470 260 L362 260 Z M205 170 L363 347 L318 347 L165 170 L205 170 Z"/>',
+      '</svg>',
+      '<div class="splash-wordmark"><span class="splash-re">RE</span><span class="splash-bourne">BOURNE</span></div>',
+      '<div class="splash-tagline-row">',
+        '<div class="splash-line"></div>',
+        '<div class="splash-tag">Reinvent Your Potential</div>',
+        '<div class="splash-line"></div>',
+      '</div>',
+      '<div class="splash-divider"></div>',
+      '<p class="splash-headline">Are you ready to reinvent your potential?</p>',
+      '<button id="b-splash" class="splash-btn">Begin your journey</button>',
+      '<div class="splash-sub">&mdash; Build your programme &mdash;</div>',
+      '<div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:1px;height:60px;background:linear-gradient(to top,transparent,#3A5F96)"></div>'
+    ].join('');
+
+    app.innerHTML = '';
+    app.appendChild(splash);
+
+    var bSplash = g('b-splash');
+    if(bSplash){
+      bSplash.onmouseover = function(){ this.style.background='#3A5F96'; this.style.letterSpacing='.32em'; };
+      bSplash.onmouseout  = function(){ this.style.background='transparent'; this.style.letterSpacing='.28em'; };
+      bSplash.onclick = function(){ goStep(-1); };
+    }
+    return;
+  }
+
+  // ── LANDING ──────────────────────────────────────────────────────────────
+  if(step===-1){
+    var ptCards='<div class="plan-type-grid">';
+    for(var i=0;i<PLAN_TYPES.length;i++){
+      var pt=PLAN_TYPES[i],sel=form.planType===pt.k?' sel':'';
+      ptCards+='<div class="pt-card'+sel+'" id="pt-'+pt.k+'">'
+        +'<div class="pt-card-icon">'+pt.icon+'</div>'
+        +'<div class="pt-card-title">'+pt.title+'</div>'
+        +'<div class="pt-card-desc">'+pt.desc+'</div>'
+        +'<span class="pt-card-tag">'+pt.tag+'</span>'
+        +'</div>';
+    }
+    ptCards+='</div>';
+
+    var durCards='<div class="dur-grid">';
+    for(var j=0;j<DURATIONS.length;j++){
+      var d=DURATIONS[j],dsel=form.planWeeks===d.w?' sel':'';
+      durCards+='<div class="dur-card'+dsel+(d.pop?' pop':'')+'" id="dur-'+d.w+'">'
+        +(d.pop?'<div class="dur-pop">Most popular</div>':'')
+        +'<div class="dur-num">'+d.w+'</div>'
+        +'<div class="dur-label">'+d.l+'</div>'
+        +'<div class="dur-desc">'+d.d+'</div>'
+        +'</div>';
+    }
+    durCards+='</div>';
+
+    app.innerHTML='<div class="hero">'
+      +'<div class="hero-label">AI-powered coaching</div>'
+      +'<h1>Reinvent Your<br><em style="font-family:\'Playfair Display\',serif;font-style:italic;font-weight:400">Potential</em></h1>'
+      +'<div class="hero-tag">ReBourne Performance Plans</div>'
+      +'<p class="hero-sub">Answer a few questions about your goals, lifestyle and preferences. Receive a complete, personalised meal and training programme built around you.</p>'
+      +'<div class="feat-row">'
+        +'<div class="feat-pill"><div class="feat-pill-dot"></div>Bespoke nutrition</div>'
+        +'<div class="feat-pill"><div class="feat-pill-dot"></div>Structured training</div>'
+        +'<div class="feat-pill"><div class="feat-pill-dot"></div>Injury aware</div>'
+        +'<div class="feat-pill"><div class="feat-pill-dot"></div>AI generated</div>'
+      +'</div>'
+      +'</div>'
+      +'<div class="section-label">Choose your programme</div>'
+      +ptCards
+      +'<div class="section-label">Select duration</div>'
+      +durCards
+      +'<button class="cta-btn" id="b-start"'+((!form.planType||!form.planWeeks)?' disabled':'')+'>Begin your journey &rarr;</button>';
+
+    for(var pi=0;pi<PLAN_TYPES.length;pi++){
+      (function(k){bind('pt-'+k,function(){form.planType=k;render();});})(PLAN_TYPES[pi].k);
+    }
+    for(var di=0;di<DURATIONS.length;di++){
+      (function(w){bind('dur-'+w,function(){form.planWeeks=w;render();});})(DURATIONS[di].w);
+    }
+    bind('b-start',function(){if(form.planType&&form.planWeeks)goStep(0);});
+    return;
+  }
+
+  // ── PROGRESS BAR ─────────────────────────────────────────────────────────
+  var pct=Math.round(step/5*100);
+  var prog='<div class="prog-wrap"><div class="prog-track"><div class="prog-fill" style="width:'+pct+'%"></div></div>'
+    +'<div class="prog-meta"><span>'+STEPS_LABELS[step+1]+'</span><span>Step '+(step+1)+' of 5 &mdash; '+planLabel()+'</span></div></div>';
+
+  var body='';
+
+  // ── STEP 0: ABOUT YOU ────────────────────────────────────────────────────
   if(step===0){
-    body = '<div class="card">'
-      +'<div class="card-title">About you</div>'
-      +'<div class="card-sub">Your stats power the Mifflin-St Jeor formula to calculate your precise calorie and macro targets.</div>'
+    var actHtml='<div class="act-list">';
+    for(var ai=0;ai<ACTIVITY_OPTS.length;ai++){
+      var ao=ACTIVITY_OPTS[ai],asel=form.activity===ao.k?' sel':'';
+      actHtml+='<div class="act-opt'+asel+'" id="act-'+ao.k+'">'
+        +'<div class="act-dot"></div>'
+        +'<div><div class="act-title">'+ao.title+'</div>'
+        +'<div class="act-desc">'+ao.desc+'</div>'
+        +'<div class="act-ex">e.g. '+ao.ex+'</div></div>'
+        +'</div>';
+    }
+    actHtml+='</div>';
+    body='<div class="form-card"><h2 class="form-card-title">About you</h2>'
+      +'<p class="form-card-sub">Your physical stats let us calculate your precise calorie and macro targets using the Mifflin-St Jeor formula.</p>'
       +'<div class="field"><label>Your name</label><input id="f-name" type="text" placeholder="First name" value="'+form.name+'"></div>'
       +'<div class="row2">'
-        +'<div class="field"><label>Age</label><input id="f-age" type="number" min="16" max="90" placeholder="28" value="'+form.age+'"></div>'
-        +'<div class="field"><label>Sex</label><select id="f-sex">'
-          +'<option value="male"'+(form.sex==='male'?' selected':'')+'>Male</option>'
-          +'<option value="female"'+(form.sex==='female'?' selected':'')+'>Female</option>'
-        +'</select></div>'
+        +'<div class="field"><label>Age</label><input id="f-age" type="number" min="16" max="80" placeholder="28" value="'+form.age+'"></div>'
+        +'<div class="field"><label>Sex</label><select id="f-sex"><option value="male"'+(form.sex==='male'?' selected':'')+'>Male</option><option value="female"'+(form.sex==='female'?' selected':'')+'>Female</option></select></div>'
       +'</div>'
       +'<div class="row2">'
         +'<div class="field"><label>Weight (kg)</label><input id="f-weight" type="number" placeholder="80" value="'+form.weight+'"></div>'
         +'<div class="field"><label>Height (cm)</label><input id="f-height" type="number" placeholder="178" value="'+form.height+'"></div>'
       +'</div>'
-      +'<div class="field"><label>Activity level (excluding workouts)</label><select id="f-activity">'
-        +'<option value="sedentary"'+(form.activity==='sedentary'?' selected':'')+'>Sedentary &mdash; desk job, little movement</option>'
-        +'<option value="light"'+(form.activity==='light'?' selected':'')+'>Lightly active &mdash; some walking</option>'
-        +'<option value="moderate"'+(form.activity==='moderate'?' selected':'')+'>Moderately active &mdash; regular exercise</option>'
-        +'<option value="active"'+(form.activity==='active'?' selected':'')+'>Very active &mdash; physically demanding or daily training</option>'
-        +'<option value="very_active"'+(form.activity==='very_active'?' selected':'')+'>Extremely active &mdash; athlete level</option>'
-      +'</select></div>'
-      +'<div class="btn-row"><button class="btn btn-p" id="b-bio">Continue &rarr;</button></div>'
+      +'<div class="field"><label>Activity level &mdash; choose what best describes your typical day, excluding planned workouts</label>'+actHtml+'</div>'
+      +'<div class="btn-row"><button class="pri-btn" id="b-bio">Continue &rarr;</button></div>'
       +'</div>';
   }
 
+  // ── STEP 1: GOAL ─────────────────────────────────────────────────────────
   else if(step===1){
-    var goals = [
-      {k:'lose',    icon:'&#128293;', label:'Lose fat',     desc:'&minus;500 kcal deficit'},
-      {k:'maintain',icon:'&#9878;',   label:'Maintain',     desc:'TDEE calories'},
-      {k:'gain',    icon:'&#128170;', label:'Build muscle', desc:'+300 kcal surplus'}
+    var goals=[
+      {k:'lose',    icon:'&#128293;',label:'Lose fat',    desc:'Calorie deficit'},
+      {k:'maintain',icon:'&#9878;',  label:'Maintain',    desc:'TDEE calories'},
+      {k:'gain',    icon:'&#128170;',label:'Build muscle',desc:'Calorie surplus'}
     ];
-    var gcards = '<div class="row3">';
-    for(var gi=0; gi<goals.length; gi++){
-      var gsel = form.goal===goals[gi].k ? ' sel' : '';
-      gcards += '<div class="goal-card'+gsel+'" id="goal-'+goals[gi].k+'">'
-        +'<div class="goal-icon">'+goals[gi].icon+'</div>'
-        +'<div class="goal-label">'+goals[gi].label+'</div>'
-        +'<div class="goal-desc">'+goals[gi].desc+'</div>'
+    var gc='<div class="goal-grid">';
+    for(var gi=0;gi<goals.length;gi++){
+      var gl2=goals[gi],gsel=form.goal===gl2.k?' sel':'';
+      gc+='<div class="goal-card'+gsel+'" id="goal-'+gl2.k+'"><div class="goal-icon">'+gl2.icon+'</div><div class="goal-label">'+gl2.label+'</div><div class="goal-desc">'+gl2.desc+'</div></div>';
+    }
+    gc+='</div>';
+
+    var intensityHtml='';
+    if(form.goal==='lose'){
+      intensityHtml='<div class="intensity-box"><div class="intensity-title">How aggressive do you want your deficit?</div><div class="int-opts">';
+      for(var dii=0;dii<DEFICIT_OPTS.length;dii++){
+        var dopt=DEFICIT_OPTS[dii],dsel2=form.deficitLevel===dopt.k?' sel':'';
+        intensityHtml+='<div class="int-opt'+dsel2+'" id="def-'+dopt.k+'">'
+          +'<div><div class="int-label">'+dopt.label+' <span class="int-kcal">'+dopt.kcal+'</span></div><div class="int-detail">'+dopt.detail+'</div></div>'
+          +'<span class="int-badge '+dopt.badge+'">'+dopt.rate+'</span></div>';
+      }
+      intensityHtml+='</div></div>';
+    } else if(form.goal==='gain'){
+      intensityHtml='<div class="intensity-box"><div class="intensity-title">What kind of bulk are you after?</div><div class="int-opts">';
+      for(var sii=0;sii<SURPLUS_OPTS.length;sii++){
+        var sopt=SURPLUS_OPTS[sii],ssel2=form.surplusLevel===sopt.k?' sel':'';
+        intensityHtml+='<div class="int-opt'+ssel2+'" id="sur-'+sopt.k+'">'
+          +'<div><div class="int-label">'+sopt.label+' <span class="int-kcal">'+sopt.kcal+'</span></div><div class="int-detail">'+sopt.detail+'</div></div>'
+          +'<span class="int-badge '+sopt.badge+'">'+sopt.rate+'</span></div>';
+      }
+      intensityHtml+='</div></div>';
+    }
+
+    body='<div class="form-card"><h2 class="form-card-title">Your goal</h2>'
+      +'<p class="form-card-sub">Select your main goal, then fine-tune the intensity to match your ambition and timeline.</p>'
+      +gc+intensityHtml
+      +'<div class="btn-row"><button class="nav-btn" id="b-back1">&larr; Back</button><button class="pri-btn" id="b-next1">Continue &rarr;</button></div>'
+      +'</div>';
+  }
+
+  // ── STEP 2: DIET ─────────────────────────────────────────────────────────
+  else if(step===2){
+    var dc='<div class="diet-grid">';
+    for(var dti=0;dti<DIETS.length;dti++){
+      var dt=DIETS[dti],dtsel=form.dietType===dt.k?' sel':'';
+      dc+='<div class="diet-card'+dtsel+'" id="diet-'+dt.k+'"><div class="diet-label">'+dt.l+'</div><div class="diet-desc">'+dt.d+'</div></div>';
+    }
+    dc+='</div>';
+    body='<div class="form-card"><h2 class="form-card-title">Diet &amp; food preferences</h2>'
+      +'<p class="form-card-sub">Your meal plan will be built strictly around these preferences. The more detail you give, the better your plan.</p>'
+      +'<div class="sec-lbl">Diet type</div>'+dc
+      +'<div class="row2">'
+        +'<div class="field"><label>Main meals / day</label><select id="f-meals">'+[2,3,4,5,6].map(function(n){return '<option'+(form.meals==n?' selected':'')+'>'+n+'</option>';}).join('')+'</select></div>'
+        +'<div class="field"><label>Snacks / day</label><select id="f-snacks">'+[0,1,2,3].map(function(n){return '<option'+(form.snacks==n?' selected':'')+'>'+n+'</option>';}).join('')+'</select></div>'
+      +'</div>'
+      +'<div class="field"><label>Allergies &amp; intolerances</label>'
+        +'<textarea id="f-allergies" placeholder="E.g. gluten, dairy, nuts, shellfish, lactose...">'+form.allergies+'</textarea>'
+        +'<div class="field-hint">Type anything you cannot eat. Leave blank if none.</div>'
+      +'</div>'
+      +'<div class="field"><label>Foods you dislike</label>'
+        +'<textarea id="f-dislikes" placeholder="E.g. mushrooms, spicy food, liver, Brussels sprouts...">'+form.dislikes+'</textarea>'
+        +'<div class="field-hint">These will never appear in your meal plan. Leave blank if none.</div>'
+      +'</div>'
+      +'<div class="btn-row"><button class="nav-btn" id="b-back2">&larr; Back</button><button class="pri-btn" id="b-next2">Continue &rarr;</button></div>'
+      +'</div>';
+  }
+
+  // ── STEP 3: TRAINING ─────────────────────────────────────────────────────
+  else if(step===3){
+    // Training days slider
+    var trainBody='<div class="field"><label>Training days per week</label>'
+      +'<div class="sl-wrap"><div class="sl-val" id="tdv">'+form.trainingDays+' days</div>'
+      +'<input type="range" id="sl-td" min="1" max="7" step="1" value="'+form.trainingDays+'"></div></div>';
+
+    // Step goal
+    trainBody+='<div class="field"><label>Daily step target</label>'
+      +'<div class="sl-wrap"><div class="sl-val" id="stv">'+Number(form.steps).toLocaleString()+' steps</div>'
+      +'<input type="range" id="sl-st" min="2000" max="25000" step="500" value="'+form.steps+'"></div></div>';
+
+    // Equipment
+    trainBody+='<div class="sec-lbl">Available equipment</div>'+renderChips(EQUIPMENT,'equipment');
+
+    // Plan-specific cardio section
+    trainBody+='<div class="sec-lbl">Cardio</div>'
+      +'<div style="font-size:12px;color:var(--ink3);margin-bottom:10px">Select all cardio types you have access to and enjoy</div>'
+      +renderChips(CARDIO_OPTS,'cardioTypes');
+
+    // Running-specific sub-questions if running is selected
+    if(form.cardioTypes.indexOf('running')!==-1){
+      var rdGoalHtml='<div class="chips">';
+      for(var rgi=0;rgi<RUNNING_GOALS.length;rgi++){
+        var rg=RUNNING_GOALS[rgi],rgsel=form.distanceGoal===rg.k?' sel':'';
+        rdGoalHtml+='<div class="chip'+rgsel+'" id="rgoal-'+rg.k+'">'+rg.label+'</div>';
+      }
+      rdGoalHtml+='</div>';
+      trainBody+='<div class="cardio-sub"><div class="cardio-sub-title">Running details</div>'
+        +'<div class="field"><label>How many runs per week?</label>'
+          +'<div class="sl-wrap"><div class="sl-val" id="rdv">'+form.runningDays+' runs</div>'
+          +'<input type="range" id="sl-rd" min="1" max="7" step="1" value="'+form.runningDays+'"></div>'
+        +'</div>'
+        +'<div class="field"><label>Distance or race goal</label>'+rdGoalHtml+'</div>'
         +'</div>';
     }
-    gcards += '</div>';
-    body = '<div class="card">'
-      +'<div class="card-title">What\'s your goal?</div>'
-      +'<div class="card-sub">This sets your calorie target &mdash; deficit, surplus, or maintenance.</div>'
-      +gcards
-      +'<div class="btn-row">'
-        +'<button class="btn" id="b-back1">&larr; Back</button>'
-        +'<button class="btn btn-p" id="b-next1">Continue &rarr;</button>'
-      +'</div>'
+
+    // Plan-specific context
+    if(form.planType==='hyrox'){
+      trainBody+='<div class="field" style="margin-top:1rem"><label>Target race date (if applicable)</label>'
+        +'<input id="f-racedate" type="text" placeholder="E.g. October 2025, 6 months away" value="'+(form.raceDate||'')+'"></div>';
+    }
+
+    // Injuries
+    trainBody+='<div class="field" style="margin-top:1rem"><label>Injuries &amp; physical limitations</label>'
+      +'<textarea id="f-injuries" placeholder="Be specific — e.g. chronic lower back pain so no heavy deadlifts, left knee injury so avoid running and deep lunges, recovering from shoulder surgery 3 months ago...">'+form.injuries+'</textarea>'
+      +'<div class="field-hint">The more specific you are, the safer and more effective your programme will be.</div></div>';
+
+    // Notes
+    trainBody+='<div class="field"><label>Anything else we should know?</label>'
+      +'<textarea id="f-notes" placeholder="E.g. I train in the mornings, I prefer compound movements, I have a competition in 8 weeks, I want to focus on upper body strength...">'+form.notes+'</textarea></div>';
+
+    body='<div class="form-card"><h2 class="form-card-title">Training &amp; activity</h2>'
+      +'<p class="form-card-sub">Tell us about your training schedule, equipment and any limitations. Your '+planLabel()+' programme will be built specifically around these.</p>'
+      +trainBody
+      +'<div class="btn-row"><button class="nav-btn" id="b-back3">&larr; Back</button><button class="pri-btn" id="b-next3">See my numbers &rarr;</button></div>'
       +'</div>';
   }
 
-  else if(step===2){
-    body = '<div class="card">'
-      +'<div class="card-title">Food preferences</div>'
-      +'<div class="card-sub">Nothing you cannot eat or dislike will appear in your meal plan.</div>'
-      +'<div class="row2">'
-        +'<div class="field"><label>Main meals / day</label><select id="f-meals">'
-          +[2,3,4,5,6].map(function(n){return '<option'+(form.meals==n?' selected':'')+'>'+n+'</option>';}).join('')
-        +'</select></div>'
-        +'<div class="field"><label>Snacks / day</label><select id="f-snacks">'
-          +[0,1,2,3].map(function(n){return '<option'+(form.snacks==n?' selected':'')+'>'+n+'</option>';}).join('')
-        +'</select></div>'
-      +'</div>'
-      +'<div class="sec-lbl">Allergies &mdash; avoid entirely</div>'
-      +renderChips(ALLERGIES,'allergies')
-      +'<div class="sec-lbl">Foods you dislike</div>'
-      +renderChips(DISLIKES,'dislikes')
-      +'<div class="btn-row">'
-        +'<button class="btn" id="b-back2">&larr; Back</button>'
-        +'<button class="btn btn-p" id="b-next2">Continue &rarr;</button>'
-      +'</div>'
-      +'</div>';
-  }
-
-  else if(step===3){
-    body = '<div class="card">'
-      +'<div class="card-title">Training &amp; activity</div>'
-      +'<div class="card-sub">Shapes your training split and feeds into your daily calorie burn estimate.</div>'
-      +'<div class="field"><label>Training days per week</label>'
-        +'<div class="sl-wrap"><div class="sl-val" id="tdv">'+form.trainingDays+' days</div>'
-        +'<input type="range" id="sl-td" min="1" max="7" step="1" value="'+form.trainingDays+'"></div>'
-      +'</div>'
-      +'<div class="field"><label>Daily step target</label>'
-        +'<div class="sl-wrap"><div class="sl-val" id="stv">'+Number(form.steps).toLocaleString()+' steps</div>'
-        +'<input type="range" id="sl-st" min="2000" max="25000" step="500" value="'+form.steps+'"></div>'
-      +'</div>'
-      +'<div class="sec-lbl">Cardio you can do</div>'
-      +renderChips(CARDIO,'cardio')
-      +'<div class="sec-lbl">Injuries or limitations</div>'
-      +renderChips(INJURIES,'injuries')
-      +'<div class="field" style="margin-top:1rem"><label>Anything else?</label>'
-        +'<textarea id="f-notes" placeholder="E.g. home workouts only, morning sessions, competition in 8 weeks...">'+form.notes+'</textarea>'
-      +'</div>'
-      +'<div class="btn-row">'
-        +'<button class="btn" id="b-back3">&larr; Back</button>'
-        +'<button class="btn btn-p" id="b-next3">See my numbers &rarr;</button>'
-      +'</div>'
-      +'</div>';
-  }
-
-  else if(step===4 && calc){
-    var c=calc;
-    var gl = form.goal==='lose'
-      ? 'Running a 500 kcal deficit &mdash; expect ~0.4&ndash;0.5 kg fat loss per week.'
-      : form.goal==='gain'
-      ? 'Running a 300 kcal surplus &mdash; lean muscle gain ~0.2&ndash;0.3 kg per week.'
-      : 'Eating at TDEE &mdash; maintenance and body recomposition.';
-    body = '<div class="card">'
-      +'<div class="card-title">Your numbers, '+form.name+'</div>'
-      +'<div class="card-sub">Calculated with Mifflin-St Jeor, adjusted for activity level and step target.</div>'
+  // ── STEP 4: NUMBERS ──────────────────────────────────────────────────────
+  else if(step===4){if(!calc)calc=doCalc();
+    var c=calc,adj=getAdj();
+    var adjLabel=adj===0?'Maintenance':adj>0?'+'+adj+' kcal surplus':adj+' kcal deficit';
+    var intName='';
+    if(form.goal==='lose'){var df=DEFICIT_OPTS.find(function(x){return x.k===form.deficitLevel;});intName=df?df.label:'';}
+    if(form.goal==='gain'){var sf=SURPLUS_OPTS.find(function(x){return x.k===form.surplusLevel;});intName=sf?sf.label:'';}
+    var wl=form.planWeeks+'-week';
+    body='<div class="form-card"><h2 class="form-card-title">Your numbers, '+form.name+'</h2>'
+      +'<p class="form-card-sub">Calculated using the Mifflin-St Jeor formula, adjusted for your activity level and step target.</p>'
       +'<div class="stat-grid">'
-        +'<div class="stat"><div class="stat-lbl">BMR</div><div class="stat-val">'+c.bmr.toLocaleString()+'</div><div class="stat-unit">kcal at rest</div></div>'
+        +'<div class="stat"><div class="stat-lbl">BMR</div><div class="stat-val">'+c.bmr.toLocaleString()+'</div><div class="stat-unit">kcal at complete rest</div></div>'
         +'<div class="stat"><div class="stat-lbl">TDEE</div><div class="stat-val">'+c.tdee.toLocaleString()+'</div><div class="stat-unit">total daily burn</div></div>'
-        +'<div class="stat hi"><div class="stat-lbl">Target</div><div class="stat-val">'+c.target.toLocaleString()+'</div><div class="stat-unit">kcal to eat</div></div>'
+        +'<div class="stat hi"><div class="stat-lbl">Daily target</div><div class="stat-val">'+c.target.toLocaleString()+'</div><div class="stat-unit">kcal to eat</div></div>'
       +'</div>'
       +mbar(c.protein,c.carbs,c.fat)
       +'<div class="stat-grid">'
@@ -323,207 +717,319 @@ function render(){
         +'<div class="stat"><div class="stat-lbl">Carbs</div><div class="stat-val">'+c.carbs+'g</div><div class="stat-unit">energy &amp; performance</div></div>'
         +'<div class="stat"><div class="stat-lbl">Fat</div><div class="stat-val">'+c.fat+'g</div><div class="stat-unit">25% of calories</div></div>'
       +'</div>'
-      +'<p style="font-size:12px;color:var(--ink3);margin-top:.5rem">'+gl+'</p>'
-      +'<div class="btn-row">'
-        +'<button class="btn" id="b-back4">&larr; Edit</button>'
-        +'<button class="btn btn-p" id="b-gen">Generate my plans &rarr;</button>'
+      +'<div class="badges">'
+        +'<span class="bdg bdg-steel">'+adjLabel+'</span>'
+        +(intName?'<span class="bdg bdg-steel">'+intName+'</span>':'')
+        +'<span class="bdg bdg-gold">'+planLabel()+'</span>'
+        +'<span class="bdg bdg-steel">'+form.dietType+'</span>'
+        +'<span class="bdg bdg-steel">'+wl+' programme</span>'
+        +'<span class="bdg bdg-steel">'+Number(form.steps).toLocaleString()+' steps/day</span>'
       +'</div>'
-      +'</div>';
+      +'<div class="btn-row"><button class="nav-btn" id="b-back4">&larr; Edit</button>'
+        +'<button class="pri-btn" id="b-gen">Generate my '+wl+' plan &rarr;</button>'
+      +'</div></div>';
   }
 
+  // ── STEP 5: PLAN OUTPUT ──────────────────────────────────────────────────
   else if(step===5){
-    var inner = '';
+    var inner='';
     if(loading){
-      inner = '<div class="spin-wrap"><div class="spinner"></div>'
-        +'<div>Generating your personalised plans&hellip;</div>'
-        +'<div style="font-size:12px;color:var(--ink3)">Takes 20&ndash;40 seconds</div>'
+      var prog2=form.planWeeks>1?' (Week '+generatingWeek+' of '+form.planWeeks+')':'';
+      inner='<div class="spin-wrap"><div class="spinner"></div>'
+        +'<div style="font-weight:600;color:var(--white)">Building your '+form.planWeeks+'-week '+planLabel()+' programme'+prog2+'&hellip;</div>'
+        +'<div style="font-size:12px">This may take a minute for longer plans</div>'
         +'</div>';
     } else if(apiErr){
-      inner = '<div class="err-box"><strong>Could not generate plan:</strong> '+apiErr+'</div>'
-        +'<button class="btn btn-p" id="b-retry">Try again</button>';
-    } else if(plan){
+      inner='<div class="err-box"><strong>Could not generate plan:</strong> '+apiErr+'</div>'
+        +'<button class="pri-btn" id="b-retry">Try again</button>';
+    } else if(allWeeks.length>0){
       var c2=calc;
-      var injBadges = form.injuries.filter(function(x){return x!=='None';})
-        .map(function(x){return '<span class="badge b-rd">&#9888; '+x+'</span>';}).join('');
-      inner += '<div class="badges">'
-        +'<span class="badge b-or">'+c2.target.toLocaleString()+' kcal/day</span>'
-        +'<span class="badge b-or">'+c2.protein+'g protein</span>'
-        +'<span class="badge b-gr">'+form.trainingDays+' training days/wk</span>'
-        +injBadges+'</div>';
-      if(plan.coachNotes) inner += '<div class="coach-note">&ldquo;'+plan.coachNotes+'&rdquo;</div>';
-      inner += '<div class="disclaimer">&#9888; For informational purposes only. Consult a qualified professional before starting any new diet or exercise programme.</div>';
-      inner += '<div class="plan-title">7-day meal plan</div>';
-      (plan.mealPlan||[]).forEach(function(day){
-        var tot=(day.meals||[]).reduce(function(s,m){return s+(m.calories||0);},0);
-        inner += '<div class="day-block"><div class="day-hd"><span>'+day.day+'</span>'
-          +'<span style="font-size:12px;color:var(--ink3);font-weight:400">'+tot+' kcal</span></div>'
-          +'<div class="day-body">';
-        (day.meals||[]).forEach(function(m){
-          inner += '<div class="meal-row"><div>'
-            +'<div class="meal-type">'+m.type+'</div>'
-            +'<div class="meal-name">'+m.name+'</div>'
-            +'<div class="meal-macros">P:'+m.protein+'g &middot; C:'+m.carbs+'g &middot; F:'+m.fat+'g</div>'
-            +'</div><div class="meal-cals">'+m.calories+' kcal</div></div>';
-        });
-        inner += '</div></div>';
-      });
-      inner += '<div class="plan-title" style="margin-top:1.5rem">7-day training plan</div>';
-      (plan.trainingPlan||[]).forEach(function(day){
-        var isRest=day.type==='Rest';
-        inner += '<div class="day-block"><div class="day-hd"><span>'+day.day+'</span>'
-          +'<span class="badge '+(isRest?'b-gr':'b-or')+'">'+day.type+'</span></div>';
-        if(day.exercises&&day.exercises.length){
-          inner += '<div class="day-body">';
-          if(day.focus) inner += '<div style="font-size:12px;color:var(--ink3);margin-bottom:8px">'+day.focus+'</div>';
-          day.exercises.forEach(function(ex){
-            inner += '<div class="ex-item"><span class="ex-arr">&rarr;</span><span>'+ex+'</span></div>';
+      inner+='<div class="badges">'
+        +'<span class="bdg bdg-gold">'+planLabel()+'</span>'
+        +'<span class="bdg bdg-steel">'+c2.target.toLocaleString()+' kcal/day</span>'
+        +'<span class="bdg bdg-steel">'+c2.protein+'g protein</span>'
+        +'<span class="bdg bdg-steel">'+form.trainingDays+' training days/wk</span>'
+        +'<span class="bdg bdg-steel">'+Number(form.steps).toLocaleString()+' steps/day</span>'
+        +(form.injuries?'<span class="bdg bdg-red">Injury adapted</span>':'')
+        +'</div>';
+      if(allWeeks[0]&&allWeeks[0].coachNotes){
+        inner+='<div class="coach-note">&ldquo;'+allWeeks[0].coachNotes+'&rdquo;</div>';
+      }
+      inner+='<div class="disclaimer">&#9888; This plan is for informational purposes only. Consult a qualified healthcare professional before starting any new diet or exercise programme, particularly if you have injuries or medical conditions.</div>';
+
+      for(var wi=0;wi<allWeeks.length;wi++){
+        var wk=allWeeks[wi],wkNum=wi+1;
+        inner+='<div class="week-header">Week '+wkNum+(form.planWeeks>1?' of '+form.planWeeks:'')+'</div>';
+        inner+='<div class="plan-title">Meal plan</div>';
+        (wk.mealPlan||[]).forEach(function(day){
+          var tot=(day.meals||[]).reduce(function(s,m){return s+(m.calories||0);},0);
+          inner+='<div class="day-block"><div class="day-hd"><span>'+day.day+'</span><span style="color:var(--ink3);font-size:11px;text-transform:none;font-weight:400">'+tot+' kcal</span></div><div class="day-body">';
+          (day.meals||[]).forEach(function(m){
+            inner+='<div class="meal-row"><div><div class="meal-type">'+m.type+'</div><div class="meal-name">'+m.name+'</div><div class="meal-macros">P:'+m.protein+'g &middot; C:'+m.carbs+'g &middot; F:'+m.fat+'g</div></div><div class="meal-cals">'+m.calories+' kcal</div></div>';
           });
-          inner += '</div>';
-        }
-        inner += '</div>';
-      });
-      inner += '<button class="dl-btn" id="b-dl">&#11015; Download plan as HTML file</button>';
-      inner += '<button class="reset-btn" id="b-reset">Start a new plan</button>';
+          inner+='</div></div>';
+        });
+        inner+='<div class="plan-title" style="margin-top:1.25rem">Training plan</div>';
+        (wk.trainingPlan||[]).forEach(function(day){
+          var isRest=day.type==='Rest';
+          inner+='<div class="day-block"><div class="day-hd"><span>'+day.day+'</span>'
+            +'<span style="font-size:10px;font-weight:700;padding:2px 9px;border-radius:100px;'
+            +(isRest?'background:rgba(110,231,183,.12);color:#6ee7b7':'background:rgba(50,73,109,.4);color:var(--steel2)')+'">'+day.type+'</span></div>';
+          if(day.exercises&&day.exercises.length){
+            inner+='<div class="day-body">';
+            if(day.focus)inner+='<div style="font-size:11px;color:var(--ink3);margin-bottom:8px;font-style:italic">'+day.focus+'</div>';
+            day.exercises.forEach(function(ex){inner+='<div class="ex-item"><span class="ex-arr">&rarr;</span><span>'+ex+'</span></div>';});
+            inner+='</div>';
+          }
+          inner+='</div>';
+        });
+      }
+      inner+='<button class="dl-btn" id="b-dl">&#11015; Download your programme</button>';
+      inner+='<button class="reset-btn" id="b-reset">Start a new plan</button>';
     }
-    body = '<div class="card"><div class="card-title">Your plans'+(form.name?', '+form.name:'')+'</div>'+inner+'</div>';
+    body='<div class="form-card"><h2 class="form-card-title">'+form.planWeeks+'-Week '+planLabel()+(form.name?', '+form.name:'')+'</h2>'+inner+'</div>';
   }
 
-  g('app').innerHTML = '<h1>Your plan, built for you</h1>'
-    +'<p class="sub">Complete the form to generate your personalised meal and training plan.</p>'
-    +prog+body;
+  app.innerHTML=prog+body;
 
-  // Bind buttons — all by stable element ID, no string values in handlers
-  function bind(id, fn){ var e=g(id); if(e) e.onclick=fn; }
+  // ── BIND ALL HANDLERS ────────────────────────────────────────────────────
+  function bnd(id,fn){var e=g(id);if(e)e.onclick=fn;}
 
-  bind('b-bio',   nextFromBio);
-  bind('b-back1', function(){ goStep(0); });
-  bind('b-next1', function(){ if(form.goal) goStep(2); });
-  bind('b-back2', function(){ goStep(1); });
-  bind('b-next2', nextFromFood);
-  bind('b-back3', function(){ goStep(2); });
-  bind('b-next3', nextFromTraining);
-  bind('b-back4', function(){ goStep(3); });
-  bind('b-gen',   startGenerate);
-  bind('b-retry', startGenerate);
-  bind('b-dl',    downloadPlan);
-  bind('b-reset', resetAll);
-
-  // Goal cards — bound by stable id, value captured in closure cleanly
-  ['lose','maintain','gain'].forEach(function(k){
-    bind('goal-'+k, function(){ form.goal=k; render(); });
+  // Step 0
+  bnd('b-bio',function(){
+    var n=g('f-name').value.trim(),a=g('f-age').value.trim(),w=g('f-weight').value.trim(),h=g('f-height').value.trim();
+    if(!n||!a||!w||!h){alert('Please fill in all fields.');return;}
+    if(!form.activity){alert('Please select your activity level.');return;}
+    form.name=n;form.age=a;form.weight=w;form.height=h;form.sex=g('f-sex').value;
+    goStep(1);
   });
+  function saveBioFields(){
+    var n=g('f-name'),a=g('f-age'),w=g('f-weight'),h=g('f-height'),s=g('f-sex'),ac=g('f-activity-sel');
+    if(n)form.name=n.value;
+    if(a)form.age=a.value;
+    if(w)form.weight=w.value;
+    if(h)form.height=h.value;
+    if(s)form.sex=s.value;
+  }
+  ACTIVITY_OPTS.forEach(function(ao){bnd('act-'+ao.k,function(){saveBioFields();form.activity=ao.k;render();});});
 
-  // Chips — index only in closure, list value looked up at click time
-  bindChips(ALLERGIES,'allergies');
-  bindChips(DISLIKES, 'dislikes');
-  bindChips(CARDIO,   'cardio');
-  bindChips(INJURIES, 'injuries');
+  // Step 1
+  bnd('b-back1',function(){goStep(0);});
+  bnd('b-next1',function(){if(!form.goal){alert('Please select a goal.');return;}goStep(2);});
+  ['lose','maintain','gain'].forEach(function(k){bnd('goal-'+k,function(){form.goal=k;render();});});
+  DEFICIT_OPTS.forEach(function(d){bnd('def-'+d.k,function(){form.deficitLevel=d.k;render();});});
+  SURPLUS_OPTS.forEach(function(s){bnd('sur-'+s.k,function(){form.surplusLevel=s.k;render();});});
 
-  // Sliders
-  var slTd=g('sl-td');
-  if(slTd) slTd.oninput=function(){ form.trainingDays=this.value; g('tdv').textContent=this.value+' days'; };
-  var slSt=g('sl-st');
-  if(slSt) slSt.oninput=function(){ form.steps=this.value; g('stv').textContent=Number(this.value).toLocaleString()+' steps'; };
+  // Step 2
+  bnd('b-back2',function(){goStep(1);});
+  bnd('b-next2',function(){
+    form.allergies=g('f-allergies')?g('f-allergies').value:'';
+    form.dislikes=g('f-dislikes')?g('f-dislikes').value:'';
+    form.meals=g('f-meals')?g('f-meals').value:'3';
+    form.snacks=g('f-snacks')?g('f-snacks').value:'1';
+    goStep(3);
+  });
+  DIETS.forEach(function(dt){bnd('diet-'+dt.k,function(){form.dietType=dt.k;render();});});
+
+  // Step 3
+  bnd('b-back3',function(){goStep(2);});
+  bnd('b-next3',function(){
+    form.injuries=g('f-injuries')?g('f-injuries').value:'';
+    form.notes=g('f-notes')?g('f-notes').value:'';
+    if(g('f-racedate'))form.raceDate=g('f-racedate').value;
+    goStep(4);
+  });
+  bindChips(EQUIPMENT,'equipment');
+  bindChips(CARDIO_OPTS,'cardioTypes');
+  RUNNING_GOALS.forEach(function(rg){bnd('rgoal-'+rg.k,function(){form.distanceGoal=rg.k;render();});});
+  var slTd=g('sl-td');if(slTd)slTd.oninput=function(){form.trainingDays=this.value;g('tdv').textContent=this.value+' days';};
+  var slSt=g('sl-st');if(slSt)slSt.oninput=function(){form.steps=this.value;g('stv').textContent=Number(this.value).toLocaleString()+' steps';};
+  var slRd=g('sl-rd');if(slRd)slRd.oninput=function(){form.runningDays=this.value;g('rdv').textContent=this.value+' runs';};
+
+  // Step 4
+  bnd('b-back4',function(){goStep(3);});
+  bnd('b-gen',startGenerate);
+
+  // Step 5
+  bnd('b-retry',startGenerate);
+  bnd('b-dl',downloadPlan);
+  bnd('b-reset',resetAll);
+}
+
+// ── API ──────────────────────────────────────────────────────────────────────
+async function generateWeek(weekNum,totalWeeks){
+  var c=calc;
+  var gl=form.goal==='lose'?'Fat loss':form.goal==='gain'?'Muscle gain':'Maintain/Recomp';
+  var adj=getAdj();
+  var adjStr=adj===0?'maintenance':adj>0?'+'+adj+' kcal surplus':Math.abs(adj)+' kcal deficit';
+  var dietLabel=(DIETS.find(function(d){return d.k===form.dietType;})||{l:'Standard'}).l;
+  var cardioStr=form.cardioTypes.length?form.cardioTypes.join(', '):'None';
+  var equipStr=form.equipment.length?form.equipment.join(', '):'Not specified';
+  var progressNote=totalWeeks>1?'This is week '+weekNum+' of '+totalWeeks+'. '+(weekNum===1?'Start with foundational volume and technique.':weekNum===totalWeeks?'Peak week — maximum intensity and challenge.':'Progress from week '+(weekNum-1)+', increase load or volume by 5-10%.'):'';
+
+  // Build plan-type specific context
+  var planContext='';
+  if(form.planType==='beginner')planContext='This is a BEGINNER programme. Focus on fundamental movement patterns: squat, hinge, push, pull. Keep exercise selection simple and prioritise form. Include full body or upper/lower splits. No advanced techniques.';
+  else if(form.planType==='intermediate')planContext='This is an INTERMEDIATE programme. Include compound lifts with progressive overload, some isolation work. Push/pull/legs or upper/lower splits are appropriate. Include periodisation.';
+  else if(form.planType==='advanced')planContext='This is an ADVANCED programme. High volume, intensity techniques (supersets, drop sets), complex movement patterns, advanced periodisation. Assume excellent lifting form and experience.';
+  else if(form.planType==='hyrox')planContext='This is a HYROX RACE PREP programme. Combine functional fitness movements (ski erg, sled push/pull, burpee broad jumps, wall balls, sandbag lunges, rowing, farmers carry, running) with zone 2 and threshold running. Structure sessions as race simulations where appropriate.'+(form.raceDate?' Race date: '+form.raceDate+'.':'');
+  else if(form.planType==='running')planContext='This is a RUNNING SPECIFIC programme. Structure training as: easy runs (zone 2), tempo runs, interval sessions, and one long run per week. Include strength work to support running performance. Distance goal: '+(form.distanceGoal||'general fitness')+'. Runs per week: '+form.runningDays+'.';
+  else if(form.planType==='hybrid')planContext='This is a HYBRID ATHLETE programme. Balance heavy compound strength work with endurance training. Combine gym sessions with cardio sessions. Neither strength nor cardio should suffer — programme them intelligently to avoid interference.';
+  else if(form.planType==='booty')planContext='This is a BOOTY BUILDER programme. Prioritise glute hypertrophy: hip thrusts, Romanian deadlifts, Bulgarian split squats, cable kickbacks, abductions, step-ups. Include progressive overload on all glute movements. Support with upper body and core work.';
+
+  var prompt='You are an elite fitness and nutrition coach creating a bespoke programme for ReBourne, a premium fitness brand.\n\n'
+    +'PROGRAMME TYPE: '+planLabel()+'\n'
+    +'CLIENT: '+form.name+', Goal: '+gl+' ('+adjStr+'), Calories: '+c.target+' kcal/day\n'
+    +'Macros: '+c.protein+'g protein, '+c.carbs+'g carbs, '+c.fat+'g fat\n'
+    +'Diet: '+dietLabel+', Meals: '+form.meals+' main + '+form.snacks+' snacks\n'
+    +'Allergies/Intolerances: '+(form.allergies||'None')+'\n'
+    +'Dislikes: '+(form.dislikes||'None')+'\n'
+    +'Training days/week: '+form.trainingDays+', Steps/day: '+form.steps+'\n'
+    +'Equipment: '+equipStr+'\n'
+    +'Cardio available: '+cardioStr+'\n'
+    +'Injuries/Limitations: '+(form.injuries||'None')+'\n'
+    +'Additional notes: '+(form.notes||'None')+'\n\n'
+    +'PROGRAMME CONTEXT: '+planContext+'\n'
+    +(progressNote?'WEEK PROGRESSION: '+progressNote+'\n':'')+'\n'
+    +'Return ONLY valid JSON, no markdown fences:\n'
+    +'{"mealPlan":[{"day":"Monday","meals":[{"type":"Breakfast","name":"...","calories":0,"protein":0,"carbs":0,"fat":0}]}],'
+    +'"trainingPlan":[{"day":"Monday","type":"Push","focus":"...","exercises":["Bench press — 4 sets x 8 reps @ RPE 8"]}],'
+    +'"coachNotes":"..."}\n'
+    +'All 7 days Mon-Sun. Training on '+form.trainingDays+' days, rest on remaining days. Respect all injuries. Follow diet type strictly. Snacks as extra meal entries. Include sets, reps and RPE or % 1RM for training exercises where relevant.';
+
+  var res=await fetch('/api/message',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:8000,messages:[{role:'user',content:prompt}]})
+  });
+  if(!res.ok){var e=await res.json().catch(function(){return{};});throw new Error((e.error&&e.error.message)||'API error '+res.status);}
+  var data=await res.json();
+  if(data.stop_reason==='max_tokens')throw new Error('Response cut off on week '+weekNum+'. Please try again.');
+  var text='';
+  for(var bi=0;bi<data.content.length;bi++){if(data.content[bi].type==='text'){text=data.content[bi].text;break;}}
+  var s=text.indexOf('{'),e2=text.lastIndexOf('}');
+  if(s===-1||e2<=s)throw new Error('Unexpected response on week '+weekNum+'. Please try again.');
+  return JSON.parse(text.slice(s,e2+1));
 }
 
 async function startGenerate(){
-  step=5; loading=true; apiErr=null; plan=null; render();
+  step=5;loading=true;apiErr=null;allWeeks=[];generatingWeek=0;
+  render();
   try{
-    var c=calc;
-    var gl=form.goal==='lose'?'Fat loss':form.goal==='gain'?'Muscle gain':'Maintain';
-    var inj=form.injuries.filter(function(x){return x!=='None';}).join(', ')||'None';
-    var prompt='You are an expert fitness and nutrition coach. Generate a personalised 7-day meal and training plan.\n'
-      +'CLIENT: Goal:'+gl+', Calories:'+c.target+'kcal'
-      +', Macros:'+c.protein+'g protein '+c.carbs+'g carbs '+c.fat+'g fat'
-      +', Meals:'+form.meals+' main + '+form.snacks+' snacks'
-      +', Allergies (AVOID):'+(form.allergies.join(', ')||'None')
-      +', Dislikes:'+(form.dislikes.join(', ')||'None')
-      +', Steps:'+form.steps+'/day'
-      +', Cardio:'+(form.cardio.join(', ')||'None')
-      +', Training days/week:'+form.trainingDays
-      +', Injuries:'+inj
-      +', Notes:'+(form.notes||'None')+'\n'
-      +'Return ONLY valid JSON, no markdown fences:\n'
-      +'{"mealPlan":[{"day":"Monday","meals":[{"type":"Breakfast","name":"...","calories":0,"protein":0,"carbs":0,"fat":0}]}],'
-      +'"trainingPlan":[{"day":"Monday","type":"Push","focus":"...","exercises":["Bench press 3x10"]}],'
-      +'"coachNotes":"..."}\n'
-      +'All 7 days Mon-Sun. Respect injuries. Rest days for non-training days. Include snacks as meal entries if snacks > 0.';
-
-    var res=await fetch('/api/message',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:8000,messages:[{role:'user',content:prompt}]})
-    });
-    if(!res.ok){ var e=await res.json().catch(function(){return {};}); throw new Error((e.error&&e.error.message)||'API error '+res.status); }
-    var data=await res.json();
-    if(data.stop_reason==='max_tokens') throw new Error('Response cut off, please try again.');
-    var text='';
-    for(var bi=0;bi<data.content.length;bi++){ if(data.content[bi].type==='text'){text=data.content[bi].text;break;} }
-    var s=text.indexOf('{'), e2=text.lastIndexOf('}');
-    if(s===-1||e2<=s) throw new Error('Unexpected response format, please try again.');
-    plan=JSON.parse(text.slice(s,e2+1));
-  } catch(err){
-    apiErr=err.message;
-  }
-  loading=false; render();
+    for(var w=1;w<=form.planWeeks;w++){
+      generatingWeek=w;render();
+      allWeeks.push(await generateWeek(w,form.planWeeks));
+    }
+  }catch(err){apiErr=err.message;}
+  loading=false;render();
 }
 
+// ── DOWNLOAD ─────────────────────────────────────────────────────────────────
 function downloadPlan(){
-  if(!plan||!calc) return;
+  if(!allWeeks.length||!calc)return;
   var gl=form.goal==='lose'?'Fat loss':form.goal==='gain'?'Muscle gain':'Maintain';
   var date=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
-  var mealRows='';
-  (plan.mealPlan||[]).forEach(function(day){
-    var tot=(day.meals||[]).reduce(function(s,m){return s+(m.calories||0);},0);
-    mealRows+='<tr style="background:#eeeae0"><td colspan="4" style="padding:10px 14px;font-weight:700;font-size:13px">'+day.day+' <span style="font-weight:400;color:#7a7e8a;font-size:12px">— '+tot+' kcal</span></td></tr>';
-    (day.meals||[]).forEach(function(m){
-      mealRows+='<tr>'
-        +'<td style="padding:8px 14px;font-size:12px;color:#c8611a;font-weight:700;border-bottom:1px solid #e2ddd0">'+m.type+'</td>'
-        +'<td style="padding:8px 14px;font-size:13px;border-bottom:1px solid #e2ddd0">'+m.name+'</td>'
-        +'<td style="padding:8px 14px;font-size:12px;color:#7a7e8a;text-align:right;border-bottom:1px solid #e2ddd0;white-space:nowrap">'+m.calories+' kcal</td>'
-        +'<td style="padding:8px 14px;font-size:12px;color:#7a7e8a;text-align:right;border-bottom:1px solid #e2ddd0;white-space:nowrap">P:'+m.protein+'g C:'+m.carbs+'g F:'+m.fat+'g</td>'
-        +'</tr>';
-    });
-  });
-  var trainRows='';
-  (plan.trainingPlan||[]).forEach(function(day){
-    var isRest=day.type==='Rest';
-    var exHtml='';
-    if(day.exercises&&day.exercises.length){
-      day.exercises.forEach(function(ex){ exHtml+='<li style="padding:4px 0;font-size:13px;color:#3a3d47;border-bottom:1px solid #e2ddd0">→ '+ex+'</li>'; });
-      exHtml='<ul style="list-style:none;padding:0;margin:0">'+exHtml+'</ul>';
-    } else { exHtml='<span style="font-size:13px;color:#7a7e8a">Rest day — focus on recovery.</span>'; }
-    trainRows+='<tr style="background:#eeeae0"><td colspan="2" style="padding:10px 14px;font-weight:700;font-size:13px">'+day.day
-      +' <span style="font-size:12px;font-weight:600;color:'+(isRest?'#2d6a4f':'#c8611a')+'">'+day.type+'</span></td></tr>'
-      +'<tr><td colspan="2" style="padding:10px 14px 14px">'+(day.focus?'<div style="font-size:12px;color:#7a7e8a;margin-bottom:8px">'+day.focus+'</div>':'')+exHtml+'</td></tr>';
-  });
+  var dietLabel=(DIETS.find(function(d){return d.k===form.dietType;})||{l:'Standard'}).l;
 
-  var html='<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Fitness Plan - '+form.name+'</title>'
-    +'<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f8f6f1;color:#0f1117;padding:40px 24px}.page{max-width:800px;margin:0 auto}.cover{background:#c8611a;border-radius:16px;padding:40px;margin-bottom:28px;color:#fff}.cover h1{font-size:34px;font-weight:700;margin-bottom:6px}.cover p{font-size:14px;opacity:.85;margin-top:4px}.disclaimer{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px;font-size:12px;color:#78350f;margin-bottom:24px;line-height:1.6}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}.stat{background:#fff;border-radius:12px;padding:16px;border:1px solid #e2ddd0}.stat-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#7a7e8a;margin-bottom:4px}.stat-val{font-size:24px;font-weight:700;color:#0f1117}.stat-unit{font-size:11px;color:#7a7e8a;margin-top:2px}.stat.acc{background:#c8611a}.stat.acc .stat-lbl,.stat.acc .stat-val,.stat.acc .stat-unit{color:#fff}.macros{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px}.macro{background:#fff;border:1px solid #e2ddd0;border-radius:10px;padding:14px;text-align:center}.macro-val{font-size:22px;font-weight:700;color:#c8611a}.macro-lbl{font-size:12px;color:#7a7e8a;margin-top:3px}h2{font-size:20px;font-weight:700;margin:28px 0 14px;padding-bottom:8px;border-bottom:2px solid #c8611a}table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e2ddd0;margin-bottom:24px}.coach{border-left:4px solid #c8611a;padding:16px 20px;margin-bottom:28px;font-size:15px;color:#3a3d47;line-height:1.7;font-style:italic;background:#fff;border-radius:0 12px 12px 0}.footer{text-align:center;font-size:12px;color:#7a7e8a;margin-top:40px;padding-top:20px;border-top:1px solid #e2ddd0}@media print{body{background:#fff;padding:0}.cover{border-radius:0}}</style>'
+  var weeksHtml='';
+  for(var wi=0;wi<allWeeks.length;wi++){
+    var wk=allWeeks[wi],wkNum=wi+1;
+    var mealRows='';
+    (wk.mealPlan||[]).forEach(function(day){
+      var tot=(day.meals||[]).reduce(function(s,m){return s+(m.calories||0);},0);
+      mealRows+='<tr style="background:#232f47"><td colspan="4" style="padding:10px 14px;font-weight:700;font-size:13px;color:#fff;letter-spacing:.04em">'+day.day.toUpperCase()+' <span style="font-weight:400;color:#8892a4;font-size:11px">'+tot+' kcal</span></td></tr>';
+      (day.meals||[]).forEach(function(m){
+        mealRows+='<tr><td style="padding:8px 14px;font-size:11px;color:#3d5a85;font-weight:700;border-bottom:1px solid #1e2b42;letter-spacing:.08em;text-transform:uppercase">'+m.type+'</td>'
+          +'<td style="padding:8px 14px;font-size:13px;color:#fff;border-bottom:1px solid #1e2b42">'+m.name+'</td>'
+          +'<td style="padding:8px 14px;font-size:12px;color:#8892a4;text-align:right;border-bottom:1px solid #1e2b42;white-space:nowrap">'+m.calories+' kcal</td>'
+          +'<td style="padding:8px 14px;font-size:11px;color:#8892a4;text-align:right;border-bottom:1px solid #1e2b42;white-space:nowrap">P:'+m.protein+'g C:'+m.carbs+'g F:'+m.fat+'g</td></tr>';
+      });
+    });
+    var trainRows='';
+    (wk.trainingPlan||[]).forEach(function(day){
+      var isRest=day.type==='Rest';
+      var exHtml='';
+      if(day.exercises&&day.exercises.length){
+        day.exercises.forEach(function(ex){exHtml+='<li style="padding:5px 0;font-size:13px;color:#d6d8dc;border-bottom:1px solid #1e2b42;list-style:none">&rarr; '+ex+'</li>';});
+        exHtml='<ul style="padding:0;margin:0">'+exHtml+'</ul>';
+      }else{exHtml='<span style="font-size:13px;color:#8892a4">Rest day &mdash; focus on recovery, mobility and hitting your step goal.</span>';}
+      trainRows+='<tr style="background:#232f47"><td colspan="2" style="padding:10px 14px;font-weight:700;font-size:13px;color:#fff;letter-spacing:.04em">'+day.day.toUpperCase()+' <span style="font-size:11px;font-weight:600;color:'+(isRest?'#6ee7b7':'#3d5a85')+'">'+day.type+'</span></td></tr>'
+        +'<tr><td colspan="2" style="padding:10px 14px 14px;background:#1e2b42">'+(day.focus?'<div style="font-size:11px;color:#8892a4;margin-bottom:8px;font-style:italic">'+day.focus+'</div>':'')+exHtml+'</td></tr>';
+    });
+    weeksHtml+='<div style="background:#32496D;border-radius:10px;padding:14px 20px;margin:28px 0 14px;color:#fff;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase">Week '+wkNum+(form.planWeeks>1?' of '+form.planWeeks:'')+'</div>'
+      +'<h2 style="font-size:16px;font-weight:700;margin:16px 0 10px;padding-bottom:8px;border-bottom:1px solid #32496D;color:#fff;letter-spacing:.06em;text-transform:uppercase">Meal plan</h2>'
+      +'<table style="width:100%;border-collapse:collapse;background:#1e2b42;border-radius:10px;overflow:hidden;border:1px solid #232f47;margin-bottom:20px"><tbody>'+mealRows+'</tbody></table>'
+      +'<h2 style="font-size:16px;font-weight:700;margin:16px 0 10px;padding-bottom:8px;border-bottom:1px solid #32496D;color:#fff;letter-spacing:.06em;text-transform:uppercase">Training plan</h2>'
+      +'<table style="width:100%;border-collapse:collapse;background:#1e2b42;border-radius:10px;overflow:hidden;border:1px solid #232f47;margin-bottom:20px"><tbody>'+trainRows+'</tbody></table>';
+  }
+
+  var html='<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">'
+    +'<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">'
+    +'<title>'+form.planWeeks+'-Week '+planLabel()+' | ReBourne</title>'
+    +'<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:"Montserrat",sans-serif;background:#1A2236;color:#D6D8DC;padding:40px 24px}.page{max-width:800px;margin:0 auto}'
+    +'.cover{background:#0E1117;border:1px solid rgba(50,73,109,.4);border-radius:16px;padding:48px 40px;margin-bottom:32px;position:relative;overflow:hidden}'
+    +'.cover::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:#32496D}'
+    +'.cover-label{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#3d5a85;margin-bottom:12px}'
+    +'.cover h1{font-family:"Playfair Display",serif;font-size:36px;font-weight:600;color:#fff;margin-bottom:6px}'
+    +'.cover-tag{font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:#8892a4;margin-bottom:16px}'
+    +'.cover-meta{font-size:13px;color:#8892a4;line-height:1.8}'
+    +'.cover-meta strong{color:#D6D8DC}'
+    +'.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:24px 0}'
+    +'.stat{background:#1e2b42;border-radius:10px;padding:16px;border:1px solid rgba(50,73,109,.3)}'
+    +'.stat-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#8892a4;margin-bottom:4px}'
+    +'.stat-val{font-family:"Playfair Display",serif;font-size:26px;color:#fff}'
+    +'.stat-unit{font-size:10px;color:#8892a4;margin-top:2px}'
+    +'.stat.hi{background:#32496D}.stat.hi .stat-lbl{color:rgba(255,255,255,.65)}.stat.hi .stat-val,.stat.hi .stat-unit{color:#fff}'
+    +'.macros{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}'
+    +'.macro{background:#1e2b42;border:1px solid rgba(50,73,109,.3);border-radius:10px;padding:14px;text-align:center}'
+    +'.macro-val{font-family:"Playfair Display",serif;font-size:24px;color:#3d5a85}'
+    +'.macro-lbl{font-size:11px;color:#8892a4;margin-top:3px}'
+    +'.coach{border-left:3px solid #32496D;padding:14px 18px;margin:20px 0 24px;font-size:14px;color:#D6D8DC;line-height:1.8;font-style:italic;background:#1e2b42;border-radius:0 10px 10px 0}'
+    +'.disclaimer{background:rgba(201,169,110,.08);border:1px solid rgba(201,169,110,.2);border-radius:8px;padding:12px 14px;font-size:11px;color:#c9a96e;margin-bottom:24px;line-height:1.6}'
+    +'.footer{text-align:center;font-size:11px;color:#8892a4;margin-top:48px;padding-top:20px;border-top:1px solid rgba(50,73,109,.3);letter-spacing:.06em}'
+    +'@media print{body{background:#fff;color:#000;padding:0}.cover{background:#1A2236;border-radius:0}}</style>'
     +'</head><body><div class="page">'
-    +'<div class="cover"><h1>'+form.name+'</h1><p>'+gl+' &bull; '+form.trainingDays+' training days/week &bull; '+calc.target.toLocaleString()+' kcal/day</p><p style="margin-top:4px;opacity:.7">Generated '+date+'</p></div>'
-    +'<div class="disclaimer">&#9888; This plan is for informational purposes only. Consult a qualified healthcare professional before starting.</div>'
-    +'<h2>Your targets</h2>'
-    +'<div class="stats"><div class="stat"><div class="stat-lbl">BMR</div><div class="stat-val">'+calc.bmr.toLocaleString()+'</div><div class="stat-unit">kcal at complete rest</div></div><div class="stat"><div class="stat-lbl">TDEE</div><div class="stat-val">'+calc.tdee.toLocaleString()+'</div><div class="stat-unit">total daily calorie burn</div></div><div class="stat acc"><div class="stat-lbl">Daily target</div><div class="stat-val">'+calc.target.toLocaleString()+'</div><div class="stat-unit">kcal to eat per day</div></div></div>'
-    +'<div class="macros"><div class="macro"><div class="macro-val">'+calc.protein+'g</div><div class="macro-lbl">Protein</div></div><div class="macro"><div class="macro-val">'+calc.carbs+'g</div><div class="macro-lbl">Carbohydrates</div></div><div class="macro"><div class="macro-val">'+calc.fat+'g</div><div class="macro-lbl">Fat</div></div></div>'
-    +(plan.coachNotes?'<div class="coach">"'+plan.coachNotes+'"</div>':'')
-    +'<h2>7-day meal plan</h2><table><tbody>'+mealRows+'</tbody></table>'
-    +'<h2>7-day training plan</h2><table><tbody>'+trainRows+'</tbody></table>'
-    +'<div class="footer">Plan generated with AI assistance &bull; Review with a qualified coach before starting</div>'
+    +'<div class="cover">'
+      +'<div class="cover-label">ReBourne Performance Programme</div>'
+      +'<h1>'+form.name+'</h1>'
+      +'<div class="cover-tag">Reinvent Your Potential</div>'
+      +'<div class="cover-meta">'
+        +'<strong>'+form.planWeeks+'-Week '+planLabel()+'</strong> &bull; '+gl+' &bull; '+dietLabel+'<br>'
+        +calc.target.toLocaleString()+' kcal/day &bull; '+form.trainingDays+' training days/week &bull; '+Number(form.steps).toLocaleString()+' steps/day<br>'
+        +'Generated '+date
+      +'</div>'
+    +'</div>'
+    +'<div class="disclaimer">&#9888; This plan is for informational purposes only. Consult a qualified healthcare professional before starting any new diet or exercise programme, particularly if you have injuries or medical conditions.</div>'
+    +'<div class="stats">'
+      +'<div class="stat"><div class="stat-lbl">BMR</div><div class="stat-val">'+calc.bmr.toLocaleString()+'</div><div class="stat-unit">kcal at complete rest</div></div>'
+      +'<div class="stat"><div class="stat-lbl">TDEE</div><div class="stat-val">'+calc.tdee.toLocaleString()+'</div><div class="stat-unit">total daily calorie burn</div></div>'
+      +'<div class="stat hi"><div class="stat-lbl">Daily target</div><div class="stat-val">'+calc.target.toLocaleString()+'</div><div class="stat-unit">kcal to eat per day</div></div>'
+    +'</div>'
+    +'<div class="macros">'
+      +'<div class="macro"><div class="macro-val">'+calc.protein+'g</div><div class="macro-lbl">Protein</div></div>'
+      +'<div class="macro"><div class="macro-val">'+calc.carbs+'g</div><div class="macro-lbl">Carbohydrates</div></div>'
+      +'<div class="macro"><div class="macro-val">'+calc.fat+'g</div><div class="macro-lbl">Fat</div></div>'
+    +'</div>'
+    +(allWeeks[0]&&allWeeks[0].coachNotes?'<div class="coach">&ldquo;'+allWeeks[0].coachNotes+'&rdquo;</div>':'')
+    +weeksHtml
+    +'<div class="footer">REBOURNE &bull; REINVENT YOUR POTENTIAL &bull; Plan generated with AI assistance &bull; Review with a qualified coach before starting</div>'
     +'</div></body></html>';
 
   var blob=new Blob([html],{type:'text/html'});
   var url=URL.createObjectURL(blob);
   var a=document.createElement('a');
-  a.href=url; a.download=(form.name||'client').replace(/\s+/g,'-').toLowerCase()+'-fitness-plan.html';
-  document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+  a.href=url;
+  a.download=form.name.replace(/\s+/g,'-').toLowerCase()+'-'+form.planWeeks+'wk-'+form.planType+'-rebourne.html';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
 }
 
 function resetAll(){
-  step=0; plan=null; calc=null; loading=false; apiErr=null;
-  form.name=''; form.age=''; form.weight=''; form.height=''; form.goal='';
-  form.allergies=[]; form.dislikes=[]; form.injuries=['None']; form.cardio=[]; form.notes='';
-  render();
+  step=-2;allWeeks=[];calc=null;loading=false;apiErr=null;generatingWeek=0;
+  form.planType='';form.planWeeks=0;form.name='';form.age='';form.weight='';form.height='';
+  form.activity='';form.goal='';form.dietType='standard';form.allergies='';form.dislikes='';
+  form.injuries='';form.notes='';form.equipment=[];form.cardioTypes=[];form.distanceGoal='';
+  form.raceDate='';
+  render();window.scrollTo(0,0);
 }
 
 render();
