@@ -253,17 +253,22 @@ input[type=range]{padding:0;border:none;background:var(--border);height:3px;bord
 @media(max-width:500px){.plan-type-grid,.dur-grid,.row2,.row3,.goal-grid,.diet-grid,.stat-grid{grid-template-columns:1fr 1fr}.dur-grid{grid-template-columns:1fr 1fr 1fr}}
 
 /* ── DASHBOARD ───────────────────────────────────────── */
-.dash-wrap{max-width:900px;margin:0 auto;padding:0 20px 80px}
-.dash-header{padding:24px 0 0}
+.dash-wrap{max-width:900px;margin:0 auto;padding:0 0 80px}
+.dash-header{padding:24px 20px 0}
 .dash-title{font-size:22px;font-weight:600;color:var(--white);margin-bottom:4px}
-.dash-sub{font-size:12px;color:var(--ink3);margin-bottom:20px}
+.dash-sub{font-size:12px;color:var(--ink3);margin-bottom:20px}.dash-content-body{padding:0 20px}
 .dash-badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
 
-/* Tab nav */
-.tab-nav{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:24px;overflow-x:auto}
-.tab-btn{padding:12px 18px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);cursor:pointer;border:none;background:transparent;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;font-family:inherit;transition:all .15s}
-.tab-btn:hover{color:var(--silver2)}
-.tab-btn.active{color:var(--steel2);border-bottom-color:var(--steel2)}
+/* Bottom nav */
+.dash-bottom-nav{display:flex;border-top:1px solid var(--border);background:#050a12;position:sticky;bottom:0;z-index:50}
+.dbn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 6px;cursor:pointer;color:var(--ink3);transition:color .15s;font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;border:none;background:transparent;font-family:inherit}
+.dbn:hover,.dbn.active{color:var(--steel2)}
+.dbn i{font-size:22px}
+/* Dash top context bar */
+.dash-context-bar{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);margin-bottom:20px}
+.dash-context-title{font-size:18px;font-weight:600;color:var(--white)}
+.dash-context-sub{font-size:11px;color:var(--ink3);margin-top:2px}
+.dash-context-badge{font-size:10px;font-weight:600;letter-spacing:.06em;padding:5px 12px;border-radius:100px;background:rgba(58,95,150,.15);color:var(--steel2);border:0.5px solid var(--border2);white-space:nowrap}
 
 /* Week/day selectors */
 .week-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
@@ -1187,20 +1192,24 @@ function renderDashboard(container){
   if(form.injuries) html += '<span class="bdg bdg-red">Injury adapted</span>';
   html += '</div>';
 
-  // Tab nav
-  var tabs = [
-    {k:'overview',  l:'Overview'},
-    {k:'nutrition', l:'Nutrition'},
-    {k:'training',  l:'Training'},
-    {k:'calendar',  l:'Calendar'},
-    {k:'shopping',  l:'Shopping list'},
-    {k:'progress',  l:'Progress'}
-  ];
-  html += '<div class="tab-nav">';
-  tabs.forEach(function(t){
-    html += '<button class="tab-btn'+(dash.tab===t.k?' active':'')+'" id="tab-'+t.k+'">'+t.l+'</button>';
-  });
-  html += '</div></div>'; // close dash-header
+  // Context bar - shows current section title at top
+  var tabMeta = {
+    overview:  {l:'Overview',      icon:'ti-home',          sub:'Your programme at a glance'},
+    nutrition: {l:'Nutrition',     icon:'ti-salad',         sub:'Week '+(dash.week+1)+' • '+DAYS[dash.day]},
+    training:  {l:'Training',      icon:'ti-barbell',       sub:'Week '+(dash.week+1)+' • '+DAYS[dash.day]},
+    calendar:  {l:'Calendar',      icon:'ti-calendar',      sub:'Monthly overview'},
+    shopping:  {l:'Shopping list', icon:'ti-shopping-cart', sub:dash.shopMode==='weekly'?'Week '+(dash.week+1)+' ingredients':'Today’s ingredients'},
+    progress:  {l:'Progress',      icon:'ti-chart-bar',     sub:'Adherence & check-ins'}
+  };
+  var cm = tabMeta[dash.tab]||{l:'Dashboard',sub:''};
+  html += '<div class="dash-context-bar">';
+  html += '<div><div class="dash-context-title">'+cm.l+'</div><div class="dash-context-sub">'+cm.sub+'</div></div>';
+  html += '<div class="dash-context-badge">'+planLabel2()+'</div>';
+  html += '</div>';
+  html += '</div>'; // close dash-header
+
+  // Tab content area
+
 
   // Tab content
   html += '<div id="dash-content">';
@@ -1215,11 +1224,13 @@ function renderDashboard(container){
   html += '</div>'; // close dash-wrap
   container.innerHTML = html;
 
-  // Bind tab buttons
-  tabs.forEach(function(t){
-    var el = g('tab-'+t.k);
-    if(el) el.onclick = function(){ dash.tab=t.k; renderDashboard(g('app')); window.scrollTo(0,0); };
+  // Bind bottom nav buttons
+  var navKeys = ['overview','nutrition','training','shopping','progress'];
+  navKeys.forEach(function(k){
+    var el = g('dbn-'+k);
+    if(el) el.onclick = function(){ dash.tab=k; renderDashboard(g('app')); window.scrollTo(0,0); };
   });
+  // Calendar accessible from within other tabs only (day strip click etc)
 
   bindDashTab();
 }
@@ -1623,6 +1634,11 @@ function renderProgressTab(){
 function bindDashTab(){
   function bnd(id,fn){var e=g(id);if(e)e.onclick=fn;}
 
+  // Bottom nav bindings - always active
+  ['overview','nutrition','training','shopping','progress'].forEach(function(k){
+    bnd('dbn-'+k,function(){dash.tab=k;renderDashboard(g('app'));window.scrollTo(0,0);});
+  });
+
   if(dash.tab==='overview'){
     bnd('ov-dl',downloadPlan);
     bnd('ov-reset',resetAll);
@@ -1720,13 +1736,49 @@ function bindDashTab(){
 }
 
 // ── RECIPE MODAL ─────────────────────────────────────────────────────────────
+
+// Cache key based on meal name + diet type - same meal never generated twice
+function recipeCacheKey(meal){
+  return 'rb_recipe_'+meal.name.toLowerCase().replace(/[^a-z0-9]/g,'_')+'_'+form.dietType;
+}
+
+function loadRecipeFromStorage(meal){
+  try{
+    var k = recipeCacheKey(meal);
+    // Check in-memory first
+    if(dash.recipeCache[k]) return dash.recipeCache[k];
+    // Then check localStorage
+    var stored = localStorage.getItem(k);
+    if(stored){
+      var parsed = JSON.parse(stored);
+      dash.recipeCache[k] = parsed; // warm the memory cache
+      return parsed;
+    }
+  }catch(e){}
+  return null;
+}
+
+function saveRecipeToStorage(meal, recipe){
+  try{
+    var k = recipeCacheKey(meal);
+    dash.recipeCache[k] = recipe;
+    localStorage.setItem(k, JSON.stringify(recipe));
+    // Keep localStorage tidy - cap at 50 recipes
+    var allKeys = Object.keys(localStorage).filter(function(k){return k.indexOf('rb_recipe_')===0;});
+    if(allKeys.length > 50){
+      localStorage.removeItem(allKeys[0]);
+    }
+  }catch(e){}
+}
+
 function openRecipeModal(meal, key){
-  // If we have a cached recipe, show it immediately
-  if(dash.recipeCache[key]){
-    showRecipeModal(meal, dash.recipeCache[key], key);
+  // Check cache by meal name (persists across sessions and weeks)
+  var cached = loadRecipeFromStorage(meal);
+  if(cached){
+    showRecipeModal(meal, cached, key);
     return;
   }
-  // Otherwise generate it
+  // Not cached - generate it
   showRecipeLoadingModal(meal, key);
   generateRecipe(meal, key);
 }
@@ -1760,7 +1812,7 @@ async function generateRecipe(meal, key){
     var text = (data.content.find(function(b){return b.type==='text';})||{}).text||'';
     var s=text.indexOf('{'),e2=text.lastIndexOf('}');
     var recipe = JSON.parse(text.slice(s,e2+1));
-    dash.recipeCache[key] = recipe;
+    saveRecipeToStorage(meal, recipe);
     closeModal();
     showRecipeModal(meal, recipe, key);
   }catch(err){
