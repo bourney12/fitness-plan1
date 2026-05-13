@@ -876,27 +876,27 @@ function render(){
 
   // ── STEP 5: PLAN OUTPUT ─────────────────────────────────────────────────
   else if(step===5){
-    var inner='';
     if(loading){
       var prog2=form.planWeeks>1?' (Week '+generatingWeek+' of '+form.planWeeks+')':'';
-      inner='<div class="spin-wrap"><div class="spinner"></div>'
+      var inner='<div class="spin-wrap"><div class="spinner"></div>'
         +'<div style="font-weight:600;color:var(--white)">Building your '+form.planWeeks+'-week '+planLabel()+' programme'+prog2+'&hellip;</div>'
         +'<div style="font-size:12px">This may take a minute for longer plans</div>'
         +'</div>';
-      body='<div class="form-card">'+inner+'</div>';
-    } else if(apiErr){
-      body='<div class="form-card"><div class="err-box"><strong>Could not generate plan:</strong> '+apiErr+'</div>'
-        +'<button class="pri-btn" id="b-retry">Try again</button></div>';
-    } else if(allWeeks.length>0){
-      // Render the full dashboard
-      renderDashboard(app);
-      return; // dashboard handles its own binding
-    } else {
-      body='<div class="form-card"><p style="color:var(--ink3)">Waiting...</p></div>';
+      app.innerHTML=prog+'<div class="form-card">'+inner+'</div>';
+      return;
     }
-    app.innerHTML=prog+body;
-    function bnd2(id,fn){var e=g(id);if(e)e.onclick=fn;}
-    bnd2('b-retry',startGenerate);
+    if(apiErr){
+      app.innerHTML=prog+'<div class="form-card"><div class="err-box"><strong>Could not generate plan:</strong> '+apiErr+'</div>'
+        +'<button class="pri-btn" id="b-retry">Try again</button></div>';
+      var e2=g('b-retry');if(e2)e2.onclick=startGenerate;
+      return;
+    }
+    if(allWeeks.length>0){
+      renderDashboard(app);
+      return;
+    }
+    app.innerHTML=prog+'<div class="form-card"><p style="color:var(--ink3)">Waiting...</p></div>';
+    return;
   }
 
   app.innerHTML=prog+body;
@@ -962,7 +962,7 @@ function render(){
 
 
 // ── API ──────────────────────────────────────────────────────────────────────
-async function generateWeek(weekNum,totalWeeks){
+async function generateWeek(weekNum,totalWeeks,overrideNote){
   var c=calc;
   var gl=form.goal==='lose'?'Fat loss':form.goal==='gain'?'Muscle gain':'Maintain/Recomp';
   var adj=getAdj();
@@ -970,7 +970,7 @@ async function generateWeek(weekNum,totalWeeks){
   var dietLabel=(DIETS.find(function(d){return d.k===form.dietType;})||{l:'Standard'}).l;
   var cardioStr=form.cardioTypes.length?form.cardioTypes.join(', '):'None';
   var equipStr=form.equipment.length?form.equipment.join(', '):'Not specified';
-  var progressNote=totalWeeks>1?'This is week '+weekNum+' of '+totalWeeks+'. '+(weekNum===1?'Start with foundational volume and technique.':weekNum===totalWeeks?'Peak week — maximum intensity and challenge.':'Progress from week '+(weekNum-1)+', increase load or volume by 5-10%.'):'';
+  var progressNote=overrideNote?overrideNote:(totalWeeks>1?'This is week '+weekNum+' of '+totalWeeks+'. '+(weekNum===1?'Start with foundational volume and technique.':weekNum===totalWeeks?'Peak week — maximum intensity and challenge.':'Progress from week '+(weekNum-1)+', increase load or volume by 5-10%.'):'');
 
   // Build plan-type specific context
   var planContext='';
@@ -1019,6 +1019,8 @@ async function generateWeek(weekNum,totalWeeks){
 
 async function startGenerate(){
   step=5;loading=true;apiErr=null;allWeeks=[];generatingWeek=0;
+  // Load cached measurements from localStorage
+  try{var stored=localStorage.getItem('rb_measurements');if(stored)dash.measurements=JSON.parse(stored);}catch(e){}
   render();
   try{
     for(var w=1;w<=form.planWeeks;w++){
@@ -1026,7 +1028,57 @@ async function startGenerate(){
       allWeeks.push(await generateWeek(w,form.planWeeks));
     }
   }catch(err){apiErr=err.message;}
-  loading=false;render();
+  loading=false;
+  if(allWeeks.length>0) saveClientToCoach();
+  render();
+}
+
+function syncClientData(){
+  try{
+    var clients=[];
+    var stored=localStorage.getItem('rb_coach_clients');
+    if(stored) clients=JSON.parse(stored);
+    var idx=clients.findIndex(function(c){return c.name===form.name;});
+    if(idx>-1){
+      clients[idx].checkins=dash.checkins;
+      clients[idx].adherence=dash.adherence;
+      clients[idx].measurements=dash.measurements;
+      localStorage.setItem('rb_coach_clients',JSON.stringify(clients));
+    }
+  }catch(e){}
+}
+
+function saveClientToCoach(){
+  try{
+    var clients=[];
+    var stored=localStorage.getItem('rb_coach_clients');
+    if(stored) clients=JSON.parse(stored);
+    var record={
+      name:form.name,
+      email:form.email||'',
+      planType:planLabel2(),
+      planWeeks:form.planWeeks,
+      goal:form.goal==='lose'?'Fat loss':form.goal==='gain'?'Muscle gain':'Maintain',
+      dietType:form.dietType,
+      trainingDays:form.trainingDays,
+      steps:form.steps,
+      injuries:form.injuries,
+      allergies:form.allergies,
+      dislikes:form.dislikes,
+      calc:calc,
+      checkins:dash.checkins,
+      adherence:dash.adherence,
+      measurements:dash.measurements,
+      generatedAt:new Date().toISOString(),
+      weekCount:allWeeks.length
+    };
+    // Update existing or add new
+    var idx=clients.findIndex(function(c){return c.name===form.name&&c.planType===record.planType;});
+    if(idx>-1) clients[idx]=record; else clients.unshift(record);
+    // Cap at 200 clients
+    if(clients.length>200) clients=clients.slice(0,200);
+    localStorage.setItem('rb_coach_clients',JSON.stringify(clients));
+  }catch(e){}
 }
 
 // ── DOWNLOAD ─────────────────────────────────────────────────────────────────
@@ -1042,12 +1094,12 @@ function downloadPlan(){
     var mealRows='';
     (wk.mealPlan||[]).forEach(function(day){
       var tot=(day.meals||[]).reduce(function(s,m){return s+(m.calories||0);},0);
-      mealRows+='<tr style="background:#232f47"><td colspan="4" style="padding:10px 14px;font-weight:700;font-size:13px;color:#fff;letter-spacing:.04em">'+day.day.toUpperCase()+' <span style="font-weight:400;color:#8892a4;font-size:11px">'+tot+' kcal</span></td></tr>';
+      mealRows+='<tr style="background:#1a2a40"><td colspan="4" style="padding:10px 14px;font-weight:700;font-size:13px;color:#fff;letter-spacing:.04em">'+day.day.toUpperCase()+' <span style="font-weight:400;color:#7E98BC;font-size:11px">'+tot+' kcal</span></td></tr>';
       (day.meals||[]).forEach(function(m){
-        mealRows+='<tr><td style="padding:8px 14px;font-size:11px;color:#3d5a85;font-weight:700;border-bottom:1px solid #1e2b42;letter-spacing:.08em;text-transform:uppercase">'+m.type+'</td>'
-          +'<td style="padding:8px 14px;font-size:13px;color:#fff;border-bottom:1px solid #1e2b42">'+m.name+'</td>'
-          +'<td style="padding:8px 14px;font-size:12px;color:#8892a4;text-align:right;border-bottom:1px solid #1e2b42;white-space:nowrap">'+m.calories+' kcal</td>'
-          +'<td style="padding:8px 14px;font-size:11px;color:#8892a4;text-align:right;border-bottom:1px solid #1e2b42;white-space:nowrap">P:'+m.protein+'g C:'+m.carbs+'g F:'+m.fat+'g</td></tr>';
+        mealRows+='<tr><td style="padding:8px 14px;font-size:11px;color:#7E98BC;font-weight:700;border-bottom:1px solid #0d1929;letter-spacing:.08em;text-transform:uppercase">'+m.type+'</td>'
+          +'<td style="padding:8px 14px;font-size:13px;color:#F5F5F5;border-bottom:1px solid #0d1929">'+m.name+'</td>'
+          +'<td style="padding:8px 14px;font-size:12px;color:#7E98BC;text-align:right;border-bottom:1px solid #0d1929;white-space:nowrap">'+m.calories+' kcal</td>'
+          +'<td style="padding:8px 14px;font-size:11px;color:#5a6a82;text-align:right;border-bottom:1px solid #0d1929;white-space:nowrap">P:'+m.protein+'g C:'+m.carbs+'g F:'+m.fat+'g</td></tr>';
       });
     });
     var trainRows='';
@@ -1055,60 +1107,63 @@ function downloadPlan(){
       var isRest=day.type==='Rest';
       var exHtml='';
       if(day.exercises&&day.exercises.length){
-        day.exercises.forEach(function(ex){exHtml+='<li style="padding:5px 0;font-size:13px;color:#d6d8dc;border-bottom:1px solid #1e2b42;list-style:none">&rarr; '+ex+'</li>';});
+        day.exercises.forEach(function(ex){exHtml+='<li style="padding:5px 0;font-size:13px;color:#D6D8DC;border-bottom:1px solid #0d1929;list-style:none">&rarr; '+ex+'</li>';});
         exHtml='<ul style="padding:0;margin:0">'+exHtml+'</ul>';
-      }else{exHtml='<span style="font-size:13px;color:#8892a4">Rest day &mdash; focus on recovery, mobility and hitting your step goal.</span>';}
-      trainRows+='<tr style="background:#232f47"><td colspan="2" style="padding:10px 14px;font-weight:700;font-size:13px;color:#fff;letter-spacing:.04em">'+day.day.toUpperCase()+' <span style="font-size:11px;font-weight:600;color:'+(isRest?'#6ee7b7':'#3d5a85')+'">'+day.type+'</span></td></tr>'
-        +'<tr><td colspan="2" style="padding:10px 14px 14px;background:#1e2b42">'+(day.focus?'<div style="font-size:11px;color:#8892a4;margin-bottom:8px;font-style:italic">'+day.focus+'</div>':'')+exHtml+'</td></tr>';
+      }else{exHtml='<span style="font-size:13px;color:#5a6a82">Rest day &mdash; focus on recovery and hitting your step goal.</span>';}
+      trainRows+='<tr style="background:#1a2a40"><td colspan="2" style="padding:10px 14px;font-weight:700;font-size:13px;color:#fff;letter-spacing:.04em">'+day.day.toUpperCase()+' <span style="font-size:11px;font-weight:600;color:'+(isRest?'#6ee7b7':'#7E98BC')+'">'+day.type+'</span></td></tr>'
+        +'<tr><td colspan="2" style="padding:10px 14px 14px;background:#0d1929">'+(day.focus?'<div style="font-size:11px;color:#5a6a82;margin-bottom:8px;font-style:italic">'+day.focus+'</div>':'')+exHtml+'</td></tr>';
     });
-    weeksHtml+='<div style="background:#32496D;border-radius:10px;padding:14px 20px;margin:28px 0 14px;color:#fff;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase">Week '+wkNum+(form.planWeeks>1?' of '+form.planWeeks:'')+'</div>'
-      +'<h2 style="font-size:16px;font-weight:700;margin:16px 0 10px;padding-bottom:8px;border-bottom:1px solid #32496D;color:#fff;letter-spacing:.06em;text-transform:uppercase">Meal plan</h2>'
-      +'<table style="width:100%;border-collapse:collapse;background:#1e2b42;border-radius:10px;overflow:hidden;border:1px solid #232f47;margin-bottom:20px"><tbody>'+mealRows+'</tbody></table>'
-      +'<h2 style="font-size:16px;font-weight:700;margin:16px 0 10px;padding-bottom:8px;border-bottom:1px solid #32496D;color:#fff;letter-spacing:.06em;text-transform:uppercase">Training plan</h2>'
-      +'<table style="width:100%;border-collapse:collapse;background:#1e2b42;border-radius:10px;overflow:hidden;border:1px solid #232f47;margin-bottom:20px"><tbody>'+trainRows+'</tbody></table>';
+    weeksHtml+='<div style="background:#3A5F96;border-radius:8px;padding:12px 20px;margin:28px 0 14px;color:#fff;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;-webkit-print-color-adjust:exact;print-color-adjust:exact">Week '+wkNum+(allWeeks.length>1?' of '+allWeeks.length:'')+'</div>'
+      +'<h2 style="font-size:15px;font-weight:700;margin:16px 0 10px;padding-bottom:8px;border-bottom:2px solid #3A5F96;color:#fff;letter-spacing:.06em;text-transform:uppercase">Meal plan</h2>'
+      +'<table style="width:100%;border-collapse:collapse;background:#0d1929;border-radius:8px;overflow:hidden;border:1px solid #1a2a40;margin-bottom:20px"><tbody>'+mealRows+'</tbody></table>'
+      +'<h2 style="font-size:15px;font-weight:700;margin:16px 0 10px;padding-bottom:8px;border-bottom:2px solid #3A5F96;color:#fff;letter-spacing:.06em;text-transform:uppercase">Training plan</h2>'
+      +'<table style="width:100%;border-collapse:collapse;background:#0d1929;border-radius:8px;overflow:hidden;border:1px solid #1a2a40;margin-bottom:20px"><tbody>'+trainRows+'</tbody></table>';
   }
 
   var html='<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">'
     +'<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">'
-    +'<title>'+form.planWeeks+'-Week '+planLabel()+' | ReBourne</title>'
-    +'<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:"Montserrat",sans-serif;background:#1A2236;color:#D6D8DC;padding:40px 24px}.page{max-width:800px;margin:0 auto}'
-    +'.cover{background:#0E1117;border:1px solid rgba(50,73,109,.4);border-radius:16px;padding:48px 40px;margin-bottom:32px;position:relative;overflow:hidden}'
-    +'.cover::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:#32496D}'
-    +'.cover-label{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#3d5a85;margin-bottom:12px}'
-    +'.cover h1{font-family:"Playfair Display",serif;font-size:36px;font-weight:600;color:#fff;margin-bottom:6px}'
-    +'.cover-tag{font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:#8892a4;margin-bottom:16px}'
-    +'.cover-meta{font-size:13px;color:#8892a4;line-height:1.8}'
-    +'.cover-meta strong{color:#D6D8DC}'
-    +'.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:24px 0}'
-    +'.stat{background:#1e2b42;border-radius:10px;padding:16px;border:1px solid rgba(50,73,109,.3)}'
-    +'.stat-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#8892a4;margin-bottom:4px}'
-    +'.stat-val{font-family:"Playfair Display",serif;font-size:26px;color:#fff}'
-    +'.stat-unit{font-size:10px;color:#8892a4;margin-top:2px}'
-    +'.stat.hi{background:#32496D}.stat.hi .stat-lbl{color:rgba(255,255,255,.65)}.stat.hi .stat-val,.stat.hi .stat-unit{color:#fff}'
+    +'<title>'+form.planWeeks+'-Week '+planLabel2()+' | ReBourne</title>'
+    +'<style>'
+    +'*{box-sizing:border-box;margin:0;padding:0}'
+    +'body{font-family:"Montserrat",sans-serif;background:#07101D;color:#D6D8DC;padding:40px 24px;-webkit-print-color-adjust:exact;print-color-adjust:exact}'
+    +'.page{max-width:800px;margin:0 auto}'
+    +'.cover{background:#050a12;border:1px solid rgba(58,95,150,.4);border-radius:16px;padding:40px;margin-bottom:28px;position:relative;overflow:hidden}'
+    +'.cover::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:#3A5F96}'
+    +'.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}'
+    +'.stat{background:#0d1929;border-radius:10px;padding:14px;border:1px solid rgba(58,95,150,.3)}'
+    +'.stat-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#5a6a82;margin-bottom:4px}'
+    +'.stat-val{font-size:24px;font-weight:700;color:#fff}'
+    +'.stat-unit{font-size:10px;color:#5a6a82;margin-top:2px}'
+    +'.stat.acc{background:#3A5F96}.stat.acc .stat-lbl,.stat.acc .stat-val,.stat.acc .stat-unit{color:#fff}'
     +'.macros{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}'
-    +'.macro{background:#1e2b42;border:1px solid rgba(50,73,109,.3);border-radius:10px;padding:14px;text-align:center}'
-    +'.macro-val{font-family:"Playfair Display",serif;font-size:24px;color:#3d5a85}'
-    +'.macro-lbl{font-size:11px;color:#8892a4;margin-top:3px}'
-    +'.coach{border-left:3px solid #32496D;padding:14px 18px;margin:20px 0 24px;font-size:14px;color:#D6D8DC;line-height:1.8;font-style:italic;background:#1e2b42;border-radius:0 10px 10px 0}'
-    +'.disclaimer{background:rgba(201,169,110,.08);border:1px solid rgba(201,169,110,.2);border-radius:8px;padding:12px 14px;font-size:11px;color:#c9a96e;margin-bottom:24px;line-height:1.6}'
-    +'.footer{text-align:center;font-size:11px;color:#8892a4;margin-top:48px;padding-top:20px;border-top:1px solid rgba(50,73,109,.3);letter-spacing:.06em}'
-    +'@media print{body{background:#fff;color:#000;padding:0}.cover{background:#1A2236;border-radius:0}}</style>'
+    +'.macro{background:#0d1929;border:1px solid rgba(58,95,150,.3);border-radius:10px;padding:14px;text-align:center}'
+    +'.macro-val{font-size:22px;font-weight:700;color:#7E98BC}'
+    +'.macro-lbl{font-size:11px;color:#5a6a82;margin-top:3px}'
+    +'.coach{border-left:3px solid #3A5F96;padding:14px 18px;margin:16px 0 24px;font-size:14px;color:#D6D8DC;line-height:1.8;font-style:italic;background:#0d1929;border-radius:0 10px 10px 0}'
+    +'.disclaimer{background:rgba(201,169,110,.08);border:1px solid rgba(201,169,110,.2);border-radius:8px;padding:12px 14px;font-size:11px;color:#c9a96e;margin-bottom:20px;line-height:1.6}'
+    +'.footer{text-align:center;font-size:11px;color:#5a6a82;margin-top:40px;padding-top:20px;border-top:1px solid rgba(58,95,150,.3);letter-spacing:.06em}'
+    +'@media print{'
+    +'  body{padding:0}'
+    +'  .cover{border-radius:0}'
+    +'  .no-print{display:none}'
+    +'}'
+    +'</style>'
     +'</head><body><div class="page">'
     +'<div class="cover">'
-      +'<div class="cover-label">ReBourne Performance Programme</div>'
-      +'<h1>'+form.name+'</h1>'
-      +'<div class="cover-tag">Reinvent Your Potential</div>'
-      +'<div class="cover-meta">'
-        +'<strong>'+form.planWeeks+'-Week '+planLabel()+'</strong> &bull; '+gl+' &bull; '+dietLabel+'<br>'
+      +'<div style="font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#7E98BC;margin-bottom:10px">ReBourne Performance Programme</div>'
+      +'<div style="font-size:32px;font-weight:600;color:#fff;margin-bottom:4px">'+form.name+'</div>'
+      +'<div style="font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:#5a6a82;margin-bottom:14px">Reinvent Your Potential</div>'
+      +'<div style="font-size:13px;color:#5a6a82;line-height:1.8">'
+        +'<strong style="color:#D6D8DC">'+form.planWeeks+'-Week '+planLabel2()+'</strong> &bull; '+gl+' &bull; '+dietLabel+'<br>'
         +calc.target.toLocaleString()+' kcal/day &bull; '+form.trainingDays+' training days/week &bull; '+Number(form.steps).toLocaleString()+' steps/day<br>'
         +'Generated '+date
       +'</div>'
     +'</div>'
-    +'<div class="disclaimer">&#9888; This plan is for informational purposes only. Consult a qualified healthcare professional before starting any new diet or exercise programme, particularly if you have injuries or medical conditions.</div>'
+    +'<div class="disclaimer">&#9888; This plan is for informational purposes only. Consult a qualified healthcare professional before starting.</div>'
     +'<div class="stats">'
       +'<div class="stat"><div class="stat-lbl">BMR</div><div class="stat-val">'+calc.bmr.toLocaleString()+'</div><div class="stat-unit">kcal at complete rest</div></div>'
       +'<div class="stat"><div class="stat-lbl">TDEE</div><div class="stat-val">'+calc.tdee.toLocaleString()+'</div><div class="stat-unit">total daily calorie burn</div></div>'
-      +'<div class="stat hi"><div class="stat-lbl">Daily target</div><div class="stat-val">'+calc.target.toLocaleString()+'</div><div class="stat-unit">kcal to eat per day</div></div>'
+      +'<div class="stat acc"><div class="stat-lbl">Daily target</div><div class="stat-val">'+calc.target.toLocaleString()+'</div><div class="stat-unit">kcal to eat per day</div></div>'
     +'</div>'
     +'<div class="macros">'
       +'<div class="macro"><div class="macro-val">'+calc.protein+'g</div><div class="macro-lbl">Protein</div></div>'
@@ -1117,15 +1172,36 @@ function downloadPlan(){
     +'</div>'
     +(allWeeks[0]&&allWeeks[0].coachNotes?'<div class="coach">&ldquo;'+allWeeks[0].coachNotes+'&rdquo;</div>':'')
     +weeksHtml
-    +'<div class="footer">REBOURNE &bull; REINVENT YOUR POTENTIAL &bull; Plan generated with AI assistance &bull; Review with a qualified coach before starting</div>'
-    +'</div></body></html>';
+    +'<div class="footer">REBOURNE &bull; REINVENT YOUR POTENTIAL &bull; AI-assisted plan &bull; Review with a qualified coach before starting</div>'
+    +'</div>'
+    +'<div class="no-print" style="text-align:center;margin-top:32px">'
+      +'<button onclick="window.print()" style="background:#3A5F96;color:#fff;border:none;padding:14px 40px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.08em;text-transform:uppercase;font-family:inherit">Print / Save as PDF</button>'
+      +'<p style="font-size:12px;color:#5a6a82;margin-top:12px">In the print dialog, choose &ldquo;Save as PDF&rdquo; as your printer</p>'
+    +'</div>'
+    +'</body></html>';
 
-  var blob=new Blob([html],{type:'text/html'});
-  var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');
-  a.href=url;
-  a.download=form.name.replace(/\s+/g,'-').toLowerCase()+'-'+form.planWeeks+'wk-'+form.planType+'-rebourne.html';
-  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+  var win=window.open('','_blank');
+  win.document.write(html);
+  win.document.close();
+}
+
+async function generateNextWeek(weekIdx, avgScore){
+  var btn=g('auto-prog-btn');
+  if(btn){btn.disabled=true;btn.textContent='Generating week '+(weekIdx+1)+'...';}
+  try{
+    var intensityNote = avgScore>=4
+      ? 'The client is feeling strong. Increase training intensity by 5-10%, add one extra set to key lifts, keep calories the same.'
+      : avgScore<=2
+      ? 'The client is struggling. Reduce training volume by 10-15%, increase daily calories by 100-150 kcal to help recovery.'
+      : 'The client is adapting well. Apply standard progressive overload, increase weights by 2.5-5% where possible.';
+    var weekData = await generateWeek(weekIdx+1, allWeeks.length, intensityNote);
+    allWeeks[weekIdx] = weekData;
+    dash.week = weekIdx;
+    dash.tab = 'training';
+  }catch(e){
+    alert('Could not generate next week. Please try again.');
+  }
+  renderDashboard(g('app'));
 }
 
 function resetAll(){
@@ -1142,16 +1218,17 @@ function resetAll(){
 // ══════════════════════════════════════════════════════════════════════════════
 
 var dash = {
-  tab: 'overview',       // overview | nutrition | training | calendar | shopping | progress
-  week: 0,               // current week index
-  day: 0,                // current day index 0-6
-  shopMode: 'weekly',    // daily | weekly
+  tab: 'overview',
+  week: 0,
+  day: 0,
+  shopMode: 'weekly',
   checkedIngredients: {},
   checkedShop: {},
-  adherence: {},         // {wk-day-type: true}
-  checkins: {},          // {wk: {energy:n, hunger:n, sleep:n}}
-  calOffset: 0,          // calendar month offset
-  recipeCache: {},       // meal key -> recipe object
+  adherence: {},
+  checkins: {},
+  measurements: {},      // {weekIdx: {weight,waist,chest,hips,thigh,arm,bodyfat}}
+  calOffset: 0,
+  recipeCache: {},
   recipeLoading: false,
   swapLoading: false
 };
@@ -1378,7 +1455,11 @@ function renderTrainingTab(){
     html += '</div>';
     html += '<div class="session-body">';
     (dayData.exercises||[]).forEach(function(ex,ei){
-      html += '<div class="ex-row"><span class="ex-num">'+(ei+1)+'</span><span>'+ex+'</span></div>';
+      var exName=ex.split(' — ')[0].split(' – ')[0].split('(')[0].trim();
+      var ytUrl='https://www.youtube.com/results?search_query='+encodeURIComponent(exName+' exercise tutorial');
+      html += '<div class="ex-row"><span class="ex-num">'+(ei+1)+'</span><span style="flex:1">'+ex+'</span>'
+        +'<a href="'+ytUrl+'" target="_blank" rel="noopener" style="font-size:10px;font-weight:700;color:var(--steel2);text-decoration:none;white-space:nowrap;padding:3px 8px;border:0.5px solid var(--border);border-radius:4px;margin-left:8px;flex-shrink:0;letter-spacing:.04em">&#9654; Watch</a>'
+        +'</div>';
     });
     html += '</div></div>';
 
@@ -1627,6 +1708,70 @@ function renderProgressTab(){
   });
   html += '</div>';
 
+
+  // Body measurements section
+  html += '<div class="modal-section-lbl" style="margin-top:28px;margin-bottom:14px">Body measurements</div>';
+  var meas = dash.measurements[dash.week]||{};
+  var measFields = [
+    {k:'weight',  l:'Body weight', u:'kg', ph:'e.g. 82.4'},
+    {k:'waist',   l:'Waist',       u:'cm', ph:'e.g. 88'},
+    {k:'chest',   l:'Chest',       u:'cm', ph:'e.g. 102'},
+    {k:'hips',    l:'Hips',        u:'cm', ph:'e.g. 96'},
+    {k:'thigh',   l:'Thigh',       u:'cm', ph:'e.g. 58'},
+    {k:'arm',     l:'Upper arm',   u:'cm', ph:'e.g. 34'},
+    {k:'bodyfat', l:'Body fat',    u:'%',  ph:'e.g. 18.5'}
+  ];
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">';
+  measFields.forEach(function(mf){
+    html += '<div>'
+      +'<label style="display:block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--silver2);margin-bottom:5px">'+mf.l+' ('+mf.u+')</label>'
+      +'<input type="number" step="0.1" id="meas-'+mf.k+'" placeholder="'+mf.ph+'" value="'+(meas[mf.k]||'')+'" '
+      +'style="width:100%;padding:10px 12px;border:1px solid var(--border2);border-radius:var(--r);background:var(--midnight2);color:var(--white);font-family:inherit;font-size:13px;outline:none">'
+      +'</div>';
+  });
+  html += '</div>';
+  html += '<button class="pri-btn" id="save-meas" style="width:100%;margin-bottom:24px">Save measurements for week '+(dash.week+1)+'</button>';
+
+  // Weight trend
+  var hasAnyMeas = Object.keys(dash.measurements).length > 0;
+  if(hasAnyMeas){
+    html += '<div class="modal-section-lbl" style="margin-bottom:14px">Weight trend</div>';
+    html += '<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:16px;margin-bottom:20px">';
+    var startW = parseFloat(form.weight)||0;
+    var hasW = false;
+    allWeeks.forEach(function(wk,wi){
+      var wm = dash.measurements[wi];
+      if(wm && wm.weight){
+        hasW = true;
+        var diff = Math.round((parseFloat(wm.weight)-startW)*10)/10;
+        var diffStr = diff>0?'+'+diff+'kg':diff+'kg';
+        var col = form.goal==='lose'?(diff<=0?'var(--green)':'#fca5a5'):form.goal==='gain'?(diff>=0?'var(--green)':'var(--steel2)'):'var(--steel2)';
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px">'
+          +'<span style="color:var(--ink2)">Week '+(wi+1)+'</span>'
+          +'<span style="font-weight:700;color:var(--white)">'+wm.weight+'kg</span>'
+          +'<span style="font-size:11px;font-weight:600;color:'+col+'">'+(wi===0?'Start':diffStr)+'</span>'
+          +'</div>';
+      }
+    });
+    if(!hasW) html += '<p style="font-size:13px;color:var(--ink3);text-align:center;padding:8px 0">Log weight each week to track your trend</p>';
+    html += '</div>';
+  }
+
+  // Auto-progression button
+  var ci2 = dash.checkins[dash.week]||{};
+  var ciComplete = Object.keys(ci2).length >= 2;
+  if(dash.week < allWeeks.length-1 && ciComplete){
+    var avgScore = Math.round(((ci2.energy||3)+(ci2.hunger||3)+(ci2.sleep||3))/3);
+    var adjMsg = avgScore>=4?'You are feeling strong — week '+(dash.week+2)+' will step up intensity.'
+      :avgScore<=2?'You are finding it tough — week '+(dash.week+2)+' will ease back and recalibrate.'
+      :'You are adapting well — week '+(dash.week+2)+' will build progressively.';
+    html += '<div class="modal-section-lbl" style="margin-bottom:14px">Auto-progression &mdash; Week '+(dash.week+2)+'</div>';
+    html += '<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:20px;margin-bottom:12px">'
+      +'<p style="font-size:13px;color:var(--ink2);margin-bottom:12px;line-height:1.6">'+adjMsg+'</p>'
+      +'<button class="pri-btn" id="auto-prog-btn" style="width:100%">Generate Week '+(dash.week+2)+' with adjustments &rarr;</button>'
+      +'</div>';
+  }
+
   return html;
 }
 
@@ -1662,6 +1807,7 @@ function bindDashTab(){
     bnd('train-done-btn',function(){
       var key='train-w'+dash.week+'d'+dash.day;
       dash.adherence[key]=!dash.adherence[key];
+      syncClientData();
       renderDashboard(g('app'));
     });
   }
@@ -1716,6 +1862,24 @@ function bindDashTab(){
 
   if(dash.tab==='progress'){
     allWeeks.forEach(function(w,i){bnd('pwk-'+i,function(){dash.week=i;renderDashboard(g('app'));});});
+    // Save measurements
+    bnd('save-meas',function(){
+      if(!dash.measurements[dash.week]) dash.measurements[dash.week]={};
+      var fields=['weight','waist','chest','hips','thigh','arm','bodyfat'];
+      fields.forEach(function(f2){
+        var el=g('meas-'+f2);
+        if(el&&el.value) dash.measurements[dash.week][f2]=el.value;
+      });
+      // Persist to localStorage
+      try{localStorage.setItem('rb_measurements',JSON.stringify(dash.measurements));}catch(e){}
+      renderDashboard(g('app'));
+    });
+    // Auto-progression
+    bnd('auto-prog-btn',function(){
+      var ci2=dash.checkins[dash.week]||{};
+      var avg=Math.round(((ci2.energy||3)+(ci2.hunger||3)+(ci2.sleep||3))/3);
+      generateNextWeek(dash.week+1, avg);
+    });
     var qs2=['energy','hunger','sleep'];
     qs2.forEach(function(qk){
       for(var r=1;r<=5;r++){
@@ -1723,6 +1887,7 @@ function bindDashTab(){
           bnd('ci-'+q+'-'+rating,function(){
             if(!dash.checkins[dash.week])dash.checkins[dash.week]={};
             dash.checkins[dash.week][q]=rating;
+            syncClientData();
             renderDashboard(g('app'));
           });
         })(qk,r);
