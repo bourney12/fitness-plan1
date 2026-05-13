@@ -1296,18 +1296,31 @@ function renderDashboard(container){
   if(dash.tab==='calendar')    html += renderCalendarTab();
   if(dash.tab==='shopping')    html += renderShoppingTab();
   if(dash.tab==='progress')    html += renderProgressTab();
+  html += '</div>'; // close dash-content
+
+  // Bottom navigation - always rendered into the HTML string
+  var navItems = [
+    {k:'overview',  icon:'ti-home',         l:'Home'},
+    {k:'nutrition', icon:'ti-salad',         l:'Food'},
+    {k:'training',  icon:'ti-barbell',       l:'Train'},
+    {k:'shopping',  icon:'ti-shopping-cart', l:'Shop'},
+    {k:'progress',  icon:'ti-chart-bar',     l:'Progress'}
+  ];
+  html += '<div class="dash-bottom-nav">';
+  navItems.forEach(function(n){
+    html += '<button class="dbn'+(dash.tab===n.k?' active':'')+'" id="dbn-'+n.k+'">'
+      +'<i class="ti '+n.icon+'" aria-hidden="true"></i>'+n.l+'</button>';
+  });
   html += '</div>';
 
   html += '</div>'; // close dash-wrap
   container.innerHTML = html;
 
-  // Bind bottom nav buttons
-  var navKeys = ['overview','nutrition','training','shopping','progress'];
-  navKeys.forEach(function(k){
-    var el = g('dbn-'+k);
-    if(el) el.onclick = function(){ dash.tab=k; renderDashboard(g('app')); window.scrollTo(0,0); };
+  // Bind bottom nav buttons after they are in the DOM
+  navItems.forEach(function(n){
+    var el = g('dbn-'+n.k);
+    if(el) el.onclick = (function(k){ return function(){ dash.tab=k; renderDashboard(g('app')); window.scrollTo(0,0); }; })(n.k);
   });
-  // Calendar accessible from within other tabs only (day strip click etc)
 
   bindDashTab();
 }
