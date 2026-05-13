@@ -5,6 +5,15 @@ const path = require("path");
 const API_KEY = process.env.ANTHROPIC_API_KEY;
 const PORT    = process.env.PORT || 3000;
 
+function serveFile(res, filename, contentType) {
+  const filePath = path.join(__dirname, filename);
+  fs.readFile(filePath, (err, content) => {
+    if (err) { res.writeHead(404); res.end(filename + " not found"); return; }
+    res.writeHead(200, { "Content-Type": contentType });
+    res.end(content);
+  });
+}
+
 const server = http.createServer(async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
@@ -16,22 +25,17 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // Serve the HTML app
-  if (req.method === "GET" && req.url === "/") {
-    const filePath = path.join(__dirname, "fitness-plan-app.html");
-    fs.readFile(filePath, (err, content) => {
-      if (err) {
-        res.writeHead(404);
-        res.end("fitness-plan-app.html not found");
-        return;
-      }
-      res.writeHead(200, { "Content-Type": "text/html" });
-      res.end(content);
-    });
-    return;
+  // Main app
+  if (req.method === "GET" && (req.url === "/" || req.url === "/index.html")) {
+    return serveFile(res, "fitness-plan-app.html", "text/html");
   }
 
-  // Proxy to Anthropic
+  // Coach dashboard
+  if (req.method === "GET" && req.url === "/coach") {
+    return serveFile(res, "coach.html", "text/html");
+  }
+
+  // Anthropic API proxy
   if (req.method === "POST" && req.url === "/api/message") {
     let body = "";
     req.on("data", chunk => { body += chunk; });
@@ -62,5 +66,5 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log("Fitness plan server running on port " + PORT);
+  console.log("ReBourne server running on port " + PORT);
 });
