@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ReBourne — Coach Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --midnight:#07101D;--midnight2:#0d1929;--midnight3:#132236;
+  --steel:#3A5F96;--steel2:#7E98BC;
+  --silver:#F5F5F5;--silver2:#b8c4d4;--charcoal:#0E1117;
+  --white:#F5F5F5;--ink:#F5F5F5;--ink2:#D6D8DC;--ink3:#7E98BC;
+  --card:#0d1929;--card2:#132236;
+  --border:rgba(122,152,188,0.15);--border2:rgba(122,152,188,0.28);
+  --gold:#c9a96e;--green:#6ee7b7;--red:#fca5a5;
+  --r:8px;--rl:12px;
+}
+body{font-family:'Montserrat',sans-serif;background:var(--midnight);color:var(--ink);min-height:100vh}
+
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.login-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--rl);padding:40px;width:100%;max-width:400px;text-align:center}
+.login-logo{margin-bottom:24px}
+.login-title{font-size:20px;font-weight:600;margin-bottom:6px}
+.login-sub{font-size:13px;color:var(--ink3);margin-bottom:28px}
+.login-input{width:100%;padding:12px 14px;border:1px solid var(--border2);border-radius:var(--r);background:var(--midnight2);color:var(--white);font-family:inherit;font-size:14px;outline:none;margin-bottom:12px;text-align:center;letter-spacing:.08em}
+.login-btn{width:100%;padding:13px;border-radius:var(--r);border:none;background:var(--steel);color:var(--white);font-family:inherit;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.login-err{color:#fca5a5;font-size:12px;margin-top:10px}
+
+/* HEADER */
+.coach-header{background:#050a12;border-bottom:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.coach-logo{display:flex;align-items:center;gap:12px}
+.coach-badge{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,169,110,.3);padding:4px 12px;border-radius:100px}
+.logout-btn{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);cursor:pointer;background:none;border:1px solid var(--border);border-radius:var(--r);padding:7px 14px;font-family:inherit}
+.logout-btn:hover{color:var(--white);border-color:var(--border2)}
+
+/* LAYOUT */
+.coach-wrap{max-width:1100px;margin:0 auto;padding:28px 24px 80px}
+
+/* STATS ROW */
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+.stat-block{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:18px 20px}
+.stat-block.accent{background:var(--steel);border-color:var(--steel2)}
+.sb-val{font-size:28px;font-weight:700;color:var(--white);margin-bottom:4px}
+.sb-lbl{font-size:11px;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em}
+.stat-block.accent .sb-lbl{color:rgba(255,255,255,.7)}
+
+/* SECTION */
+.section-hd{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--steel2);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.section-hd::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* CLIENT TABLE */
+.client-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:var(--rl);overflow:hidden;border:1px solid var(--border);margin-bottom:28px}
+.ct-head{background:var(--card2)}
+.ct-head th{padding:11px 16px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);text-align:left;border-bottom:1px solid var(--border)}
+.ct-row{border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+.ct-row:last-child{border-bottom:none}
+.ct-row:hover{background:var(--card2)}
+.ct-row.selected{background:var(--card2);border-left:3px solid var(--steel2)}
+.ct-row td{padding:13px 16px;font-size:13px;color:var(--ink2)}
+.ct-name{font-weight:600;color:var(--white)}
+.ct-badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:.04em}
+.b-steel{background:rgba(58,95,150,.25);color:var(--steel2)}
+.b-gold{background:rgba(201,169,110,.15);color:var(--gold)}
+.b-green{background:rgba(110,231,183,.12);color:var(--green)}
+.b-red{background:rgba(252,165,165,.1);color:var(--red)}
+
+/* CLIENT DETAIL PANEL */
+.detail-panel{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:24px;margin-bottom:24px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px}
+.detail-item{background:var(--midnight2);border-radius:var(--r);padding:12px}
+.di-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:4px}
+.di-val{font-size:14px;font-weight:600;color:var(--white)}
+
+/* CHECKIN SUMMARY */
+.checkin-row{display:flex;gap:16px;margin-bottom:10px;align-items:center}
+.ci-week{font-size:12px;font-weight:600;color:var(--ink2);width:60px;flex-shrink:0}
+.ci-bar{flex:1;display:flex;gap:6px;align-items:center}
+.ci-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.ci-label{font-size:11px;color:var(--ink3);margin-left:4px}
+
+/* MEASUREMENT TABLE */
+.meas-table{width:100%;border-collapse:collapse;font-size:12px}
+.meas-table th{padding:8px 10px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);text-align:left;border-bottom:1px solid var(--border)}
+.meas-table td{padding:8px 10px;color:var(--ink2);border-bottom:1px solid var(--border)}
+.meas-table td:first-child{font-weight:600;color:var(--white)}
+.trend-up{color:var(--green);font-weight:600}
+.trend-dn{color:#fca5a5;font-weight:600}
+
+/* ADHERENCE BAR */
+.adh-row{margin-bottom:12px}
+.adh-lbl{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px}
+.adh-track{height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.adh-fill{height:100%;border-radius:2px;background:var(--steel2)}
+
+/* COACH NOTES */
+.coach-note-input{width:100%;min-height:90px;padding:12px 14px;border:1px solid var(--border2);border-radius:var(--r);background:var(--midnight2);color:var(--white);font-family:inherit;font-size:13px;resize:vertical;outline:none;line-height:1.6}
+.save-note-btn{margin-top:10px;padding:10px 24px;border-radius:var(--r);border:none;background:var(--steel);color:var(--white);font-family:inherit;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:40px;color:var(--ink3);font-size:13px}
+.empty i{font-size:32px;display:block;margin-bottom:12px;color:var(--border2)}
+
+/* TABS */
+.detail-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:20px}
+.dt-btn{padding:10px 18px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);cursor:pointer;border:none;background:transparent;border-bottom:2px solid transparent;margin-bottom:-1px;font-family:inherit;transition:all .15s}
+.dt-btn.active{color:var(--steel2);border-bottom-color:var(--steel2)}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-logo">
+        <svg width="56" height="56" viewBox="140 150 540 510" aria-label="ReBourne logo">
+          <defs>
+            <linearGradient id="g1" x1="180" y1="120" x2="650" y2="680" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#7E98BC"/>
+              <stop offset="45%" stop-color="#3A5F96"/>
+              <stop offset="100%" stop-color="#162A46"/>
+            </linearGradient>
+          </defs>
+          <path fill="url(#g1)" fill-rule="evenodd" d="M205 170 L475 170 C565 170 625 223 625 306 C625 372 586 421 521 438 L657 630 L534 630 L412 452 L362 452 L362 630 L240 630 L240 240 L205 170 Z M362 260 L362 372 L470 372 C510 372 535 351 535 316 C535 282 510 260 470 260 L362 260 Z M205 170 L363 347 L318 347 L165 170 L205 170 Z"/>
+        </svg>
+      </div>
+      <div class="login-title">Coach Dashboard</div>
+      <div class="login-sub">ReBourne — Reinvent Your Potential</div>
+      <input type="password" class="login-input" id="pw-input" placeholder="Enter password" autocomplete="current-password">
+      <button class="login-btn" id="login-btn">Access dashboard</button>
+      <div class="login-err" id="login-err" style="display:none">Incorrect password. Please try again.</div>
+    </div>
+  </div>
+</div>
+
+<!-- COACH DASHBOARD (hidden until login) -->
+<div id="coach-screen" style="display:none">
+
+  <header class="coach-header">
+    <div class="coach-logo">
+      <svg width="32" height="32" viewBox="140 150 540 510" aria-label="ReBourne">
+        <defs><linearGradient id="g2" x1="180" y1="120" x2="650" y2="680" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#7E98BC"/><stop offset="45%" stop-color="#3A5F96"/><stop offset="100%" stop-color="#162A46"/></linearGradient></defs>
+        <path fill="url(#g2)" fill-rule="evenodd" d="M205 170 L475 170 C565 170 625 223 625 306 C625 372 586 421 521 438 L657 630 L534 630 L412 452 L362 452 L362 630 L240 630 L240 240 L205 170 Z M362 260 L362 372 L470 372 C510 372 535 351 535 316 C535 282 510 260 470 260 L362 260 Z M205 170 L363 347 L318 347 L165 170 L205 170 Z"/>
+      </svg>
+      <div>
+        <div style="font-size:13px;letter-spacing:.18em;color:var(--white)"><span style="font-weight:300;color:var(--steel2)">RE</span><span style="font-weight:700">BOURNE</span></div>
+        <div style="font-size:8px;letter-spacing:.15em;color:var(--ink3);text-transform:uppercase">Coach dashboard</div>
+      </div>
+      <div class="coach-badge">Coach</div>
+    </div>
+    <button class="logout-btn" id="logout-btn">Log out</button>
+  </header>
+
+  <div class="coach-wrap">
+
+    <!-- Stats bar -->
+    <div class="stats-bar" id="stats-bar">
+      <div class="stat-block accent">
+        <div class="sb-val" id="stat-total">0</div>
+        <div class="sb-lbl">Total plans generated</div>
+      </div>
+      <div class="stat-block">
+        <div class="sb-val" id="stat-week">0</div>
+        <div class="sb-lbl">Generated this week</div>
+      </div>
+      <div class="stat-block">
+        <div class="sb-val" id="stat-checkins">0</div>
+        <div class="sb-lbl">Check-ins received</div>
+      </div>
+      <div class="stat-block">
+        <div class="sb-val" id="stat-adh">—</div>
+        <div class="sb-lbl">Avg adherence rate</div>
+      </div>
+    </div>
+
+    <!-- Client list -->
+    <div class="section-hd" style="margin-bottom:14px">All clients</div>
+    <table class="client-table" id="client-table">
+      <thead class="ct-head">
+        <tr>
+          <th>Client</th>
+          <th>Plan type</th>
+          <th>Duration</th>
+          <th>Goal</th>
+          <th>Generated</th>
+          <th>Adherence</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="client-tbody">
+        <tr><td colspan="7" class="empty">No client data yet. Plans appear here after clients generate them.</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Client detail panel -->
+    <div id="client-detail" style="display:none">
+      <div class="section-hd" style="margin-bottom:14px">Client detail — <span id="detail-name"></span></div>
+
+      <div class="detail-tabs">
+        <button class="dt-btn active" id="dtab-overview" onclick="switchDetailTab('overview')">Overview</button>
+        <button class="dt-btn" id="dtab-checkins" onclick="switchDetailTab('checkins')">Check-ins</button>
+        <button class="dt-btn" id="dtab-measurements" onclick="switchDetailTab('measurements')">Measurements</button>
+        <button class="dt-btn" id="dtab-adherence" onclick="switchDetailTab('adherence')">Adherence</button>
+        <button class="dt-btn" id="dtab-notes" onclick="switchDetailTab('notes')">Coach notes</button>
+      </div>
+
+      <!-- Overview tab -->
+      <div id="detail-overview">
+        <div class="detail-panel">
+          <div class="detail-grid" id="detail-stats"></div>
+          <div id="detail-supplements"></div>
+        </div>
+      </div>
+
+      <!-- Check-ins tab -->
+      <div id="detail-checkins" style="display:none">
+        <div class="detail-panel">
+          <div id="checkin-content"></div>
+        </div>
+      </div>
+
+      <!-- Measurements tab -->
+      <div id="detail-measurements" style="display:none">
+        <div class="detail-panel">
+          <div id="meas-content"></div>
+        </div>
+      </div>
+
+      <!-- Adherence tab -->
+      <div id="detail-adherence" style="display:none">
+        <div class="detail-panel">
+          <div id="adh-content"></div>
+        </div>
+      </div>
+
+      <!-- Coach notes tab -->
+      <div id="detail-notes" style="display:none">
+        <div class="detail-panel">
+          <div style="font-size:13px;color:var(--ink3);margin-bottom:12px;line-height:1.6">Add private coaching notes for this client. These are only visible to you.</div>
+          <textarea class="coach-note-input" id="coach-note-input" placeholder="e.g. Client struggles with hunger on rest days. Suggested adding a protein shake mid-afternoon. Review calorie target at week 4..."></textarea>
+          <button class="save-note-btn" id="save-note-btn">Save note</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty state for no clients -->
+    <div id="no-clients" style="display:none">
+      <div class="detail-panel">
+        <div class="empty">
+          <div style="font-size:32px;margin-bottom:12px;color:var(--border2)">&#128203;</div>
+          No clients yet. Plans will appear here once clients generate them at your app URL.
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:32px">
+      <button onclick="clearAllData()" style="background:none;border:1px solid var(--border);border-radius:var(--r);padding:8px 20px;color:var(--ink3);font-family:inherit;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;cursor:pointer">Clear all client data</button>
+      <div style="font-size:11px;color:var(--ink3);margin-top:8px">Client data is stored locally in this browser</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+var PASSWORD = 'Rebourne1';
+var selectedClient = null;
+var currentDetailTab = 'overview';
+var coachNotes = {};
+
+// ── LOGIN ─────────────────────────────────────────────────────────────────────
+function g(id){ return document.getElementById(id); }
+
+g('login-btn').onclick = function(){
+  var pw = g('pw-input').value;
+  if(pw === PASSWORD){
+    g('login-screen').style.display = 'none';
+    g('coach-screen').style.display = 'block';
+    loadDashboard();
+  } else {
+    g('login-err').style.display = 'block';
+    g('pw-input').value = '';
+  }
+};
+
+g('pw-input').addEventListener('keydown', function(e){
+  if(e.key === 'Enter') g('login-btn').click();
+});
+
+g('logout-btn').onclick = function(){
+  g('coach-screen').style.display = 'none';
+  g('login-screen').style.display = 'block';
+  g('pw-input').value = '';
+};
+
+// ── DATA LOADING ──────────────────────────────────────────────────────────────
+function getAllClients(){
+  var clients = [];
+  try{
+    var stored = localStorage.getItem('rb_coach_clients');
+    if(stored) clients = JSON.parse(stored);
+  }catch(e){}
+  return clients;
+}
+
+function saveClients(clients){
+  try{ localStorage.setItem('rb_coach_clients', JSON.stringify(clients)); }catch(e){}
+}
+
+function loadCoachNotes(){
+  try{
+    var stored = localStorage.getItem('rb_coach_notes');
+    if(stored) coachNotes = JSON.parse(stored);
+  }catch(e){}
+}
+
+function saveCoachNotes(){
+  try{ localStorage.setItem('rb_coach_notes', JSON.stringify(coachNotes)); }catch(e){}
+}
+
+// ── DASHBOARD LOAD ────────────────────────────────────────────────────────────
+function loadDashboard(){
+  loadCoachNotes();
+  var clients = getAllClients();
+
+  // Stats
+  var now = new Date();
+  var weekStart = new Date(now); weekStart.setDate(now.getDate()-now.getDay());
+  var thisWeek = clients.filter(function(c){ return new Date(c.generatedAt) >= weekStart; }).length;
+  var totalCheckins = clients.reduce(function(s,c){ return s+(c.checkins?Object.keys(c.checkins).length:0); },0);
+  var adhRates = clients.map(function(c){
+    if(!c.adherence||!c.planWeeks||!c.trainingDays) return null;
+    var totalSessions = c.planWeeks * parseInt(c.trainingDays);
+    var done = Object.values(c.adherence).filter(Boolean).length;
+    return totalSessions>0?Math.round(done/totalSessions*100):null;
+  }).filter(function(x){ return x!==null; });
+  var avgAdh = adhRates.length>0?Math.round(adhRates.reduce(function(a,b){return a+b;},0)/adhRates.length)+'%':'—';
+
+  g('stat-total').textContent = clients.length;
+  g('stat-week').textContent = thisWeek;
+  g('stat-checkins').textContent = totalCheckins;
+  g('stat-adh').textContent = avgAdh;
+
+  // Client table
+  var tbody = g('client-tbody');
+  if(clients.length === 0){
+    tbody.innerHTML = '<tr><td colspan="7" class="empty">No client data yet. Plans appear here after clients generate them.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = '';
+  clients.forEach(function(client, idx){
+    var adhRate = '—';
+    if(client.adherence && client.planWeeks && client.trainingDays){
+      var total = client.planWeeks * parseInt(client.trainingDays);
+      var done2 = Object.values(client.adherence).filter(Boolean).length;
+      if(total>0) adhRate = Math.round(done2/total*100)+'%';
+    }
+    var date = client.generatedAt ? new Date(client.generatedAt).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '—';
+    var hasCheckins = client.checkins && Object.keys(client.checkins).length>0;
+    var hasMeas = client.measurements && Object.keys(client.measurements).length>0;
+    var statusBadge = hasCheckins
+      ? '<span class="ct-badge b-green">Active</span>'
+      : '<span class="ct-badge b-steel">Generated</span>';
+
+    var tr = document.createElement('tr');
+    tr.className = 'ct-row';
+    tr.innerHTML = '<td><div class="ct-name">'+client.name+'</div><div style="font-size:11px;color:var(--ink3);margin-top:2px">'+client.email+'</div></td>'
+      +'<td><span class="ct-badge b-gold">'+client.planType+'</span></td>'
+      +'<td>'+client.planWeeks+' weeks</td>'
+      +'<td>'+client.goal+'</td>'
+      +'<td style="font-size:11px">'+date+'</td>'
+      +'<td style="font-weight:600;color:'+(adhRate==='—'?'var(--ink3)':parseInt(adhRate)>=70?'var(--green)':'var(--steel2)')+'">'+adhRate+'</td>'
+      +'<td>'+statusBadge+'</td>';
+    tr.onclick = function(){ selectClient(idx); };
+    tbody.appendChild(tr);
+  });
+}
+
+// ── CLIENT DETAIL ─────────────────────────────────────────────────────────────
+function selectClient(idx){
+  var clients = getAllClients();
+  selectedClient = clients[idx];
+  g('detail-name').textContent = selectedClient.name;
+  g('client-detail').style.display = 'block';
+
+  // Highlight row
+  document.querySelectorAll('.ct-row').forEach(function(r,i){
+    r.classList.toggle('selected', i===idx);
+  });
+
+  // Load coach note
+  var noteKey = selectedClient.name+'_'+selectedClient.generatedAt;
+  g('coach-note-input').value = coachNotes[noteKey]||'';
+  g('save-note-btn').onclick = function(){
+    coachNotes[noteKey] = g('coach-note-input').value;
+    saveCoachNotes();
+    g('save-note-btn').textContent = 'Saved!';
+    setTimeout(function(){ g('save-note-btn').textContent='Save note'; }, 2000);
+  };
+
+  switchDetailTab('overview');
+  window.scrollTo(0, g('client-detail').offsetTop - 20);
+}
+
+function switchDetailTab(tab){
+  currentDetailTab = tab;
+  ['overview','checkins','measurements','adherence','notes'].forEach(function(t){
+    g('detail-'+t).style.display = t===tab?'block':'none';
+    g('dtab-'+t).classList.toggle('active', t===tab);
+  });
+  if(tab==='overview')      renderDetailOverview();
+  if(tab==='checkins')      renderDetailCheckins();
+  if(tab==='measurements')  renderDetailMeasurements();
+  if(tab==='adherence')     renderDetailAdherence();
+}
+
+function renderDetailOverview(){
+  var c = selectedClient;
+  var stats = [
+    {l:'Target calories', v:(c.calc&&c.calc.target)?c.calc.target.toLocaleString()+' kcal':'—'},
+    {l:'Protein target',  v:(c.calc&&c.calc.protein)?c.calc.protein+'g':'—'},
+    {l:'Diet type',       v:c.dietType||'—'},
+    {l:'Training days',   v:(c.trainingDays||'—')+'/week'},
+    {l:'Step goal',       v:(c.steps?Number(c.steps).toLocaleString():' —')+' steps/day'},
+    {l:'Plan weeks',      v:(c.planWeeks||'—')+' weeks'}
+  ];
+  var html = stats.map(function(s){
+    return '<div class="detail-item"><div class="di-lbl">'+s.l+'</div><div class="di-val">'+s.v+'</div></div>';
+  }).join('');
+  g('detail-stats').innerHTML = html;
+
+  var suppHtml = '<div style="margin-top:16px"><div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--steel2);margin-bottom:10px">Client info</div>';
+  if(c.injuries) suppHtml += '<div style="background:var(--midnight2);border-radius:var(--r);padding:12px;margin-bottom:8px"><div style="font-size:10px;color:var(--ink3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em;font-weight:600">Injuries / limitations</div><div style="font-size:13px;color:var(--ink2)">'+c.injuries+'</div></div>';
+  if(c.allergies) suppHtml += '<div style="background:var(--midnight2);border-radius:var(--r);padding:12px;margin-bottom:8px"><div style="font-size:10px;color:var(--ink3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em;font-weight:600">Allergies</div><div style="font-size:13px;color:var(--ink2)">'+c.allergies+'</div></div>';
+  if(c.dislikes) suppHtml += '<div style="background:var(--midnight2);border-radius:var(--r);padding:12px"><div style="font-size:10px;color:var(--ink3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em;font-weight:600">Dislikes</div><div style="font-size:13px;color:var(--ink2)">'+c.dislikes+'</div></div>';
+  suppHtml += '</div>';
+  g('detail-supplements').innerHTML = suppHtml;
+}
+
+function renderDetailCheckins(){
+  var c = selectedClient;
+  var ci = c.checkins||{};
+  var qs = [{k:'energy',l:'Energy'},{k:'hunger',l:'Hunger'},{k:'sleep',l:'Sleep'}];
+  if(Object.keys(ci).length===0){
+    g('checkin-content').innerHTML = '<p style="color:var(--ink3);font-size:13px;text-align:center;padding:20px 0">No check-ins submitted yet.</p>';
+    return;
+  }
+  var html = '<table style="width:100%;border-collapse:collapse">';
+  html += '<tr><th style="padding:8px 12px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);text-align:left;border-bottom:1px solid var(--border)">Week</th>';
+  qs.forEach(function(q){ html += '<th style="padding:8px 12px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);text-align:center;border-bottom:1px solid var(--border)">'+q.l+'</th>'; });
+  html += '<th style="padding:8px 12px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);text-align:center;border-bottom:1px solid var(--border)">Avg</th></tr>';
+  Object.keys(ci).sort().forEach(function(wi){
+    var w = ci[wi];
+    var avg = Math.round(((w.energy||0)+(w.hunger||0)+(w.sleep||0))/3);
+    var avgCol = avg>=4?'var(--green)':avg<=2?'#fca5a5':'var(--steel2)';
+    html += '<tr>';
+    html += '<td style="padding:10px 12px;font-size:13px;font-weight:600;color:var(--white);border-bottom:1px solid var(--border)">Week '+(parseInt(wi)+1)+'</td>';
+    qs.forEach(function(q){
+      var score = w[q.k]||0;
+      var col = score>=4?'var(--green)':score<=2?'#fca5a5':'var(--steel2)';
+      html += '<td style="padding:10px 12px;text-align:center;border-bottom:1px solid var(--border)"><span style="display:inline-flex;width:28px;height:28px;border-radius:50%;background:rgba(58,95,150,.2);align-items:center;justify-content:center;font-size:13px;font-weight:700;color:'+col+'">'+score+'</span></td>';
+    });
+    html += '<td style="padding:10px 12px;text-align:center;border-bottom:1px solid var(--border)"><span style="font-size:13px;font-weight:700;color:'+avgCol+'">'+avg+'</span></td>';
+    html += '</tr>';
+  });
+  html += '</table>';
+  g('checkin-content').innerHTML = html;
+}
+
+function renderDetailMeasurements(){
+  var c = selectedClient;
+  var meas = c.measurements||{};
+  var fields = [{k:'weight',l:'Weight (kg)'},{k:'waist',l:'Waist (cm)'},{k:'chest',l:'Chest (cm)'},{k:'hips',l:'Hips (cm)'},{k:'thigh',l:'Thigh (cm)'},{k:'arm',l:'Arm (cm)'},{k:'bodyfat',l:'Body fat (%)'}];
+  if(Object.keys(meas).length===0){
+    g('meas-content').innerHTML = '<p style="color:var(--ink3);font-size:13px;text-align:center;padding:20px 0">No measurements logged yet.</p>';
+    return;
+  }
+  var html = '<table class="meas-table"><thead><tr><th>Measurement</th>';
+  Object.keys(meas).sort().forEach(function(wi){ html += '<th>Week '+(parseInt(wi)+1)+'</th>'; });
+  html += '<th>Change</th></tr></thead><tbody>';
+  fields.forEach(function(field){
+    var weeks = Object.keys(meas).sort();
+    var vals = weeks.map(function(wi){ return meas[wi][field.k]; }).filter(Boolean);
+    if(vals.length===0) return;
+    html += '<tr><td>'+field.l+'</td>';
+    weeks.forEach(function(wi){
+      html += '<td>'+(meas[wi][field.k]||'—')+'</td>';
+    });
+    if(vals.length>=2){
+      var diff = Math.round((parseFloat(vals[vals.length-1])-parseFloat(vals[0]))*10)/10;
+      var pos = diff>0?'+':'';
+      var col = field.k==='weight'?(c.goal==='lose'?diff<=0:'var(--green)'):diff>=0?'var(--green)':'#fca5a5';
+      html += '<td class="'+(diff<0&&field.k==='weight'&&c.goal==='lose'?'trend-up':diff>0&&field.k!=='weight'?'trend-up':'trend-dn')+'">'+pos+diff+'</td>';
+    } else { html += '<td>—</td>'; }
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  g('meas-content').innerHTML = html;
+}
+
+function renderDetailAdherence(){
+  var c = selectedClient;
+  var adh = c.adherence||{};
+  var html = '';
+  for(var wi=0;wi<(c.planWeeks||1);wi++){
+    var sessions = parseInt(c.trainingDays)||3;
+    var done = 0;
+    for(var di=0;di<7;di++){
+      if(adh['train-w'+wi+'d'+di]) done++;
+    }
+    var pct = sessions>0?Math.round(done/sessions*100):0;
+    html += '<div class="adh-row">'
+      +'<div class="adh-lbl"><span style="font-size:12px;font-weight:600;color:var(--white)">Week '+(wi+1)+'</span>'
+      +'<span style="font-size:11px;font-weight:600;color:'+(pct>=70?'var(--green)':'var(--steel2)')+'">'+done+' / '+sessions+' sessions — '+pct+'%</span></div>'
+      +'<div class="adh-track"><div class="adh-fill" style="width:'+pct+'%;background:'+(pct>=70?'var(--green)':'var(--steel2)')+'"></div></div>'
+      +'</div>';
+  }
+  if(!html) html = '<p style="color:var(--ink3);font-size:13px;text-align:center;padding:20px 0">No adherence data yet.</p>';
+  g('adh-content').innerHTML = html;
+}
+
+function clearAllData(){
+  if(confirm('This will delete all client data. Are you sure?')){
+    localStorage.removeItem('rb_coach_clients');
+    localStorage.removeItem('rb_coach_notes');
+    selectedClient = null;
+    g('client-detail').style.display='none';
+    loadDashboard();
+  }
+}
+</script>
+</body>
+</html>
