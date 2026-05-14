@@ -1470,13 +1470,14 @@ function render(){
       ];
       var factIdx=Math.floor(Date.now()/8000)%FACTS.length;
       var fact=FACTS[factIdx];
+      var wksDone=Math.max(0,generatingWeek-1);
       var planSteps2=[
-        {label:'Analysing goals and biometrics',done:true},
-        {label:'Calculating your macro targets',done:true},
-        {label:'Building your '+form.planWeeks+'-week meal plan',done:false,active:true},
-        {label:'Programming your training sessions',done:false},
+        {label:'Analysing your goals and biometrics',done:true},
+        {label:'Calculating precise macro targets',done:true},
+        {label:'Week '+generatingWeek+' of '+form.planWeeks+' — building meal plan',done:false,active:true},
+        {label:'Programming training sessions',done:false},
         {label:'Generating recipes and shopping list',done:false},
-        {label:'Adding personalised coaching insights',done:false}
+        {label:'Adding your coaching insights',done:false}
       ];
       var stepsHtml='<div class="load-steps">';
       planSteps2.forEach(function(s){
@@ -1486,8 +1487,12 @@ function render(){
       stepsHtml+='</div>';
       var dotsHtml2='';
       if(form.planWeeks>1){
-        dotsHtml2='<div style="font-size:10px;color:var(--muted);margin-bottom:8px">Generating '+form.planWeeks+' weeks simultaneously</div><div class="load-progress-dots">';
-        for(var di2=0;di2<form.planWeeks;di2++)dotsHtml2+='<div class="lpd'+(di2===0?' active':'')+'" id="ldot-'+di2+'"></div>';
+        dotsHtml2='<div style="font-size:10px;color:var(--muted);margin-bottom:8px">Generating week '+generatingWeek+' of '+form.planWeeks+'</div><div class="load-progress-dots">';
+        for(var di2=0;di2<form.planWeeks;di2++){
+          var isDone2=di2<(generatingWeek-1);
+          var isActive2=di2===(generatingWeek-1);
+          dotsHtml2+='<div class="lpd'+(isDone2?' done':isActive2?' active':'')+'" id="ldot-'+di2+'"></div>';
+        }
         dotsHtml2+='</div>';
       }
       app.innerHTML='<div class="loading-screen">'
@@ -1603,27 +1608,141 @@ function render(){
 // ════════════════════════════════════════════════════════════════════
 // API - GENERATE PLAN
 // ════════════════════════════════════════════════════════════════════
+// ── JSON REPAIR HELPER ───────────────────────────────────────────
+function repairJSON(text){
+  // Extract the JSON blob
+  var s=text.indexOf('{'),e=text.lastIndexOf('}');
+  if(s===-1) throw new Error('No JSON found in response');
+  var raw=text.slice(s,e+1);
+
+  // First try native parse
+  try{ return JSON.parse(raw); } catch(err){}
+
+  // Remove trailing commas before ] or }
+  var cleaned=raw
+    .replace(/,\s*([}\]])/g,'$1')   // trailing commas
+    .replace(/([{,])\s*}/g,'}')     // empty objects from trailing comma
+    .replace(/\n/g,' ')             // newlines inside strings
+    .replace(/[\u0000-\u001F]/g,'') // control chars
+    .replace(/,\s*,/g,',');         // double commas
+
+  try{ return JSON.parse(cleaned); } catch(err2){}
+
+  // Last resort: truncated JSON — try to close open structures
+  // Count unmatched braces/brackets
+  var opens=0,inStr=false,prev='';
+  for(var ci=0;ci<cleaned.length;ci++){
+    var ch=cleaned[ci];
+    if(ch==='"'&&prev!=='\\') inStr=!inStr;
+    if(!inStr){
+      if(ch==='{'||ch==='[') opens++;
+      if(ch==='}'||ch===']') opens--;
+    }
+    prev=ch;
+  }
+  // If still open, close greedily
+  var patched=cleaned.replace(/,\s*$/, ''); // remove trailing comma
+  while(opens>0){
+    // Determine what to close: if last opener was [ close with ], else }
+    patched+=']}'; opens-=2;
+  }
+  patched=patched.replace(/,\s*([}\]])/g,'$1'); // clean up again
+  try{ return JSON.parse(patched); } catch(err3){
+    throw new Error('Could not parse plan JSON: '+err3.message.slice(0,80));
+  }
+}
+
+// ── VALIDATE + FILL DEFAULTS ─────────────────────────────────────
+function validateWeek(data){
+  if(!data||typeof data!=='object') throw new Error('Plan data missing');
+  // Ensure mealPlan has 7 days
+  if(!Array.isArray(data.mealPlan)||data.mealPlan.length<7){
+    var dayNames=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+    var existing=data.mealPlan||[];
+    while(existing.length<7){
+      var di=existing.length;
+      existing.push({day:dayNames[di],meals:[
+        {type:'Breakfast',name:'Oats with protein powder and berries',calories:420,protein:35,carbs:52,fat:8},
+        {type:'Lunch',name:'Grilled chicken and rice',calories:520,protein:45,carbs:55,fat:10},
+        {type:'Dinner',name:'Salmon with sweet potato and greens',calories:560,protein:42,carbs:48,fat:16}
+      ]});
+    }
+    data.mealPlan=existing;
+  }
+  // Ensure each meal has required fields
+  data.mealPlan.forEach(function(day){
+    (day.meals||[]).forEach(function(m){
+      m.calories=parseInt(m.calories)||400;
+      m.protein=parseInt(m.protein)||30;
+      m.carbs=parseInt(m.carbs)||45;
+      m.fat=parseInt(m.fat)||12;
+      if(!m.type) m.type='Meal';
+      if(!m.name) m.name='Balanced meal';
+    });
+  });
+  // Ensure trainingPlan has 7 days
+  if(!Array.isArray(data.trainingPlan)||data.trainingPlan.length<7){
+    var dayNames2=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+    var existing2=data.trainingPlan||[];
+    while(existing2.length<7){
+      var di2=existing2.length;
+      existing2.push({day:dayNames2[di2],type:'Rest',focus:'Active recovery',exercises:[]});
+    }
+    data.trainingPlan=existing2;
+  }
+  if(!data.coachNotes) data.coachNotes='Stay consistent, trust the process.';
+  return data;
+}
+
 async function generateWeek(weekNum,totalWeeks,overrideNote){
   var c=calc;
   var gl=form.goal==='lose'?'Fat loss':form.goal==='gain'?'Muscle gain':'Maintain/Recomp';
   var adj=getAdj();
-  var progressNote=overrideNote||('Week '+weekNum+' of '+totalWeeks+'. '+(weekNum===1?'Start with foundational volume and technique.':weekNum===totalWeeks?'Peak week — maximum intensity.':'Progress from week '+(weekNum-1)+', increase load or volume by 5-10%.'));
-  var prompt='Elite fitness coach. Generate a 7-day plan. Return ONLY valid JSON.'
-    +' Client: '+form.name+', '+form.age+'yo '+form.sex+', '+form.weight+'kg, '+form.height+'cm, '+form.activity+' activity.'
-    +' Goal: '+gl+' ('+adj+' kcal/day adj). Target: '+c.target+' kcal, P:'+c.protein+'g C:'+c.carbs+'g F:'+c.fat+'g.'
-    +' Diet: '+form.dietType+'. Meals/day: '+(parseInt(form.meals||3)+parseInt(form.snacks||1))+'. Allergies: '+(form.allergies||'None')+'.'
-    +' Training: '+form.trainingDays+' days/week. Equipment: '+(form.equipment||[]).join(',')||'Full gym'+'.'
-    +' Plan type: '+planLabel()+'. '+progressNote
-    +' Injuries: '+(form.injuries||'None')+'. Notes: '+(form.notes||'None')+'.'
-    +' JSON format: {"mealPlan":[{"day":"Monday","meals":[{"type":"Breakfast","name":"...","calories":0,"protein":0,"carbs":0,"fat":0}]}],"trainingPlan":[{"day":"Monday","type":"Push","focus":"...","exercises":["Bench press 4x8 RPE8"]}],"coachNotes":"..."}. '
-    +'All 7 days. Train '+form.trainingDays+' days, rest others. Respect injuries.';
-  var res=await fetch('/api/message',{method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:4000,messages:[{role:'user',content:prompt}]})});
-  var data=await res.json();
-  var text=(data.content.find(function(b){return b.type==='text';})||{}).text||'';
-  var s=text.indexOf('{'),e2=text.lastIndexOf('}');
-  if(s===-1)throw new Error('Invalid response');
-  return JSON.parse(text.slice(s,e2+1));
+  var progressNote=overrideNote||('Week '+weekNum+' of '+totalWeeks+'. '+(weekNum===1?'Build your foundation — focus on form and hitting your calorie target.':weekNum===totalWeeks?'Final week — give it everything.':'Progress from last week. Increase weight by 2.5-5% or add a rep where possible.'));
+  var mealCount=parseInt(form.meals||3)+parseInt(form.snacks||1);
+  var prompt='You are an elite fitness and nutrition coach. Generate a complete 7-day training and nutrition plan.'
+    +' IMPORTANT: Return ONLY valid JSON with no markdown, no explanation, no extra text.'
+    +' Keep meal names concise (under 8 words). Keep exercise descriptions under 40 characters.'
+    +' Client: '+form.name+', age '+form.age+', '+form.sex+', '+form.weight+'kg, '+form.height+'cm.'
+    +' Activity: '+form.activity+'. Goal: '+gl+'. Calorie target: '+c.target+' kcal/day.'
+    +' Macros: protein '+c.protein+'g, carbs '+c.carbs+'g, fat '+c.fat+'g.'
+    +' Diet type: '+form.dietType+'. Meals per day: '+mealCount+'.'
+    +' Allergies/intolerances: '+(form.allergies||'None')+'.'
+    +' Foods to avoid: '+(form.dislikes||'None')+'.'
+    +' Training days per week: '+form.trainingDays+'.'
+    +' Available equipment: '+((form.equipment||[]).join(', ')||'Full gym')+'.'
+    +' Programme type: '+planLabel()+'. Week '+weekNum+' of '+totalWeeks+'.'
+    +' '+progressNote
+    +' Injuries/limitations: '+(form.injuries||'None')+'.'
+    +' Additional notes: '+(form.notes||'None')+'.'
+    +' JSON structure required:'
+    +' {"mealPlan":[{"day":"Monday","meals":[{"type":"Breakfast","name":"Short meal name","calories":450,"protein":35,"carbs":50,"fat":12}]}],'
+    +' "trainingPlan":[{"day":"Monday","type":"Push","focus":"Chest and shoulders","exercises":["Bench press 4x8","Overhead press 3x10"]}],'
+    +' "coachNotes":"Brief weekly coaching note"}'
+    +' Include all 7 days. Training days have exercises. Rest days have empty exercises array and type Rest.'
+    +' Every meal must have type, name, calories, protein, carbs, fat as numbers.';
+
+  var MAX_RETRIES=2;
+  var lastErr=null;
+  for(var attempt=0;attempt<=MAX_RETRIES;attempt++){
+    try{
+      var res=await fetch('/api/message',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:6000,messages:[{role:'user',content:prompt}]})});
+      if(!res.ok) throw new Error('API error '+res.status);
+      var data=await res.json();
+      if(data.error) throw new Error(data.error.message||'API error');
+      var text=(data.content.find(function(b){return b.type==='text';})||{}).text||'';
+      if(!text) throw new Error('Empty response from API');
+      var parsed=repairJSON(text);
+      return validateWeek(parsed);
+    }catch(err){
+      lastErr=err;
+      if(attempt<MAX_RETRIES){
+        await new Promise(function(r){setTimeout(r,1500);});
+      }
+    }
+  }
+  throw new Error('Failed after '+MAX_RETRIES+' retries: '+lastErr.message);
 }
 
 async function startGenerate(){
@@ -1632,12 +1751,18 @@ async function startGenerate(){
   loadAllLogs();
   render();
   try{
-    var weekPromises=[];
-    for(var w=1;w<=form.planWeeks;w++)weekPromises.push(generateWeek(w,form.planWeeks));
-    generatingWeek=form.planWeeks;render();
-    var results=await Promise.all(weekPromises);
+    // Generate weeks sequentially for reliability (avoids rate limits)
+    var results=[];
+    for(var w=1;w<=form.planWeeks;w++){
+      generatingWeek=w;
+      render(); // update loading screen dots
+      var weekData=await generateWeek(w,form.planWeeks);
+      results.push(weekData);
+    }
     allWeeks=results;
-  }catch(err){apiErr=err.message;}
+  }catch(err){
+    apiErr=err.message;
+  }
   loading=false;
   if(allWeeks.length>0)saveClientToCoach();
   render();
