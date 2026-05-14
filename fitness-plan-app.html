@@ -1726,11 +1726,16 @@ async function generateWeek(weekNum,totalWeeks,overrideNote){
   var lastErr=null;
   for(var attempt=0;attempt<=MAX_RETRIES;attempt++){
     try{
-      var res=await fetch('/api/message',{method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:6000,messages:[{role:'user',content:prompt}]})});
-      if(!res.ok) throw new Error('API error '+res.status);
-      var data=await res.json();
-      if(data.error) throw new Error(data.error.message||'API error');
+      var payload={model:'claude-sonnet-4-20250514',max_tokens:6000,messages:[{role:'user',content:prompt}]};
+      var res=await fetch('/api/message',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+      var rawText=await res.text();
+      console.log('Anthropic status:',res.status,'body:',rawText.slice(0,400));
+      var data;
+      try{ data=JSON.parse(rawText); }catch(e){ throw new Error('Non-JSON response ('+res.status+'): '+rawText.slice(0,150)); }
+      if(!res.ok||data.error){
+        var errDetail=data.error?(data.error.type?data.error.type+': '+data.error.message:JSON.stringify(data.error)):rawText.slice(0,200);
+        throw new Error('Anthropic API error ('+res.status+'): '+errDetail);
+      }
       var text=(data.content.find(function(b){return b.type==='text';})||{}).text||'';
       if(!text) throw new Error('Empty response from API');
       var parsed=repairJSON(text);
