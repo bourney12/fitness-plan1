@@ -266,11 +266,13 @@ input[type=range]{padding:0;border:none;background:var(--border);height:3px;bord
 .dash-context-badge{font-size:9px;font-weight:600;letter-spacing:.06em;padding:5px 12px;border-radius:100px;background:rgba(58,95,150,.15);color:var(--steel3);border:1px solid var(--border)}
 
 /* Bottom nav */
-.dash-bottom-nav{display:flex;border-top:1px solid var(--border);background:rgba(5,8,15,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);position:sticky;bottom:0;z-index:50}
-.dbn{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 4px 14px;cursor:pointer;color:var(--muted);transition:all .2s;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;border:none;background:transparent;font-family:inherit;position:relative}
-.dbn:hover,.dbn.active{color:var(--steel3)}
-.dbn.active::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:24px;height:2px;background:linear-gradient(to right,var(--steel),var(--steel3));border-radius:0 0 2px 2px}
-.dbn i{font-size:26px}
+.dash-bottom-nav{display:flex;border-top:1px solid var(--border);background:rgba(5,8,15,.95);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);position:sticky;bottom:0;z-index:50;padding:2px 0 4px}
+.dbn{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 4px 12px;cursor:pointer;color:var(--muted);transition:all .2s;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border:none;background:transparent;font-family:inherit;position:relative;min-width:0}
+.dbn:hover{color:var(--silver)}
+.dbn.active{color:var(--steel3)}
+.dbn.active::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:32px;height:2.5px;background:linear-gradient(to right,var(--steel),var(--steel3));border-radius:0 0 3px 3px}
+.dbn i{font-size:28px;line-height:1}
+.dbn span{font-size:10px;font-weight:700;letter-spacing:.04em;white-space:nowrap}
 
 /* Week/day nav */
 .week-nav{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
@@ -684,6 +686,68 @@ input[type=range]{padding:0;border:none;background:var(--border);height:3px;bord
 .vc-price{font-weight:600}
 .vc-row.ours .vc-label{color:var(--white);font-weight:600}
 .vc-row.ours .vc-price{color:var(--green);font-size:14px}
+
+/* ── SUBSCRIPTION PAGE ───────────────────────────── */
+.sub-page{min-height:100vh;background:var(--bg);position:relative;overflow:hidden}
+.sub-page::before{content:'';position:fixed;top:-200px;left:50%;transform:translateX(-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(58,95,150,.1),transparent 65%);pointer-events:none;border-radius:50%}
+.sub-hero{padding:60px 24px 40px;text-align:center;position:relative;z-index:1}
+.sub-hero-eyebrow{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--steel3);margin-bottom:14px}
+.sub-hero-title{font-family:'Playfair Display',serif;font-size:36px;font-weight:600;color:var(--white);line-height:1.15;margin-bottom:12px}
+.sub-hero-title em{color:var(--steel3);font-style:italic}
+.sub-hero-sub{font-size:14px;color:var(--silver);line-height:1.8;max-width:480px;margin:0 auto 36px}
+.sub-toggle{display:flex;background:var(--card);border:1px solid var(--border);border-radius:100px;padding:4px;gap:0;width:fit-content;margin:0 auto 40px}
+.sub-toggle-btn{padding:9px 24px;border-radius:100px;border:none;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;letter-spacing:.04em;transition:all .2s}
+.sub-toggle-btn.active{background:var(--steel);color:var(--white);box-shadow:0 2px 12px rgba(58,95,150,.4)}
+.sub-toggle-btn:not(.active){background:transparent;color:var(--muted)}
+.sub-toggle-save{font-size:11px;font-weight:700;color:var(--green);background:rgba(78,204,163,.1);border:1px solid rgba(78,204,163,.2);padding:3px 10px;border-radius:100px;margin-left:8px;vertical-align:middle}
+.plans-wrap{max-width:900px;margin:0 auto;padding:0 20px 60px;position:relative;z-index:1}
+.plans-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:40px}
+.plan-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rxl);padding:28px 22px;position:relative;overflow:hidden;transition:border-color .2s}
+.plan-card:hover{border-color:var(--border2)}
+.plan-card.featured{background:linear-gradient(160deg,var(--card2),var(--card3));border-color:var(--steel2);box-shadow:0 0 40px rgba(58,95,150,.2)}
+.plan-card.featured::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(to right,var(--steel),var(--steel3))}
+.plan-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:16px}
+.plan-badge-free{background:rgba(255,255,255,.08);color:var(--silver)}
+.plan-badge-pop{background:linear-gradient(to right,var(--steel),var(--steel2));color:var(--white)}
+.plan-badge-elite{background:rgba(201,169,110,.15);color:var(--gold);border:1px solid rgba(201,169,110,.2)}
+.plan-name{font-size:20px;font-weight:700;color:var(--white);margin-bottom:6px}
+.plan-price-wrap{margin:16px 0 20px}
+.plan-price{font-family:'Playfair Display',serif;font-size:42px;font-weight:600;color:var(--white);line-height:1}
+.plan-price-period{font-size:13px;color:var(--muted);margin-top:4px}
+.plan-price-annual{font-size:12px;color:var(--green);font-weight:600;margin-top:4px}
+.plan-desc{font-size:13px;color:var(--silver);line-height:1.7;margin-bottom:20px}
+.plan-features{list-style:none;margin-bottom:24px;display:flex;flex-direction:column;gap:9px}
+.plan-feature{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--silver)}
+.plan-feature-tick{color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
+.plan-feature-cross{color:var(--muted);flex-shrink:0;margin-top:1px}
+.plan-feature.dim{color:var(--muted)}
+.plan-cta{width:100%;padding:14px;border-radius:var(--r);border:none;font-family:inherit;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.plan-cta-primary{background:linear-gradient(135deg,var(--steel),var(--steel2));color:var(--white);box-shadow:0 4px 20px rgba(58,95,150,.3)}
+.plan-cta-primary:hover{box-shadow:0 6px 30px rgba(58,95,150,.5);transform:translateY(-1px)}
+.plan-cta-secondary{background:transparent;border:1px solid var(--border2);color:var(--silver)}
+.plan-cta-secondary:hover{border-color:var(--steel2);color:var(--white)}
+.plan-cta-ghost{background:transparent;border:1px solid var(--border);color:var(--muted)}
+.compare-table{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:40px}
+.ct-head-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;background:var(--card2);padding:14px 16px;border-bottom:1px solid var(--border)}
+.ct-head-cell{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--silver);text-align:center}
+.ct-head-cell:first-child{text-align:left}
+.ct-head-cell.featured-col{color:var(--steel3)}
+.ct-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:12px 16px;border-bottom:1px solid var(--border);align-items:center}
+.ct-row:last-child{border-bottom:none}
+.ct-row:hover{background:rgba(255,255,255,.02)}
+.ct-cell{font-size:12px;color:var(--silver);text-align:center}
+.ct-cell:first-child{text-align:left;color:var(--white);font-weight:500}
+.ct-cell.tick{color:var(--green);font-size:16px;font-weight:700}
+.ct-cell.cross{color:var(--muted)}
+.ct-cell.featured-col{color:var(--steel3);font-weight:600}
+.faq-wrap{max-width:640px;margin:0 auto 60px;padding:0 20px}
+.faq-item{border-bottom:1px solid var(--border);padding:18px 0;cursor:pointer}
+.faq-q{font-size:14px;font-weight:600;color:var(--white);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.faq-a{font-size:13px;color:var(--silver);line-height:1.7;margin-top:12px;display:none}
+.faq-item.open .faq-a{display:block}
+.faq-item.open .faq-chevron{transform:rotate(180deg)}
+.faq-chevron{transition:transform .2s;flex-shrink:0;color:var(--muted)}
+@media(max-width:600px){.plans-grid{grid-template-columns:1fr}.ct-head-row,.ct-row{grid-template-columns:1.5fr 1fr 1fr}}
 </style>
 </head>
 </head>
@@ -731,6 +795,7 @@ input[type=range]{padding:0;border:none;background:var(--border);height:3px;bord
 
 <script>
 var step = -2, calc = null, loading = false, apiErr = null;
+var subBilling = 'monthly'; // monthly | annual
 var allWeeks = [], generatingWeek = 0;
 
 var form = {
@@ -899,6 +964,12 @@ function render(){
   var app=g('app');
 
   // ── SPLASH PAGE ──────────────────────────────────────────────────────────
+  // ── SUBSCRIPTION PAGE ────────────────────────────────────────────────────
+  if(step===-3){
+    renderSubscriptionPage(app);
+    return;
+  }
+
   if(step===-2){
     var splash = document.createElement('div');
     splash.style.cssText = 'min-height:90vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;position:relative';
@@ -923,8 +994,11 @@ function render(){
       '</div>',
       '<div class="splash-divider"></div>',
       '<p class="splash-headline">Are you ready to reinvent your potential?</p>',
-      '<button id="b-splash" class="splash-btn">Begin your journey</button>',
-      '<div class="splash-sub">&mdash; Build your programme &mdash;</div>',
+      '<button id="b-splash" class="splash-btn">Build my programme</button>',
+      '<div style="margin-top:16px;display:flex;flex-direction:column;align-items:center;gap:10px">',
+        '<button id="b-sub" style="background:transparent;border:none;cursor:pointer;font-family:inherit;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--steel3);text-decoration:underline;text-decoration-color:rgba(58,95,150,.4);text-underline-offset:3px;padding:4px 0">View membership plans</button>',
+        '<div class="splash-sub">&mdash; Reinvent Your Potential &mdash;</div>',
+      '</div>',
       '<div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:1px;height:60px;background:linear-gradient(to top,transparent,#3A5F96)"></div>'
     ].join('');
 
@@ -936,6 +1010,8 @@ function render(){
       bSplash.onmouseover = function(){ this.style.background='#3A5F96'; this.style.letterSpacing='.32em'; };
       bSplash.onmouseout  = function(){ this.style.background='transparent'; this.style.letterSpacing='.28em'; };
       bSplash.onclick = function(){ goStep(-1); };
+    var bSub = g('b-sub');
+    if(bSub) bSub.onclick = function(){ step=-3; render(); window.scrollTo(0,0); };
     }
     return;
   }
@@ -2065,7 +2141,9 @@ function renderDashboard(container){
   html+='<nav class="dash-bottom-nav" aria-label="Dashboard navigation">';
   navItems.forEach(function(n){
     html+='<button class="dbn'+(dash.tab===n.k?' active':'')+'" id="dbn-'+n.k+'">'
-      +'<i class="ti '+n.icon+'" aria-hidden="true"></i>'+n.l+'</button>';
+      +'<i class="ti '+n.icon+'" aria-hidden="true"></i>'
+      +'<span>'+n.l+'</span>'
+      +'</button>';
   });
   html+='</nav>';
   html+='</div>';
@@ -2783,10 +2861,225 @@ async function swapMealDirect(originalMeal,key){
 }
 
 function resetAll(){
-  step=-2;allWeeks=[];calc=null;loading=false;apiErr=null;generatingWeek=0;
+  step=-2;allWeeks=[];calc=null;loading=false;apiErr=null;generatingWeek=0;subBilling='monthly';
   dash.tab='today';dash.week=0;dash.day=0;
   render();window.scrollTo(0,0);
 }
+
+// ══════════════════════════════════════════════════════════════════════════
+// SUBSCRIPTION PAGE
+// ══════════════════════════════════════════════════════════════════════════
+// Market research basis:
+// - MyFitnessPal Premium: £17.99/mo or £79.99/yr
+// - Future (AI PT app): £149/mo
+// - Whoop: £30/mo
+// - Freeletics: £12.99/mo or £74.99/yr  
+// - TrainHeroic: £18/mo
+// - Hevy (workout tracker): £7.99/mo
+// ReBourne is positioned between app-only and full human coaching.
+// One-off plans: £19-£109. Subscription should offer ~30% saving on equivalent plans.
+
+function renderSubscriptionPage(container){
+  var isAnnual = subBilling==='annual';
+  var plans=[
+    {
+      id:'free', name:'Pay as you go', badge:'pay-as-you-go', badgeClass:'plan-badge-free',
+      price:{monthly:0,annual:0}, period:'No commitment', annualNote:'',
+      desc:'Perfect for trying ReBourne. Buy individual plans whenever you need them at standard pricing.',
+      featured:false,
+      features:[
+        {t:'1-week plan from', v:'£19',      tick:true},
+        {t:'8-week plan from', v:'£69',       tick:true},
+        {t:'All plan types',               tick:true},
+        {t:'Full dashboard access',        tick:true},
+        {t:'Unlimited plans',              tick:false},
+        {t:'Priority generation',          tick:false},
+        {t:'Coach dashboard access',       tick:false},
+        {t:'Auto plan renewal',            tick:false}
+      ],
+      cta:'Start free', ctaClass:'plan-cta-ghost'
+    },
+    {
+      id:'pro', name:'Pro', badge:'Most popular', badgeClass:'plan-badge-pop',
+      price:{monthly:24.99,annual:199.99}, period:'/month', annualNote:'£'+(199.99/12).toFixed(2)+'/mo billed annually',
+      desc:'Unlimited access to all plan types. New plans generate automatically each month, adjusting to your progress.',
+      featured:true,
+      features:[
+        {t:'Unlimited plans — all types',  tick:true},
+        {t:'Auto monthly plan renewal',    tick:true},
+        {t:'Progressive overload built in',tick:true},
+        {t:'Priority AI generation',       tick:true},
+        {t:'Full tracking dashboard',      tick:true},
+        {t:'Monthly performance report',   tick:true},
+        {t:'Coach dashboard access',       tick:false},
+        {t:'White label branding',         tick:false}
+      ],
+      cta:'Start Pro', ctaClass:'plan-cta-primary'
+    },
+    {
+      id:'elite', name:'Elite', badge:'For serious athletes', badgeClass:'plan-badge-elite',
+      price:{monthly:44.99,annual:349.99}, period:'/month', annualNote:'£'+(349.99/12).toFixed(2)+'/mo billed annually',
+      desc:'Everything in Pro, plus coach dashboard for your trainer, weekly AI check-in analysis, and priority support.',
+      featured:false,
+      features:[
+        {t:'Everything in Pro',            tick:true},
+        {t:'Coach dashboard included',     tick:true},
+        {t:'Weekly AI coaching review',    tick:true},
+        {t:'Hyrox & specialist planning',  tick:true},
+        {t:'Nutrition consult add-on',     tick:true},
+        {t:'Priority email support',       tick:true},
+        {t:'Early access to new features', tick:true},
+        {t:'Cancel any time',              tick:true}
+      ],
+      cta:'Start Elite', ctaClass:'plan-cta-secondary'
+    }
+  ];
+
+  var compareRows=[
+    {label:'Unlimited plans',          free:false, pro:true,  elite:true},
+    {label:'All plan types (7)',        free:true,  pro:true,  elite:true},
+    {label:'Full tracking dashboard',  free:true,  pro:true,  elite:true},
+    {label:'AI recipe generation',     free:true,  pro:true,  elite:true},
+    {label:'Auto monthly renewal',     free:false, pro:true,  elite:true},
+    {label:'Progressive overload AI',  free:false, pro:true,  elite:true},
+    {label:'Monthly PDF report',       free:false, pro:true,  elite:true},
+    {label:'Priority generation speed',free:false, pro:true,  elite:true},
+    {label:'Coach dashboard',          free:false, pro:false, elite:true},
+    {label:'Weekly AI coaching review',free:false, pro:false, elite:true},
+    {label:'Nutrition consult add-on', free:false, pro:false, elite:true}
+  ];
+
+  var faqs=[
+    {q:'Can I cancel anytime?',        a:'Yes. Cancel your subscription at any time from your account settings. You keep access until the end of your billing period.'},
+    {q:'What happens to my plans if I cancel?', a:'Your existing plans and all tracked data remain saved in your browser. You can still view and use them without a subscription.'},
+    {q:'How is the monthly plan generated?', a:'At the start of each billing month, ReBourne automatically generates a new personalised plan based on your profile, goals and the previous month\u2019s check-in data. It progressively overloads and adapts to your results.'},
+    {q:'Is this different from buying a one-off plan?', a:'Yes. A one-off plan is a single purchase for a fixed duration. Membership gives you unlimited plans, auto-renewal, and the AI adapts each month to your progress — making it genuinely better over time.'},
+    {q:'What payment methods are accepted?', a:'All major credit and debit cards, Apple Pay and Google Pay. Payments are handled securely through Stripe.'},
+    {q:'Do you offer refunds?', a:'We offer a full refund within 7 days of your first subscription payment if you are not satisfied. Monthly renewals are non-refundable once the new plan has been generated.'}
+  ];
+
+  var html='<div class="sub-page">';
+
+  // Header nav
+  html+='<div style="padding:16px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:rgba(5,8,15,.8);backdrop-filter:blur(20px);position:sticky;top:0;z-index:50">';
+  html+='<div style="display:flex;align-items:center;gap:10px">';
+  html+='<svg width="28" height="28" viewBox="140 150 540 510"><defs><linearGradient id="sg1" x1="180" y1="120" x2="650" y2="680" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#7E98BC"/><stop offset="45%" stop-color="#3A5F96"/><stop offset="100%" stop-color="#162A46"/></linearGradient></defs><path fill="url(#sg1)" fill-rule="evenodd" d="M205 170 L475 170 C565 170 625 223 625 306 C625 372 586 421 521 438 L657 630 L534 630 L412 452 L362 452 L362 630 L240 630 L240 240 L205 170 Z M362 260 L362 372 L470 372 C510 372 535 351 535 316 C535 282 510 260 470 260 L362 260 Z M205 170 L363 347 L318 347 L165 170 L205 170 Z"/></svg>';
+  html+='<span style="font-size:12px;letter-spacing:.18em;font-weight:700;color:var(--white)"><span style="color:var(--steel3);font-weight:300">RE</span>BOURNE</span>';
+  html+='</div>';
+  html+='<button id="sub-back" style="background:transparent;border:1px solid var(--border);border-radius:var(--r);padding:7px 16px;color:var(--silver);font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;letter-spacing:.04em">&larr; Back</button>';
+  html+='</div>';
+
+  // Hero
+  html+='<div class="sub-hero">';
+  html+='<div class="sub-hero-eyebrow">Membership plans</div>';
+  html+='<h1 class="sub-hero-title">One platform.<br><em>Unlimited potential.</em></h1>';
+  html+='<p class="sub-hero-sub">Get a new personalised plan every month that adapts to your progress. Unlimited access to every programme type, full tracking dashboard, and AI coaching insights that improve over time.</p>';
+
+  // Billing toggle
+  html+='<div class="sub-toggle">';
+  html+='<button class="sub-toggle-btn'+(isAnnual?'':' active')+'" id="sub-monthly">Monthly</button>';
+  html+='<button class="sub-toggle-btn'+(isAnnual?' active':'')+'" id="sub-annual">Annual <span class="sub-toggle-save">Save 33%</span></button>';
+  html+='</div>';
+  html+='</div>';
+
+  // Plans grid
+  html+='<div class="plans-wrap">';
+  html+='<div class="plans-grid">';
+
+  plans.forEach(function(plan){
+    var price=isAnnual&&plan.price.annual>0?(plan.price.annual/12).toFixed(2):plan.price.monthly;
+    html+='<div class="plan-card'+(plan.featured?' featured':'')+'">';
+    html+='<div class="plan-badge '+plan.badgeClass+'">'+plan.badge+'</div>';
+    html+='<div class="plan-name">'+plan.name+'</div>';
+    html+='<div class="plan-price-wrap">';
+    if(plan.price.monthly===0){
+      html+='<div class="plan-price" style="font-size:28px;margin-top:8px">Pay as you go</div>';
+      html+='<div class="plan-price-period">No fixed cost</div>';
+    } else {
+      html+='<div class="plan-price">&pound;'+price+'</div>';
+      html+='<div class="plan-price-period">per month'+plan.period.replace('/month','')+'</div>';
+      if(isAnnual) html+='<div class="plan-price-annual">&#10003; &pound;'+plan.price.annual.toFixed(2)+' billed annually</div>';
+      else html+='<div style="font-size:11px;color:var(--muted);margin-top:4px">or &pound;'+(plan.price.annual/12).toFixed(2)+'/mo billed annually</div>';
+    }
+    html+='</div>';
+    html+='<p class="plan-desc">'+plan.desc+'</p>';
+    html+='<ul class="plan-features">';
+    plan.features.forEach(function(f){
+      html+='<li class="plan-feature'+(f.tick?'':' dim')+'">'
+        +'<span class="plan-feature-'+(f.tick?'tick':'cross')+'">'+(f.tick?'&#10003;':'&#8212;')+'</span>'
+        +'<span>'+f.t+(f.v?' <strong style="color:var(--white)">'+f.v+'</strong>':'')+'</span>'
+        +'</li>';
+    });
+    html+='</ul>';
+    html+='<button class="plan-cta '+plan.ctaClass+'" id="plan-cta-'+plan.id+'">'
+      +(plan.id==='free'?'Start with pay-as-you-go':plan.cta+' &mdash; &pound;'+price+'/mo')
+      +'</button>';
+    html+='</div>';
+  });
+  html+='</div>';
+
+  // Compare table
+  html+='<div style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--steel3);margin-bottom:16px;display:flex;align-items:center;gap:10px">Full comparison<div style="flex:1;height:1px;background:var(--border)"></div></div>';
+  html+='<div class="compare-table">';
+  html+='<div class="ct-head-row">';
+  html+='<div class="ct-head-cell">Feature</div>';
+  html+='<div class="ct-head-cell">Pay as you go</div>';
+  html+='<div class="ct-head-cell featured-col">Pro</div>';
+  html+='<div class="ct-head-cell">Elite</div>';
+  html+='</div>';
+  compareRows.forEach(function(row){
+    html+='<div class="ct-row">';
+    html+='<div class="ct-cell">'+row.label+'</div>';
+    html+='<div class="ct-cell '+(row.free?'tick':'cross')+'">'+(row.free?'&#10003;':'&#8212;')+'</div>';
+    html+='<div class="ct-cell featured-col '+(row.pro?'tick':'cross')+'">'+(row.pro?'&#10003;':'&#8212;')+'</div>';
+    html+='<div class="ct-cell '+(row.elite?'tick':'cross')+'">'+(row.elite?'&#10003;':'&#8212;')+'</div>';
+    html+='</div>';
+  });
+  html+='</div>';
+
+  // FAQ
+  html+='<div style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--steel3);margin:32px 0 16px;display:flex;align-items:center;gap:10px">FAQ<div style="flex:1;height:1px;background:var(--border)"></div></div>';
+  html+='<div class="faq-wrap" style="padding:0;max-width:100%">';
+  faqs.forEach(function(faq,fi){
+    html+='<div class="faq-item" id="faq-'+fi+'">';
+    html+='<div class="faq-q">'+faq.q+'<span class="faq-chevron">&#8964;</span></div>';
+    html+='<div class="faq-a">'+faq.a+'</div>';
+    html+='</div>';
+  });
+  html+='</div>';
+
+  // Social proof / trust
+  html+='<div style="text-align:center;padding:32px 0;border-top:1px solid var(--border);margin-top:32px">';
+  html+='<div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:16px">Trusted platform</div>';
+  html+='<div style="display:flex;justify-content:center;gap:24px;flex-wrap:wrap">';
+  ['&#128274; Secure payments','&#10003; Cancel any time','&#128274; No hidden fees','&#11088; 30-day money back'].forEach(function(t){
+    html+='<div style="font-size:13px;color:var(--silver);display:flex;align-items:center;gap:6px">'+t+'</div>';
+  });
+  html+='</div></div>';
+
+  html+='</div>'; // plans-wrap
+  html+='</div>'; // sub-page
+
+  container.innerHTML = html;
+
+  // Bind
+  function bnd2(id,fn){var el=g(id);if(el)el.onclick=fn;}
+  bnd2('sub-back', function(){ step=-2; render(); window.scrollTo(0,0); });
+  bnd2('sub-monthly', function(){ subBilling='monthly'; renderSubscriptionPage(container); });
+  bnd2('sub-annual',  function(){ subBilling='annual';  renderSubscriptionPage(container); });
+  // Plan CTAs - for now go to plan builder; in future these would trigger Stripe
+  bnd2('plan-cta-free', function(){ step=-2; render(); window.scrollTo(0,0); });
+  bnd2('plan-cta-pro',  function(){ alert('Stripe integration coming soon! Pro membership will be £'+(isAnnual?(199.99/12).toFixed(2):'24.99')+'/month.'); });
+  bnd2('plan-cta-elite',function(){ alert('Stripe integration coming soon! Elite membership will be £'+(isAnnual?(349.99/12).toFixed(2):'44.99')+'/month.'); });
+  // FAQ accordion
+  faqs.forEach(function(faq,fi){
+    bnd2('faq-'+fi, function(){
+      var el=g('faq-'+fi);
+      if(el) el.classList.toggle('open');
+    });
+  });
+}
+
 
 render();
 </script>
