@@ -1727,7 +1727,7 @@ async function generateWeek(weekNum,totalWeeks,overrideNote){
   for(var attempt=0;attempt<=MAX_RETRIES;attempt++){
     try{
       var res=await fetch('/api/message',{method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({model:'claude-sonnet-4-5-20250514',max_tokens:6000,messages:[{role:'user',content:prompt}]})});
+        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:6000,messages:[{role:'user',content:prompt}]})});
       if(!res.ok) throw new Error('API error '+res.status);
       var data=await res.json();
       if(data.error) throw new Error(data.error.message||'API error');
