@@ -660,8 +660,8 @@ input[type=range]{padding:0;border:none;background:var(--border);height:3px;bord
 /* ── PRICING ─────────────────────────────────────── */
 .dur-price{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--white);margin:6px 0 2px;line-height:1}
 .dur-card.sel .dur-price{color:var(--white)}
-.dur-per{font-size:10px;color:var(--silver);font-weight:500;margin-bottom:4px}
-.dur-saving{font-size:9px;font-weight:600;color:var(--green);letter-spacing:.04em}
+.dur-per{font-size:11px;color:var(--silver);font-weight:600;margin-bottom:4px}
+.dur-saving{font-size:11px;font-weight:700;color:var(--green);letter-spacing:.02em}
 .dur-card.sel .dur-saving{color:var(--green)}
 .price-callout{background:rgba(58,95,150,.06);border:1px solid var(--border);border-radius:var(--rl);padding:16px 20px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .price-callout-left{flex:1}
@@ -734,7 +734,7 @@ var step = -2, calc = null, loading = false, apiErr = null;
 var allWeeks = [], generatingWeek = 0;
 
 var form = {
-  planType:'', planWeeks:0,
+  planType:'', planWeeks:0, units:'metric', heightFt:'', heightIn:'',
   name:'', age:'', sex:'male', weight:'', height:'', activity:'',
   goal:'', deficitLevel:'moderate_loss', surplusLevel:'lean_gain',
   dietType:'standard', allergies:'', dislikes:'',
@@ -775,31 +775,44 @@ function getPlanPrice(planType, weeks){
 function formatPrice(p){ return '£'+p; }
 
 var ACTIVITY_OPTS = [
-  {k:'sedentary',   title:'Sedentary',        desc:'Little to no movement outside of daily tasks.',       ex:'Desk job, driving, evenings on the sofa'},
-  {k:'light',       title:'Lightly active',   desc:'Some light movement or exercise a few times a week.', ex:'Occasional walks, housework, 1-2 gym sessions'},
-  {k:'moderate',    title:'Moderately active',desc:'Regular exercise or an active lifestyle most days.',  ex:'3-4 workouts per week, active job, cycling commute'},
-  {k:'active',      title:'Very active',      desc:'Hard training or a physically demanding job daily.',  ex:'5-6 intense sessions per week, manual labour'},
-  {k:'very_active', title:'Extremely active', desc:'Athlete-level training or two-a-day sessions.',      ex:'Elite sport, twice-daily training, very heavy labour'}
+  {k:'sedentary',   icon:'🪑', title:'Sedentary',        desc:'Little to no movement outside of daily tasks. Mostly sitting throughout the day.',       ex:'Desk job, driving, evenings on the sofa'},
+  {k:'light',       icon:'🚶', title:'Lightly active',   desc:'Some light movement or exercise a few times per week.',                                   ex:'Occasional walks, housework, 1-2 gym sessions per week'},
+  {k:'moderate',    icon:'🏃', title:'Moderately active',desc:'Regular exercise or an active lifestyle most days of the week.',                          ex:'3-4 workouts per week, active job, cycling to work'},
+  {k:'active',      icon:'💪', title:'Very active',      desc:'Hard training most days of the week, or a physically demanding job.',                     ex:'5-6 intense workouts per week, manual labour, competitive sport'},
+  {k:'very_active', icon:'🏆', title:'Athlete',          desc:'Intense daily training at professional or semi-professional level.',                       ex:'Twice-daily sessions, endurance events, full-time athletic training'}
 ];
 
 var DIETS = [
-  {k:'standard',l:'Standard',d:'No restrictions'},{k:'vegetarian',l:'Vegetarian',d:'No meat or fish'},
-  {k:'vegan',l:'Vegan',d:'No animal products'},{k:'keto',l:'Keto',d:'High fat, low carb'},
-  {k:'paleo',l:'Paleo',d:'Whole foods only'},{k:'mediterranean',l:'Mediterranean',d:'Heart-healthy'}
+  {k:'standard',     icon:'🥗', l:'Standard',        d:'Balanced whole foods, no restrictions. Flexible and sustainable for most people.'},
+  {k:'highprotein',  icon:'🥩', l:'High protein',    d:'Emphasis on lean proteins, moderate carbs. Ideal for muscle building and body recomposition.'},
+  {k:'lowcarb',      icon:'🥦', l:'Low carb',        d:'Reduced carbohydrates, higher healthy fats. Effective for fat loss and blood sugar control.'},
+  {k:'keto',         icon:'🧀', l:'Keto',            d:'Very low carb, high fat. Puts the body into fat-burning ketosis. Strict but powerful.'},
+  {k:'mediterranean',icon:'🫒', l:'Mediterranean',   d:'Olive oil, fish, legumes, whole grains. One of the most researched diets for health and longevity.'},
+  {k:'vegetarian',   icon:'🌿', l:'Vegetarian',      d:'No meat or fish. Rich in plant proteins, eggs and dairy. Highly nutritious and sustainable.'},
+  {k:'vegan',        icon:'🌱', l:'Vegan',           d:'No animal products. Whole foods plant-based with careful attention to protein and micronutrients.'},
+  {k:'glutenfree',   icon:'🌾', l:'Gluten free',     d:'No wheat, barley or rye. Suitable for coeliac disease or gluten sensitivity.'},
+  {k:'dairyfree',    icon:'🥛', l:'Dairy free',      d:'No milk, cheese or cream. Plant-based alternatives used throughout the plan.'}
 ];
 
-var EQUIPMENT = ['Full gym','Home weights','Resistance bands','Pull-up bar','Kettlebells','No equipment'];
+var EQUIPMENT = [
+  {k:'Full gym',         icon:'🏋️', label:'Full gym'},
+  {k:'Home weights',     icon:'🏠', label:'Home weights'},
+  {k:'Resistance bands', icon:'🟡', label:'Resistance bands'},
+  {k:'Pull-up bar',      icon:'🔝', label:'Pull-up bar'},
+  {k:'Kettlebells',      icon:'🫙', label:'Kettlebells'},
+  {k:'No equipment',     icon:'🧘', label:'Bodyweight only'}
+];
 
 var CARDIO_OPTS = [
-  {k:'running',     label:'Running'},
-  {k:'walking',     label:'Walking'},
-  {k:'incline_walk',label:'Incline walking'},
-  {k:'stairmaster', label:'Stairmaster'},
-  {k:'rowing',      label:'Rowing machine'},
-  {k:'cycling',     label:'Cycling'},
-  {k:'swimming',    label:'Swimming'},
-  {k:'elliptical',  label:'Elliptical'},
-  {k:'hiit',        label:'HIIT'}
+  {k:'running',     icon:'🏃', label:'Running'},
+  {k:'walking',     icon:'🚶', label:'Walking'},
+  {k:'incline_walk',icon:'⛰️', label:'Incline walk'},
+  {k:'stairmaster', icon:'🪜', label:'Stairmaster'},
+  {k:'rowing',      icon:'🚣', label:'Rowing'},
+  {k:'cycling',     icon:'🚴', label:'Cycling'},
+  {k:'swimming',    icon:'🏊', label:'Swimming'},
+  {k:'elliptical',  icon:'🔄', label:'Elliptical'},
+  {k:'hiit',        icon:'⚡', label:'HIIT'}
 ];
 
 var RUNNING_GOALS = [
@@ -811,15 +824,15 @@ var RUNNING_GOALS = [
 ];
 
 var DEFICIT_OPTS = [
-  {k:'mild_loss',      label:'Mild deficit',      kcal:'-250 kcal/day', detail:'Slow, sustainable fat loss',        badge:'b-mild', rate:'~0.25 kg/wk'},
-  {k:'moderate_loss',  label:'Moderate deficit',  kcal:'-500 kcal/day', detail:'Steady progress, manageable hunger', badge:'b-mod',  rate:'~0.5 kg/wk'},
-  {k:'aggressive_loss',label:'Aggressive deficit',kcal:'-750 kcal/day', detail:'Faster loss, requires discipline',   badge:'b-agg',  rate:'~0.75 kg/wk'}
+  {k:'mild_loss',      label:'Mild deficit',      kcal:'-250 kcal/day', detail:'Slow and sustainable. Minimal muscle loss risk. Best for first-timers or those near their goal.',           badge:'b-mild', rate:'~0.25 kg/wk'},
+  {k:'moderate_loss',  label:'Moderate deficit',  kcal:'-500 kcal/day', detail:'The sweet spot. Strong fat loss without extreme restriction. Recommended for most people.',              badge:'b-mod',  rate:'~0.5 kg/wk'},
+  {k:'aggressive_loss',label:'Aggressive deficit',kcal:'-750 kcal/day', detail:'Fast results. Requires strict discipline and high protein intake to protect muscle mass.',                   badge:'b-agg',  rate:'~0.75 kg/wk'}
 ];
 
 var SURPLUS_OPTS = [
-  {k:'lean_gain',     label:'Lean bulk',      kcal:'+200 kcal/day', detail:'Minimal fat gain, slow muscle build', badge:'b-lean', rate:'~0.15 kg/wk'},
-  {k:'moderate_gain', label:'Moderate bulk',  kcal:'+400 kcal/day', detail:'Balanced muscle and some fat gain',   badge:'b-mod',  rate:'~0.3 kg/wk'},
-  {k:'fast_gain',     label:'Aggressive bulk',kcal:'+600 kcal/day', detail:'Maximum muscle, expect some fat',     badge:'b-fast', rate:'~0.5 kg/wk'}
+  {k:'lean_gain',     label:'Lean bulk',      kcal:'+200 kcal/day', detail:'Clean and controlled. Minimal fat gain alongside steady muscle growth. Stay lean while building.',              badge:'b-lean', rate:'~0.15 kg/wk'},
+  {k:'moderate_gain', label:'Moderate bulk',  kcal:'+400 kcal/day', detail:'The optimal balance. Meaningful muscle growth with manageable body fat increase. Most popular choice.',  badge:'b-mod',  rate:'~0.3 kg/wk'},
+  {k:'fast_gain',     label:'Aggressive bulk',kcal:'+600 kcal/day', detail:'Maximum muscle building potential. Expect some fat gain alongside fast strength and size increases.',          badge:'b-fast', rate:'~0.5 kg/wk'}
 ];
 
 var ACT = {sedentary:1.2,light:1.375,moderate:1.55,active:1.725,very_active:1.9};
@@ -854,15 +867,17 @@ function mbar(p,c,f){
 function renderChips(list,field){
   var h='<div class="chips">';
   for(var i=0;i<list.length;i++){
-    var v=typeof list[i]==='object'?list[i].label:list[i];
+    var v=typeof list[i]==='object'?(list[i].label||list[i].l||list[i].k):list[i];
     var k=typeof list[i]==='object'?list[i].k:list[i];
+    var icon=typeof list[i]==='object'?(list[i].icon||''):'';
     var arr=form[field]||[];
     var sel=arr.indexOf(k)!==-1?' sel':'';
-    h+='<div class="chip'+sel+'" id="chip-'+field+'-'+i+'">'+v+'</div>';
+    h+='<div class="chip'+sel+'" id="chip-'+field+'-'+i+'">'
+      +(icon?'<span style="margin-right:5px;font-size:14px">'+icon+'</span>':'')
+      +v+'</div>';
   }
   return h+'</div>';
 }
-
 function bindChips(list,field){
   for(var i=0;i<list.length;i++){
     (function(idx){
@@ -992,7 +1007,7 @@ function render(){
           'Monthly report'
         ];
 
-        var callout='<div class="price-callout">';
+        var callout='<div class="price-callout" style="border:1px solid var(--border2)">';
         callout+='<div class="price-callout-left">';
         callout+='<div class="price-callout-plan">'+(pt?pt.title:'')+'</div>';
         callout+='<div class="price-callout-name">'+(dur?dur.w+'-week programme':'')+' &mdash; '+(dur?dur.d:'')+'</div>';
@@ -1007,20 +1022,44 @@ function render(){
         if(isSpec) callout+='<div class="price-specialist-note">&#9889; '+pt.title+' is a specialist programme &mdash; prices reflect the additional complexity of this plan type.</div>';
 
         // What is included
-        callout+='<div style="margin-bottom:16px"><div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Everything included</div>';
-        callout+='<div style="display:flex;flex-wrap:wrap;gap:6px">';
-        includes.forEach(function(inc){
-          callout+='<div class="price-include"><div class="price-include-dot"></div>'+inc+'</div>';
+        var includesWithIcons=[
+          {icon:'🗓️', text:'Daily meal plan'},
+          {icon:'🏋️', text:'Training programme'},
+          {icon:'👨‍🍳', text:'AI recipes'},
+          {icon:'🛒', text:'Shopping list'},
+          {icon:'📊', text:'Progress tracking'},
+          {icon:'💡', text:'Coaching insights'},
+          {icon:'😴', text:'Sleep tracker'},
+          {icon:'📈', text:'Monthly report'}
+        ];
+        callout+='<div style="margin-bottom:18px"><div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--silver);margin-bottom:12px">✅ Everything included</div>';
+        callout+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">';
+        includesWithIcons.forEach(function(inc){
+          callout+='<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--card2);border:1px solid var(--border);border-radius:var(--r);font-size:12px;font-weight:500;color:var(--white)">'
+            +'<span style="font-size:16px">'+inc.icon+'</span>'+inc.text+'</div>';
         });
         callout+='</div></div>';
 
-        // Value comparison
-        callout+='<div class="value-compare">';
-        callout+='<div class="vc-title">Compare the value</div>';
-        callout+='<div class="vc-row"><span class="vc-label">Single PT session (UK avg)</span><span class="vc-price" style="color:var(--muted)">£40–90</span></div>';
-        callout+='<div class="vc-row"><span class="vc-label">Online PT monthly package</span><span class="vc-price" style="color:var(--muted)">£150–350/mo</span></div>';
-        callout+='<div class="vc-row"><span class="vc-label">Nutrition plan only</span><span class="vc-price" style="color:var(--muted)">£50–150</span></div>';
-        callout+='<div class="vc-row ours"><span class="vc-label">ReBourne '+( dur?dur.w+'-week':'')+' complete programme</span><span class="vc-price">'+formatPrice(price)+'</span></div>';
+        // Value comparison - visual
+        callout+='<div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--rl);padding:16px;margin-bottom:0">';
+        callout+='<div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:14px">💰 Compare the value</div>';
+        var comparisons=[
+          {label:'Single PT session (UK avg)',    price:'£40–90',    pct:90},
+          {label:'Online PT monthly coaching',    price:'£150–350',  pct:100},
+          {label:'Nutrition plan only',           price:'£50–150',   pct:60},
+          {label:'ReBourne '+(dur?dur.w+'-week':'')+' full programme', price:formatPrice(price), pct:Math.round(price/350*100), highlight:true}
+        ];
+        comparisons.forEach(function(c){
+          callout+='<div style="margin-bottom:10px">'
+            +'<div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;margin-bottom:5px">'
+              +'<span style="font-weight:'+(c.highlight?'700':'500')+';color:'+(c.highlight?'var(--white)':'var(--silver)')+'">'+c.label+'</span>'
+              +'<span style="font-weight:700;color:'+(c.highlight?'var(--green)':'var(--muted)')+'">'+c.price+'</span>'
+            +'</div>'
+            +'<div style="height:'+(c.highlight?'7':'4')+'px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden">'
+              +'<div style="height:100%;width:'+c.pct+'%;background:'+(c.highlight?'linear-gradient(to right,var(--steel),var(--green))':'rgba(255,255,255,.12)')+';border-radius:3px;transition:width .8s"></div>'
+            +'</div>'
+          +'</div>';
+        });
         callout+='</div>';
 
         return callout;
@@ -1050,25 +1089,36 @@ function render(){
     for(var ai=0;ai<ACTIVITY_OPTS.length;ai++){
       var ao=ACTIVITY_OPTS[ai],asel=form.activity===ao.k?' sel':'';
       actHtml+='<div class="act-opt'+asel+'" id="act-'+ao.k+'">'
-        +'<div class="act-dot"></div>'
-        +'<div><div class="act-title">'+ao.title+'</div>'
-        +'<div class="act-desc">'+ao.desc+'</div>'
-        +'<div class="act-ex">e.g. '+ao.ex+'</div></div>'
-        +'</div>';
+        +'<div style="font-size:24px;flex-shrink:0;margin-top:1px">'+(ao.icon||'')+'</div>'
+        +'<div><div class="act-title" style="font-size:14px">'+ao.title+'</div>'
+        +'<div class="act-desc" style="font-size:12px;color:var(--silver);margin-top:3px;line-height:1.5">'+ao.desc+'</div>'
+        +'<div class="act-ex" style="font-size:11px;color:var(--steel3);margin-top:4px">e.g. '+ao.ex+'</div>'
+        +'</div></div>';
     }
     actHtml+='</div>';
+    var isImp=form.units==='imperial';
+    var unitToggle='<div style="display:flex;justify-content:flex-end;margin-bottom:18px">'
+      +'<div style="display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:3px;gap:0">'
+        +'<button id="unit-metric" style="padding:7px 18px;border-radius:7px;border:none;cursor:pointer;font-family:inherit;font-size:12px;font-weight:700;letter-spacing:.04em;transition:all .2s;background:'+(isImp?'transparent':'var(--steel)')+';color:'+(isImp?'var(--muted)':'var(--white)')+'">Metric</button>'
+        +'<button id="unit-imperial" style="padding:7px 18px;border-radius:7px;border:none;cursor:pointer;font-family:inherit;font-size:12px;font-weight:700;letter-spacing:.04em;transition:all .2s;background:'+(isImp?'var(--steel)':'transparent')+';color:'+(isImp?'var(--white)':'var(--muted)')+'">Imperial</button>'
+      +'</div></div>';
+    var weightField='<div class="field"><label>Bodyweight ('+( isImp?'lbs':'kg')+')</label>'
+      +'<input id="f-weight" type="number" placeholder="'+(isImp?'e.g. 180 lbs':'e.g. 82 kg')+'" value="'+form.weight+'"></div>';
+    var heightField='<div class="field"><label>Height</label>'
+      +(isImp
+        ?'<div style="display:flex;gap:8px"><input id="f-height-ft" type="number" placeholder="ft" style="flex:1" value="'+(form.heightFt||'')+'" min="4" max="7"><input id="f-height-in" type="number" placeholder="in" style="flex:1" value="'+(form.heightIn||'')+'" min="0" max="11"></div>'
+        :'<input id="f-height" type="number" placeholder="e.g. 178 cm" value="'+form.height+'">')
+      +'</div>';
     body='<div class="form-card"><h2 class="form-card-title">About you</h2>'
-      +'<p class="form-card-sub">Your physical stats let us calculate your precise calorie and macro targets using the Mifflin-St Jeor formula.</p>'
+      +'<p class="form-card-sub">Your physical stats let us calculate your precise calorie and macro targets. More accurate = better results.</p>'
+      +unitToggle
       +'<div class="field"><label>Your name</label><input id="f-name" type="text" placeholder="First name" value="'+form.name+'"></div>'
       +'<div class="row2">'
         +'<div class="field"><label>Age</label><input id="f-age" type="number" min="16" max="80" placeholder="28" value="'+form.age+'"></div>'
         +'<div class="field"><label>Sex</label><select id="f-sex"><option value="male"'+(form.sex==='male'?' selected':'')+'>Male</option><option value="female"'+(form.sex==='female'?' selected':'')+'>Female</option></select></div>'
       +'</div>'
-      +'<div class="row2">'
-        +'<div class="field"><label>Weight (kg)</label><input id="f-weight" type="number" placeholder="80" value="'+form.weight+'"></div>'
-        +'<div class="field"><label>Height (cm)</label><input id="f-height" type="number" placeholder="178" value="'+form.height+'"></div>'
-      +'</div>'
-      +'<div class="field"><label>Activity level &mdash; choose what best describes your typical day, excluding planned workouts</label>'+actHtml+'</div>'
+      +'<div class="row2">'+weightField+heightField+'</div>'
+      +'<div class="field"><label>Activity level</label><p style="font-size:12px;color:var(--silver);margin-bottom:12px;line-height:1.5">Choose what best describes your typical day, <em>excluding</em> planned workouts.</p>'+actHtml+'</div>'
       +'<div class="btn-row"><button class="pri-btn" id="b-bio">Continue &rarr;</button></div>'
       +'</div>';
   }
@@ -1076,14 +1126,18 @@ function render(){
   // ── STEP 1: GOAL ─────────────────────────────────────────────────────────
   else if(step===1){
     var goals=[
-      {k:'lose',    icon:'&#128293;',label:'Lose fat',    desc:'Calorie deficit'},
-      {k:'maintain',icon:'&#9878;',  label:'Maintain',    desc:'TDEE calories'},
-      {k:'gain',    icon:'&#128170;',label:'Build muscle',desc:'Calorie surplus'}
+      {k:'lose',    icon:'&#128293;',label:'Lose fat',    desc:'Burn body fat while preserving muscle mass through a structured calorie deficit and high protein intake.'},
+      {k:'maintain',icon:'&#9878;',  label:'Maintain',    desc:'Optimise body composition, performance and health at your current weight. Ideal for athletes in season.'},
+      {k:'gain',    icon:'&#128170;',label:'Build muscle', desc:'Maximise muscle growth with a clean calorie surplus, progressive overload training and precise protein targets.'}
     ];
     var gc='<div class="goal-grid">';
     for(var gi=0;gi<goals.length;gi++){
       var gl2=goals[gi],gsel=form.goal===gl2.k?' sel':'';
-      gc+='<div class="goal-card'+gsel+'" id="goal-'+gl2.k+'"><div class="goal-icon">'+gl2.icon+'</div><div class="goal-label">'+gl2.label+'</div><div class="goal-desc">'+gl2.desc+'</div></div>';
+      gc+='<div class="goal-card'+gsel+'" id="goal-'+gl2.k+'">'
+        +'<div class="goal-icon">'+gl2.icon+'</div>'
+        +'<div class="goal-label">'+gl2.label+'</div>'
+        +'<div class="goal-desc" style="font-size:12px;line-height:1.6;margin-top:6px;color:var(--silver)">'+gl2.desc+'</div>'
+        +'</div>';
     }
     gc+='</div>';
 
@@ -1120,11 +1174,15 @@ function render(){
     var dc='<div class="diet-grid">';
     for(var dti=0;dti<DIETS.length;dti++){
       var dt=DIETS[dti],dtsel=form.dietType===dt.k?' sel':'';
-      dc+='<div class="diet-card'+dtsel+'" id="diet-'+dt.k+'"><div class="diet-label">'+dt.l+'</div><div class="diet-desc">'+dt.d+'</div></div>';
+      dc+='<div class="diet-card'+dtsel+'" id="diet-'+dt.k+'">'
+        +'<div style="font-size:22px;margin-bottom:6px">'+dt.icon+'</div>'
+        +'<div class="diet-label" style="font-size:13px">'+dt.l+'</div>'
+        +'<div class="diet-desc" style="font-size:11px;line-height:1.5;margin-top:5px;color:var(--silver)">'+dt.d+'</div>'
+        +'</div>';
     }
     dc+='</div>';
     body='<div class="form-card"><h2 class="form-card-title">Diet &amp; food preferences</h2>'
-      +'<p class="form-card-sub">Your meal plan will be built strictly around these preferences. The more detail you give, the better your plan.</p>'
+      +'<p class="form-card-sub" style="font-size:13px;line-height:1.7">Your meal plan is built strictly around your diet type. The more detail you give below, the more personalised your recipes will be.</p>'
       +'<div class="sec-lbl">Diet type</div>'+dc
       +'<div class="row2">'
         +'<div class="field"><label>Main meals / day</label><select id="f-meals">'+[2,3,4,5,6].map(function(n){return '<option'+(form.meals==n?' selected':'')+'>'+n+'</option>';}).join('')+'</select></div>'
@@ -1216,6 +1274,42 @@ function render(){
         +'<div class="stat"><div class="stat-lbl">TDEE</div><div class="stat-val">'+c.tdee.toLocaleString()+'</div><div class="stat-unit">total daily burn</div></div>'
         +'<div class="stat hi"><div class="stat-lbl">Daily target</div><div class="stat-val">'+c.target.toLocaleString()+'</div><div class="stat-unit">kcal to eat</div></div>'
       +'</div>'
+      // Donut chart visual
+      +(function(){
+        var p=c.protein*4,ca=c.carbs*4,f=c.fat*9,tot=p+ca+f||1;
+        var pp=p/tot,cp=ca/tot,fp=f/tot;
+        function arc(startA,endA,r,cx,cy){
+          var s=startA*2*Math.PI-Math.PI/2,e=endA*2*Math.PI-Math.PI/2;
+          var x1=cx+r*Math.cos(s),y1=cy+r*Math.sin(s);
+          var x2=cx+r*Math.cos(e),y2=cy+r*Math.sin(e);
+          var large=endA-startA>0.5?1:0;
+          return 'M '+cx+' '+cy+' L '+x1+' '+y1+' A '+r+' '+r+' 0 '+large+' 1 '+x2+' '+y2+' Z';
+        }
+        var svg='<div style="display:flex;align-items:center;gap:20px;padding:16px;background:var(--card);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:14px">';
+        svg+='<svg width="100" height="100" viewBox="0 0 100 100" aria-label="Macro split" style="flex-shrink:0">';
+        svg+='<path d="'+arc(0,pp,44,50,50)+'" fill="#3A5F96" opacity="0.9"/>';
+        svg+='<path d="'+arc(pp,pp+cp,44,50,50)+'" fill="#4ECCA3" opacity="0.9"/>';
+        svg+='<path d="'+arc(pp+cp,1,44,50,50)+'" fill="#7E98BC" opacity="0.7"/>';
+        svg+='<circle cx="50" cy="50" r="28" fill="#0A1120"/>';
+        svg+='<text x="50" y="46" text-anchor="middle" font-size="11" font-weight="700" fill="#F0F4FF" font-family="inherit">'+c.target.toLocaleString()+'</text>';
+        svg+='<text x="50" y="58" text-anchor="middle" font-size="8" fill="rgba(255,255,255,.4)" font-family="inherit">kcal</text>';
+        svg+='</svg>';
+        svg+='<div style="flex:1">';
+        svg+='<div style="font-size:12px;font-weight:600;color:var(--white);margin-bottom:12px">Daily macro split</div>';
+        [{l:'Protein',v:c.protein+'g',pct:Math.round(pp*100),c:'#3A5F96'},
+         {l:'Carbs',v:c.carbs+'g',pct:Math.round(cp*100),c:'#4ECCA3'},
+         {l:'Fat',v:c.fat+'g',pct:Math.round(fp*100),c:'#7E98BC'}
+        ].forEach(function(m){
+          svg+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:7px;font-size:12px">'
+            +'<div style="width:10px;height:10px;border-radius:2px;background:'+m.c+';flex-shrink:0"></div>'
+            +'<span style="color:var(--silver);flex:1">'+m.l+'</span>'
+            +'<span style="font-weight:700;color:var(--white)">'+m.v+'</span>'
+            +'<span style="color:var(--muted);font-size:11px;width:28px;text-align:right">'+m.pct+'%</span>'
+          +'</div>';
+        });
+        svg+='</div></div>';
+        return svg;
+      })()
       +mbar(c.protein,c.carbs,c.fat)
       +'<div class="stat-grid">'
         +'<div class="stat"><div class="stat-lbl">Protein</div><div class="stat-val">'+c.protein+'g</div><div class="stat-unit">2g per kg bodyweight</div></div>'
@@ -1338,10 +1432,23 @@ function render(){
 
   // Step 0
   bnd('b-bio',function(){
-    var n=g('f-name').value.trim(),a=g('f-age').value.trim(),w=g('f-weight').value.trim(),h=g('f-height').value.trim();
-    if(!n||!a||!w||!h){alert('Please fill in all fields.');return;}
+    var n=g('f-name'),ag=g('f-age'),wEl=g('f-weight'),hEl=g('f-height'),sexEl=g('f-sex');
+    var hFt=g('f-height-ft'),hIn=g('f-height-in');
+    var nv=n?n.value.trim():'',av=ag?ag.value.trim():'',wv=wEl?wEl.value.trim():'';
+    var hv='';
+    if(form.units==='imperial'){
+      if(!hFt||!hFt.value.trim()){alert('Please enter your height.');return;}
+      form.heightFt=hFt.value.trim();form.heightIn=hIn?hIn.value.trim():'0';
+      var totalIn3=parseInt(form.heightFt)*12+(parseInt(form.heightIn)||0);
+      hv=Math.round(totalIn3*2.54)+''; // store as cm internally
+      // convert weight lbs to kg
+      if(wv) wv=Math.round(parseFloat(wv)/2.20462*10)/10+'';
+    } else {
+      hv=hEl?hEl.value.trim():'';
+    }
+    if(!nv||!av||!wv||!hv){alert('Please fill in all fields.');return;}
     if(!form.activity){alert('Please select your activity level.');return;}
-    form.name=n;form.age=a;form.weight=w;form.height=h;form.sex=g('f-sex').value;
+    form.name=nv;form.age=av;form.weight=wv;form.height=hv;if(sexEl)form.sex=sexEl.value;
     goStep(1);
   });
   function saveBioFields(){
@@ -1353,6 +1460,27 @@ function render(){
     if(s)form.sex=s.value;
   }
   ACTIVITY_OPTS.forEach(function(ao){bnd('act-'+ao.k,function(){saveBioFields();form.activity=ao.k;render();});});
+  // Unit toggle
+  bnd('unit-metric',function(){
+    saveBioFields();
+    if(form.units==='imperial'){
+      // Convert lbs to kg
+      if(form.weight) form.weight=Math.round(parseFloat(form.weight)/2.20462*10)/10;
+      // Convert ft/in to cm
+      if(form.heightFt){var totalIn=parseInt(form.heightFt)*12+(parseInt(form.heightIn)||0);form.height=Math.round(totalIn*2.54);}
+    }
+    form.units='metric';render();
+  });
+  bnd('unit-imperial',function(){
+    saveBioFields();
+    if(form.units==='metric'){
+      // Convert kg to lbs
+      if(form.weight) form.weight=Math.round(parseFloat(form.weight)*2.20462*10)/10;
+      // Convert cm to ft/in
+      if(form.height){var totalIn2=Math.round(parseFloat(form.height)/2.54);form.heightFt=Math.floor(totalIn2/12);form.heightIn=totalIn2%12;form.height='';}
+    }
+    form.units='imperial';render();
+  });
 
   // Step 1
   bnd('b-back1',function(){goStep(0);});
@@ -1449,7 +1577,7 @@ async function generateWeek(weekNum,totalWeeks,overrideNote){
 async function startGenerate(){
   step=5;loading=true;apiErr=null;allWeeks=[];generatingWeek=0;
   // Load all cached data from localStorage
-  loadAllLogsExtended();
+  loadAllLogs();
   render();
   try{
     // Generate all weeks in parallel - massive speed improvement
