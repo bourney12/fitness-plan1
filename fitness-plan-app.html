@@ -28,8 +28,8 @@ body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--white)
 body::before{content:'';position:fixed;top:-200px;left:50%;transform:translateX(-50%);width:800px;height:800px;background:radial-gradient(circle,rgba(58,95,150,.07) 0%,transparent 65%);pointer-events:none;z-index:0}
 
 /* ── TYPOGRAPHY ── */
-h1,h2,h3{font-family:'Playfair Display',serif;font-weight:600}
-.serif-italic{font-family:'Playfair Display',serif;font-style:italic;font-weight:400}
+h1,h2,h3{font-weight:600}
+.serif-italic{font-style:italic;font-weight:400}
 
 /* ── LAYOUT ── */
 .wrap{max-width:680px;margin:0 auto;padding:0 20px 100px;position:relative;z-index:1}
@@ -51,7 +51,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;font-weight:600}
 .splash-line{width:40px;height:1px;background:var(--steel);flex-shrink:0}
 .splash-tag{font-size:9px;font-weight:500;letter-spacing:.28em;color:var(--steel3);text-transform:uppercase;white-space:nowrap}
 .splash-divider{width:1px;height:40px;background:linear-gradient(to bottom,var(--steel),transparent);margin-bottom:40px}
-.splash-headline{font-family:'Playfair Display',serif;font-size:22px;font-weight:400;font-style:italic;color:var(--white);line-height:1.6;margin-bottom:40px;max-width:420px}
+.splash-headline{font-size:22px;font-weight:400;font-style:italic;color:var(--white);line-height:1.6;margin-bottom:40px;max-width:420px}
 .splash-btn{background:transparent;border:1px solid var(--steel);color:var(--white);font-size:11px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;padding:16px 48px;border-radius:2px;cursor:pointer;transition:all .3s;font-family:inherit;margin-bottom:16px}
 .splash-btn:hover{background:var(--steel);box-shadow:0 4px 30px rgba(58,95,150,.4)}
 .splash-sub{font-size:10px;font-weight:400;letter-spacing:.18em;color:var(--steel);text-transform:uppercase;margin-top:12px}
@@ -89,7 +89,7 @@ h1,h2,h3{font-family:'Playfair Display',serif;font-weight:600}
 .dur-card{border:1px solid var(--border);border-radius:var(--r);padding:14px 8px;cursor:pointer;text-align:center;background:var(--card);transition:all .2s;position:relative}
 .dur-card.sel{border-color:var(--steel2);background:var(--card2);box-shadow:0 0 20px rgba(58,95,150,.2)}
 .dur-pop{position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:var(--steel);color:var(--white);font-size:8px;font-weight:700;letter-spacing:.08em;padding:2px 8px;border-radius:100px;white-space:nowrap;text-transform:uppercase}
-.dur-num{font-family:'Playfair Display',serif;font-size:24px;color:var(--white);margin-bottom:2px}
+.dur-num{font-size:24px;color:var(--white);margin-bottom:2px}
 .dur-label{font-size:10px;font-weight:500;color:var(--silver);margin-bottom:1px}
 .dur-desc{font-size:11px;color:var(--silver)}
 
@@ -492,7 +492,7 @@ input[type=range]{padding:0;border:none;background:var(--border);height:3px;bord
 .ov-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:.875rem}
 .ov-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:14px;text-align:center;position:relative;overflow:hidden;transition:border-color .2s}
 .ov-card:hover{border-color:var(--border2)}
-.ov-val{font-family:'Playfair Display',serif;font-size:22px;color:var(--white);margin-bottom:2px}
+.ov-val{font-size:22px;color:var(--white);margin-bottom:2px}
 .ov-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.09em;font-weight:600}
 .coach-note-box{border-left:2px solid var(--steel2);padding:12px 15px;background:var(--card);border-radius:0 var(--r) var(--r) 0;font-size:13px;color:var(--silver);line-height:1.8;margin-bottom:18px;font-style:italic}
 
@@ -619,7 +619,7 @@ input[type=range]{padding:0;border:none;background:var(--border);height:3px;bord
 /* ── BODY COMPOSITION ────────────────────────────── */
 .body-comp-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:18px;margin-bottom:14px}
 .body-comp-stat{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;text-align:center}
-.bcs-val{font-family:'Playfair Display',serif;font-size:20px;color:var(--white);margin-bottom:2px}
+.bcs-val{font-size:20px;color:var(--white);margin-bottom:2px}
 .bcs-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600}
 .bcs-change{font-size:10px;font-weight:600;margin-top:3px}
 
@@ -640,7 +640,7 @@ input[type=range]{padding:0;border:none;background:var(--border);height:3px;bord
 /* ── STREAK ──────────────────────────────────────── */
 .streak-card{background:linear-gradient(135deg,var(--card2),var(--card3));border:1px solid var(--border2);border-radius:var(--rl);padding:20px;margin-bottom:14px;text-align:center;position:relative;overflow:hidden}
 .streak-card::before{content:'';position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:160px;height:160px;background:radial-gradient(circle,rgba(201,169,110,.12),transparent);border-radius:50%}
-.streak-num{font-family:'Playfair Display',serif;font-size:56px;font-weight:600;color:var(--gold);line-height:1;margin-bottom:4px;position:relative}
+.streak-num{font-size:56px;font-weight:600;color:var(--gold);line-height:1;margin-bottom:4px;position:relative}
 .streak-lbl{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--silver);margin-bottom:4px}
 .streak-sub{font-size:11px;color:var(--muted)}
 
@@ -660,7 +660,7 @@ input[type=range]{padding:0;border:none;background:var(--border);height:3px;bord
 .report-btn:hover{background:rgba(255,255,255,.25)}
 
 /* ── PRICING ─────────────────────────────────────── */
-.dur-price{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--white);margin:6px 0 2px;line-height:1}
+.dur-price{font-size:22px;font-weight:600;color:var(--white);margin:6px 0 2px;line-height:1}
 .dur-card.sel .dur-price{color:var(--white)}
 .dur-per{font-size:11px;color:var(--silver);font-weight:600;margin-bottom:4px}
 .dur-saving{font-size:11px;font-weight:700;color:var(--green);letter-spacing:.02em}
@@ -671,7 +671,7 @@ input[type=range]{padding:0;border:none;background:var(--border);height:3px;bord
 .price-callout-name{font-size:16px;font-weight:600;color:var(--white);margin-bottom:2px}
 .price-callout-tag{font-size:11px;color:var(--muted)}
 .price-callout-right{text-align:right;flex-shrink:0}
-.price-callout-num{font-family:'Playfair Display',serif;font-size:36px;font-weight:600;color:var(--white);line-height:1}
+.price-callout-num{font-size:36px;font-weight:600;color:var(--white);line-height:1}
 .price-callout-compare{font-size:10px;color:var(--muted);margin-top:3px}
 .price-callout-compare s{color:var(--muted)}
 .price-tag-row{display:flex;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap}
@@ -692,7 +692,7 @@ input[type=range]{padding:0;border:none;background:var(--border);height:3px;bord
 .sub-page::before{content:'';position:fixed;top:-200px;left:50%;transform:translateX(-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(58,95,150,.1),transparent 65%);pointer-events:none;border-radius:50%}
 .sub-hero{padding:60px 24px 40px;text-align:center;position:relative;z-index:1}
 .sub-hero-eyebrow{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--steel3);margin-bottom:14px}
-.sub-hero-title{font-family:'Playfair Display',serif;font-size:36px;font-weight:600;color:var(--white);line-height:1.15;margin-bottom:12px}
+.sub-hero-title{font-size:36px;font-weight:600;color:var(--white);line-height:1.15;margin-bottom:12px}
 .sub-hero-title em{color:var(--steel3);font-style:italic}
 .sub-hero-sub{font-size:14px;color:var(--silver);line-height:1.8;max-width:480px;margin:0 auto 36px}
 .sub-toggle{display:flex;background:var(--card);border:1px solid var(--border);border-radius:100px;padding:4px;gap:0;width:fit-content;margin:0 auto 40px}
@@ -712,7 +712,7 @@ input[type=range]{padding:0;border:none;background:var(--border);height:3px;bord
 .plan-badge-elite{background:rgba(201,169,110,.15);color:var(--gold);border:1px solid rgba(201,169,110,.2)}
 .plan-name{font-size:20px;font-weight:700;color:var(--white);margin-bottom:6px}
 .plan-price-wrap{margin:16px 0 20px}
-.plan-price{font-family:'Playfair Display',serif;font-size:42px;font-weight:600;color:var(--white);line-height:1}
+.plan-price{font-size:42px;font-weight:600;color:var(--white);line-height:1}
 .plan-price-period{font-size:13px;color:var(--muted);margin-top:4px}
 .plan-price-annual{font-size:12px;color:var(--green);font-weight:600;margin-top:4px}
 .plan-desc{font-size:13px;color:var(--silver);line-height:1.7;margin-bottom:20px}
@@ -970,6 +970,9 @@ function render(){
     return;
   }
 
+  // ── STEP -4: PLAN BUILDER (same as old -1) ───────────────────────────────
+  // step -4 redirects to old landing logic, handled below as step===-4
+
   if(step===-2){
     var splash = document.createElement('div');
     splash.style.cssText = 'min-height:90vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;position:relative';
@@ -994,11 +997,8 @@ function render(){
       '</div>',
       '<div class="splash-divider"></div>',
       '<p class="splash-headline">Are you ready to reinvent your potential?</p>',
-      '<button id="b-splash" class="splash-btn">Build my programme</button>',
-      '<div style="margin-top:16px;display:flex;flex-direction:column;align-items:center;gap:10px">',
-        '<button id="b-sub" style="background:transparent;border:none;cursor:pointer;font-family:inherit;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--steel3);text-decoration:underline;text-decoration-color:rgba(58,95,150,.4);text-underline-offset:3px;padding:4px 0">View membership plans</button>',
-        '<div class="splash-sub">&mdash; Reinvent Your Potential &mdash;</div>',
-      '</div>',
+      '<button id="b-splash" class="splash-btn">Get started &rarr;</button>',
+      '<div class="splash-sub">&mdash; One-off plans &bull; Monthly membership &mdash;</div>',
       '<div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:1px;height:60px;background:linear-gradient(to top,transparent,#3A5F96)"></div>'
     ].join('');
 
@@ -1009,15 +1009,26 @@ function render(){
     if(bSplash){
       bSplash.onmouseover = function(){ this.style.background='#3A5F96'; this.style.letterSpacing='.32em'; };
       bSplash.onmouseout  = function(){ this.style.background='transparent'; this.style.letterSpacing='.28em'; };
-      bSplash.onclick = function(){ goStep(-1); };
-    var bSub = g('b-sub');
-    if(bSub) bSub.onclick = function(){ step=-3; render(); window.scrollTo(0,0); };
+      bSplash.onclick = function(){ step=-1; render(); window.scrollTo(0,0); };
     }
     return;
   }
 
-  // ── LANDING ──────────────────────────────────────────────────────────────
+  // ── CHOOSE: ONE-OFF VS MEMBERSHIP ────────────────────────────────────────
   if(step===-1){
+    app.innerHTML = renderChoicePage();
+    var _coo=g('choice-oneoff'),_com=g('choice-member'),_cb=g('choice-back');
+    var _cooc=g('choice-oneoff-card'),_comc=g('choice-member-card');
+    if(_coo)  _coo.onclick  = function(){ step=-4; render(); window.scrollTo(0,0); };
+    if(_cooc) _cooc.onclick = function(){ step=-4; render(); window.scrollTo(0,0); };
+    if(_com)  _com.onclick  = function(){ step=-3; render(); window.scrollTo(0,0); };
+    if(_comc) _comc.onclick = function(){ step=-3; render(); window.scrollTo(0,0); };
+    if(_cb)   _cb.onclick   = function(){ step=-2; render(); window.scrollTo(0,0); };
+    return;
+  }
+
+  // ── PLAN BUILDER LANDING ──────────────────────────────────────────────────
+  if(step===-4){
     var ptCards='<div class="plan-type-grid">';
     for(var i=0;i<PLAN_TYPES.length;i++){
       var pt=PLAN_TYPES[i],sel=form.planType===pt.k?' sel':'';
@@ -1048,7 +1059,7 @@ function render(){
     }
     durCards+='</div>';
 
-    app.innerHTML='<div class="hero">'
+    app.innerHTML='<div class="wrap"><button id="b-startback" style="background:transparent;border:none;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;color:var(--muted);padding:16px 0;display:flex;align-items:center;gap:6px;letter-spacing:.04em">&larr; Back</button></div><div class="hero">'
       +'<div class="hero-label">AI-powered coaching</div>'
       +'<h1>Reinvent Your<br><em style="font-family:\'Playfair Display\',serif;font-style:italic;font-weight:400">Potential</em></h1>'
       +'<div class="hero-tag">ReBourne Performance Plans</div>'
@@ -1149,6 +1160,7 @@ function render(){
       (function(w){bind('dur-'+w,function(){form.planWeeks=w;render();});})(DURATIONS[di].w);
     }
     bind('b-start',function(){if(form.planType&&form.planWeeks)goStep(0);});
+    bind('b-startback',function(){step=-1;render();window.scrollTo(0,0);});
     return;
   }
 
@@ -2861,10 +2873,95 @@ async function swapMealDirect(originalMeal,key){
 }
 
 function resetAll(){
-  step=-2;allWeeks=[];calc=null;loading=false;apiErr=null;generatingWeek=0;subBilling='monthly';
+  step=-2;allWeeks=[];calc=null;loading=false;apiErr=null;generatingWeek=0;subBilling='monthly';form.planType='';form.planWeeks=0;
   dash.tab='today';dash.week=0;dash.day=0;
   render();window.scrollTo(0,0);
 }
+
+// ══════════════════════════════════════════════════════════════════════════
+// CHOICE PAGE - One-off vs Membership
+// ══════════════════════════════════════════════════════════════════════════
+function renderChoicePage(){
+  var html='<div style="min-height:100vh;background:var(--bg);position:relative;overflow:hidden">';
+
+  // Ambient glow
+  html+='<div style="position:fixed;top:-200px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(58,95,150,.09),transparent 65%);pointer-events:none;border-radius:50%"></div>';
+
+  // Header
+  html+='<div style="padding:16px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:rgba(5,8,15,.8);backdrop-filter:blur(20px)">';
+  html+='<div style="display:flex;align-items:center;gap:10px">';
+  html+='<svg width="28" height="28" viewBox="140 150 540 510"><defs><linearGradient id="cg1" x1="180" y1="120" x2="650" y2="680" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#7E98BC"/><stop offset="45%" stop-color="#3A5F96"/><stop offset="100%" stop-color="#162A46"/></linearGradient></defs><path fill="url(#cg1)" fill-rule="evenodd" d="M205 170 L475 170 C565 170 625 223 625 306 C625 372 586 421 521 438 L657 630 L534 630 L412 452 L362 452 L362 630 L240 630 L240 240 L205 170 Z M362 260 L362 372 L470 372 C510 372 535 351 535 316 C535 282 510 260 470 260 L362 260 Z M205 170 L363 347 L318 347 L165 170 L205 170 Z"/></svg>';
+  html+='<span style="font-size:12px;letter-spacing:.18em;font-weight:700;color:var(--white)"><span style="color:var(--steel3);font-weight:300">RE</span>BOURNE</span>';
+  html+='</div>';
+  html+='<button id="choice-back" style="background:transparent;border:1px solid var(--border);border-radius:var(--r);padding:7px 16px;color:var(--silver);font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;letter-spacing:.04em">&larr; Back</button>';
+  html+='</div>';
+
+  // Hero text
+  html+='<div style="padding:52px 24px 36px;text-align:center;position:relative;z-index:1;max-width:640px;margin:0 auto">';
+  html+='<div style="font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--steel3);margin-bottom:14px">Choose your path</div>';
+  html+='<h1 style="font-size:32px;font-weight:600;color:var(--white);line-height:1.2;margin-bottom:12px;font-family:inherit">How would you like<br>to train with ReBourne?</h1>';
+  html+='<p style="font-size:14px;color:var(--silver);line-height:1.8;margin-bottom:0">Both options give you a fully personalised, AI-generated plan. Membership adds unlimited access and a plan that adapts and improves every month.</p>';
+  html+='</div>';
+
+  // Two cards
+  html+='<div style="max-width:720px;margin:0 auto;padding:0 20px 60px;display:grid;grid-template-columns:1fr 1fr;gap:16px;position:relative;z-index:1">';
+
+  // ONE-OFF CARD
+  html+='<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--rxl);padding:30px 24px;display:flex;flex-direction:column;transition:border-color .2s;cursor:pointer" id="choice-oneoff-card">';
+  html+='<div style="font-size:28px;margin-bottom:14px">🎯</div>';
+  html+='<div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">One-off plan</div>';
+  html+='<div style="font-size:22px;font-weight:700;color:var(--white);margin-bottom:6px">Buy a plan</div>';
+  html+='<div style="font-size:36px;font-weight:600;color:var(--white);margin-bottom:4px">£19<span style="font-size:16px;font-weight:400;color:var(--muted)">+</span></div>';
+  html+='<div style="font-size:12px;color:var(--muted);margin-bottom:20px">One payment, no commitment</div>';
+  html+='<div style="display:flex;flex-direction:column;gap:9px;flex:1;margin-bottom:24px">';
+  ['Fully personalised to your goals','Choose 1, 4, 8 or 12 weeks','All 7 programme types available','Full dashboard and tracking','Recipes, shopping list, insights','Pay once, use forever'].forEach(function(f){
+    html+='<div style="display:flex;align-items:flex-start;gap:9px;font-size:12px;color:var(--silver)">'
+      +'<span style="color:var(--steel2);font-weight:700;flex-shrink:0;margin-top:1px">&#10003;</span>'+f+'</div>';
+  });
+  html+='</div>';
+  html+='<button id="choice-oneoff" style="width:100%;padding:14px;border-radius:var(--r);border:1px solid var(--border2);background:transparent;color:var(--white);font-family:inherit;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all .2s">Build my plan &rarr;</button>';
+  html+='</div>';
+
+  // MEMBERSHIP CARD
+  html+='<div style="background:linear-gradient(160deg,var(--card2),var(--card3));border:1px solid var(--steel2);border-radius:var(--rxl);padding:30px 24px;display:flex;flex-direction:column;position:relative;overflow:hidden;cursor:pointer;box-shadow:0 0 40px rgba(58,95,150,.15)" id="choice-member-card">';
+  html+='<div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(to right,var(--steel),var(--steel3))"></div>';
+  html+='<div style="position:absolute;top:14px;right:14px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 12px;border-radius:100px;background:linear-gradient(to right,var(--steel),var(--steel2));color:var(--white)">Best value</div>';
+  html+='<div style="font-size:28px;margin-bottom:14px">&#9889;</div>';
+  html+='<div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--steel3);margin-bottom:8px">Membership</div>';
+  html+='<div style="font-size:22px;font-weight:700;color:var(--white);margin-bottom:6px">Subscribe</div>';
+  html+='<div style="font-size:36px;font-weight:600;color:var(--white);margin-bottom:4px">£24.99<span style="font-size:16px;font-weight:400;color:rgba(255,255,255,.5)">/mo</span></div>';
+  html+='<div style="font-size:12px;color:var(--steel3);margin-bottom:20px;font-weight:500">or £16.67/mo billed annually &#10003;</div>';
+  html+='<div style="display:flex;flex-direction:column;gap:9px;flex:1;margin-bottom:24px">';
+  [
+    {t:'Unlimited plans — all types',      hi:true},
+    {t:'New plan every month, auto-adapted',hi:true},
+    {t:'Progressive overload built in',    hi:true},
+    {t:'Priority AI generation',           hi:false},
+    {t:'Full dashboard and tracking',      hi:false},
+    {t:'Monthly performance report',       hi:false}
+  ].forEach(function(f){
+    html+='<div style="display:flex;align-items:flex-start;gap:9px;font-size:12px;color:'+(f.hi?'var(--white)':'var(--silver)')+'">'
+      +'<span style="color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px">&#10003;</span>'
+      +(f.hi?'<strong>':'')
+      +f.t
+      +(f.hi?'</strong>':'')
+      +'</div>';
+  });
+  html+='</div>';
+  html+='<button id="choice-member" style="width:100%;padding:14px;border-radius:var(--r);border:none;background:linear-gradient(135deg,var(--steel),var(--steel2));color:var(--white);font-family:inherit;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(58,95,150,.3)">View membership plans &rarr;</button>';
+  html+='</div>';
+
+  html+='</div>'; // grid
+
+  // Small reassurance text
+  html+='<div style="text-align:center;padding:0 20px 40px;position:relative;z-index:1">';
+  html+='<p style="font-size:12px;color:var(--muted);line-height:1.7">Not sure? Start with a one-off plan to experience ReBourne. You can upgrade to membership at any time.<br>All plans include the same AI-powered personalisation, recipes, dashboard and tracking.</p>';
+  html+='</div>';
+
+  html+='</div>'; // sub-page
+  return html;
+}
+
 
 // ══════════════════════════════════════════════════════════════════════════
 // SUBSCRIPTION PAGE
@@ -3064,11 +3161,11 @@ function renderSubscriptionPage(container){
 
   // Bind
   function bnd2(id,fn){var el=g(id);if(el)el.onclick=fn;}
-  bnd2('sub-back', function(){ step=-2; render(); window.scrollTo(0,0); });
+  bnd2('sub-back', function(){ step=-1; render(); window.scrollTo(0,0); });
   bnd2('sub-monthly', function(){ subBilling='monthly'; renderSubscriptionPage(container); });
   bnd2('sub-annual',  function(){ subBilling='annual';  renderSubscriptionPage(container); });
   // Plan CTAs - for now go to plan builder; in future these would trigger Stripe
-  bnd2('plan-cta-free', function(){ step=-2; render(); window.scrollTo(0,0); });
+  bnd2('plan-cta-free', function(){ step=-4; render(); window.scrollTo(0,0); });
   bnd2('plan-cta-pro',  function(){ alert('Stripe integration coming soon! Pro membership will be £'+(isAnnual?(199.99/12).toFixed(2):'24.99')+'/month.'); });
   bnd2('plan-cta-elite',function(){ alert('Stripe integration coming soon! Elite membership will be £'+(isAnnual?(349.99/12).toFixed(2):'44.99')+'/month.'); });
   // FAQ accordion
