@@ -22,7 +22,7 @@ const PWA_SCRIPT = `
 <script>
 if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost')){
   window.addEventListener('load',function(){
-    navigator.serviceWorker.register('/sw.js?v=4').then(function(reg){ return reg.update(); }).catch(function(){});
+    navigator.serviceWorker.register('/sw.js?v=5').then(function(reg){ return reg.update(); }).catch(function(){});
   });
 }
 </script>
@@ -37,18 +37,10 @@ function injectPwa(html) {
   return output;
 }
 
-function escapeInlineScriptEndTags(html) {
-  const openTag = "<script>";
-  const closeTag = "</script>";
-  const start = html.indexOf(openTag);
-  const end = html.lastIndexOf(closeTag);
-  if (start === -1 || end === -1 || end <= start) return html;
-
-  const bodyStart = start + openTag.length;
-  const before = html.slice(0, bodyStart);
-  const body = html.slice(bodyStart, end).split("</").join("<\\/");
-  const after = html.slice(end);
-  return before + body + after;
+function hardenDownloadHtmlStrings(html) {
+  return html
+    .replace("+'</head><body><div class=\"page\">'", "+'</he'+'ad><bo'+'dy><div class=\"page\">'")
+    .replace("+'</body></html>';", "+'</bo'+'dy></ht'+'ml>'; ");
 }
 
 function noStoreHeaders() {
@@ -70,7 +62,7 @@ function serveFile(res, filename, contentType) {
     }
     let body = content;
     if (filename === "fitness-plan-app.html") {
-      body = Buffer.from(escapeInlineScriptEndTags(injectPwa(content.toString("utf8"))));
+      body = Buffer.from(injectPwa(hardenDownloadHtmlStrings(content.toString("utf8"))));
     }
     const type = contentType.startsWith("image/") || contentType === "application/octet-stream"
       ? contentType
