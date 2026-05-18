@@ -22,7 +22,7 @@ const PWA_SCRIPT = `
 <script>
 if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost')){
   window.addEventListener('load',function(){
-    navigator.serviceWorker.register('/sw.js?v=3').then(function(reg){ return reg.update(); }).catch(function(){});
+    navigator.serviceWorker.register('/sw.js?v=4').then(function(reg){ return reg.update(); }).catch(function(){});
   });
 }
 </script>
@@ -38,9 +38,17 @@ function injectPwa(html) {
 }
 
 function escapeInlineScriptEndTags(html) {
-  return html.replace(/(<script\b[^>]*>)([\s\S]*?)(<\/script>)/gi, function(_, open, body, close) {
-    return open + body.replace(/<\//g, "<\\/") + close;
-  });
+  const openTag = "<script>";
+  const closeTag = "</script>";
+  const start = html.indexOf(openTag);
+  const end = html.lastIndexOf(closeTag);
+  if (start === -1 || end === -1 || end <= start) return html;
+
+  const bodyStart = start + openTag.length;
+  const before = html.slice(0, bodyStart);
+  const body = html.slice(bodyStart, end).split("</").join("<\\/");
+  const after = html.slice(end);
+  return before + body + after;
 }
 
 function noStoreHeaders() {
@@ -124,7 +132,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  if (req.method === "GET" && (reqUrl.pathname === "/" || reqUrl.pathname === "/index.html" || reqUrl.pathname === "/fitness-plan-app.html")) {
+  if (req.method === "GET" && (reqUrl.pathname === "/" || reqUrl.pathname === "/index.html" || reqUrl.pathname === "/fitness-plan-app.html" || reqUrl.pathname === "/app")) {
     return serveFile(res, "fitness-plan-app.html", "text/html");
   }
 
