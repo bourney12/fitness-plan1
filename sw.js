@@ -1,10 +1,7 @@
 const CACHE_NAME = "rebourne-shell-v1";
 const APP_SHELL = [
   "/",
-  "/assets/rebourne-logo-transparent.png",
-  "/assets/icons/icon-180.png",
-  "/assets/icons/icon-192.png",
-  "/assets/icons/icon-512.png",
+  "/assets/icons/icon.svg",
   "/manifest.webmanifest"
 ];
 
