@@ -47,7 +47,10 @@ function serveFile(res, filename, contentType) {
     const type = contentType.startsWith("image/") || contentType === "application/octet-stream"
       ? contentType
       : contentType + "; charset=utf-8";
-    res.writeHead(200, { "Content-Type": type });
+    res.writeHead(200, {
+      "Content-Type": type,
+      "X-Content-Type-Options": "nosniff",
+    });
     res.end(body);
   });
 }
@@ -97,7 +100,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  if (req.method === "GET" && (reqUrl.pathname === "/" || reqUrl.pathname === "/index.html")) {
+  if (req.method === "GET" && (reqUrl.pathname === "/" || reqUrl.pathname === "/index.html" || reqUrl.pathname === "/fitness-plan-app.html")) {
     return serveFile(res, "fitness-plan-app.html", "text/html");
   }
 
