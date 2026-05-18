@@ -1,8 +1,15 @@
-const CACHE_NAME = "rebourne-shell-v3";
+const CACHE_NAME = "rebourne-shell-v4";
+const FEATURE_SCRIPT = '<script src="/assets/feature-upgrades.js?v=1"></script>';
 const STATIC_ASSETS = [
   "/assets/icons/icon.svg",
-  "/manifest.webmanifest"
+  "/manifest.webmanifest",
+  "/assets/feature-upgrades.js?v=1"
 ];
+
+function withFeatureUpgrades(html) {
+  if (html.includes("/assets/feature-upgrades.js")) return html;
+  return html.replace("</body>", FEATURE_SCRIPT + "</body>");
+}
 
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_ASSETS)));
@@ -27,6 +34,11 @@ self.addEventListener("fetch", event => {
   if (request.mode === "navigate" || request.headers.get("accept")?.includes("text/html")) {
     event.respondWith(
       fetch(request, { cache: "no-store" })
+        .then(response => response.text().then(html => new Response(withFeatureUpgrades(html), {
+          status: response.status,
+          statusText: response.statusText,
+          headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" }
+        })))
         .catch(() => caches.match("/fitness-plan-app.html").then(cached => cached || Response.error()))
     );
     return;
