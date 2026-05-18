@@ -6,6 +6,34 @@ const API_KEY = process.env.ANTHROPIC_API_KEY;
 const PORT    = process.env.PORT || 5173;
 const MAX_BODY_BYTES = 1024 * 1024;
 
+const PWA_HEAD = `
+<meta name="description" content="Personalised fitness, nutrition and progress planning.">
+<meta name="theme-color" content="#05080F">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ReBourne">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/assets/icons/icon.svg">
+<link rel="icon" type="image/svg+xml" href="/assets/icons/icon.svg">
+`;
+
+const PWA_SCRIPT = `
+<script>
+if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost')){
+  window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});
+}
+</script>
+`;
+
+const ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" fill="#05080F"/><defs><linearGradient id="g" x1="90" y1="70" x2="420" y2="440" gradientUnits="userSpaceOnUse"><stop stop-color="#7E98BC"/><stop offset="0.48" stop-color="#3A5F96"/><stop offset="1" stop-color="#162A46"/></linearGradient></defs><path fill="url(#g)" d="M138 112h205c63 0 105 38 105 96 0 47-27 82-73 95l92 137h-88l-82-126h-34v126h-87V162h-38v-50Zm125 64v80h77c29 0 47-15 47-40 0-24-18-40-47-40h-77ZM138 112l113 126h-32L110 112h28Z"/><text x="256" y="482" fill="#F0F4FF" font-family="Arial, sans-serif" font-size="36" letter-spacing="14" text-anchor="middle">REBOURNE</text></svg>`;
+
+function injectPwa(html) {
+  let output = html;
+  if (!output.includes("manifest.webmanifest")) output = output.replace("</head>", PWA_HEAD + "</head>");
+  if (!output.includes("serviceWorker.register")) output = output.replace("</body>", PWA_SCRIPT + "</body>");
+  return output;
+}
+
 function serveFile(res, filename, contentType) {
   const filePath = path.join(__dirname, filename);
   fs.readFile(filePath, (err, content) => {
@@ -14,11 +42,13 @@ function serveFile(res, filename, contentType) {
       res.end(filename + " not found");
       return;
     }
+    let body = content;
+    if (filename === "fitness-plan-app.html") body = Buffer.from(injectPwa(content.toString("utf8")));
     const type = contentType.startsWith("image/") || contentType === "application/octet-stream"
       ? contentType
       : contentType + "; charset=utf-8";
     res.writeHead(200, { "Content-Type": type });
-    res.end(content);
+    res.end(body);
   });
 }
 
@@ -29,6 +59,11 @@ function sendJson(res, status, payload) {
 
 function serveAsset(res, assetPath) {
   const cleanPath = path.normalize(assetPath).replace(/^(\.\.[\/\\])+/, "");
+  if (cleanPath === "assets/icons/icon.svg") {
+    res.writeHead(200, { "Content-Type": "image/svg+xml; charset=utf-8" });
+    res.end(ICON_SVG);
+    return;
+  }
   const filePath = path.join(__dirname, cleanPath);
   const ext = path.extname(filePath).toLowerCase();
   const types = {
