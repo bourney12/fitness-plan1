@@ -2,11 +2,41 @@
   "name": "fitness-plan",
   "version": "1.0.0",
   "description": "Personalised fitness and meal plan generator",
-  "main": "server.js",
+  "main": "electron-main.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "web": "node server.js",
+    "desktop": "electron .",
+    "dist": "electron-builder --dir",
+    "mobile:prepare": "node scripts/prepare-mobile.js",
+    "ios:add": "node scripts/prepare-mobile.js && cap add ios",
+    "ios:sync": "node scripts/prepare-mobile.js && cap sync ios",
+    "ios:open": "cap open ios"
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.3.4",
+    "@capacitor/core": "^8.3.4",
+    "@capacitor/ios": "^8.3.4",
+    "electron": "^30.5.1",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.rebourne.fitnessplan",
+    "productName": "ReBourne",
+    "files": [
+      "fitness-plan-app.html",
+      "coach.html",
+      "server.js",
+      "electron-main.js",
+      "assets/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "dir",
+      "signAndEditExecutable": false
+    }
   }
 }
