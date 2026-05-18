@@ -5,6 +5,7 @@ const path = require("path");
 const API_KEY = process.env.ANTHROPIC_API_KEY;
 const PORT    = process.env.PORT || 5173;
 const MAX_BODY_BYTES = 1024 * 1024;
+const DEPLOY_VERSION = process.env.RENDER_GIT_COMMIT || "local";
 
 const PWA_HEAD = `
 <meta name="description" content="Personalised fitness, nutrition and progress planning.">
@@ -20,7 +21,9 @@ const PWA_HEAD = `
 const PWA_SCRIPT = `
 <script>
 if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost')){
-  window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('/sw.js?v=3').then(function(reg){ return reg.update(); }).catch(function(){});
+  });
 }
 </script>
 `;
@@ -34,11 +37,20 @@ function injectPwa(html) {
   return output;
 }
 
+function noStoreHeaders() {
+  return {
+    "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+    "Pragma": "no-cache",
+    "Expires": "0",
+    "Surrogate-Control": "no-store",
+  };
+}
+
 function serveFile(res, filename, contentType) {
   const filePath = path.join(__dirname, filename);
   fs.readFile(filePath, (err, content) => {
     if (err) {
-      res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
+      res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8", ...noStoreHeaders() });
       res.end(filename + " not found");
       return;
     }
@@ -47,23 +59,27 @@ function serveFile(res, filename, contentType) {
     const type = contentType.startsWith("image/") || contentType === "application/octet-stream"
       ? contentType
       : contentType + "; charset=utf-8";
-    res.writeHead(200, {
+    const headers = {
       "Content-Type": type,
       "X-Content-Type-Options": "nosniff",
-    });
+    };
+    if (filename === "fitness-plan-app.html" || filename === "sw.js" || filename === "manifest.webmanifest") {
+      Object.assign(headers, noStoreHeaders());
+    }
+    res.writeHead(200, headers);
     res.end(body);
   });
 }
 
 function sendJson(res, status, payload) {
-  res.writeHead(status, { "Content-Type": "application/json; charset=utf-8" });
+  res.writeHead(status, { "Content-Type": "application/json; charset=utf-8", ...noStoreHeaders() });
   res.end(JSON.stringify(payload));
 }
 
 function serveAsset(res, assetPath) {
   const cleanPath = path.normalize(assetPath).replace(/^(\.\.[\/\\])+/, "");
   if (cleanPath === "assets/icons/icon.svg") {
-    res.writeHead(200, { "Content-Type": "image/svg+xml; charset=utf-8" });
+    res.writeHead(200, { "Content-Type": "image/svg+xml; charset=utf-8", "X-Content-Type-Options": "nosniff" });
     res.end(ICON_SVG);
     return;
   }
@@ -78,11 +94,11 @@ function serveAsset(res, assetPath) {
   };
   fs.readFile(filePath, (err, content) => {
     if (err) {
-      res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
+      res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8", ...noStoreHeaders() });
       res.end("Asset not found");
       return;
     }
-    res.writeHead(200, { "Content-Type": types[ext] || "application/octet-stream" });
+    res.writeHead(200, { "Content-Type": types[ext] || "application/octet-stream", "X-Content-Type-Options": "nosniff" });
     res.end(content);
   });
 }
@@ -110,6 +126,10 @@ const server = http.createServer(async (req, res) => {
 
   if (req.method === "GET" && reqUrl.pathname === "/health") {
     return sendJson(res, 200, { ok: true });
+  }
+
+  if (req.method === "GET" && reqUrl.pathname === "/version") {
+    return sendJson(res, 200, { ok: true, version: DEPLOY_VERSION });
   }
 
   if (req.method === "GET" && reqUrl.pathname === "/manifest.webmanifest") {
@@ -173,7 +193,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
+  res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8", ...noStoreHeaders() });
   res.end("Not found");
 });
 

@@ -1,12 +1,11 @@
-const CACHE_NAME = "rebourne-shell-v1";
-const APP_SHELL = [
-  "/",
+const CACHE_NAME = "rebourne-shell-v3";
+const STATIC_ASSETS = [
   "/assets/icons/icon.svg",
   "/manifest.webmanifest"
 ];
 
 self.addEventListener("install", event => {
-  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL)));
+  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_ASSETS)));
   self.skipWaiting();
 });
 
@@ -25,6 +24,14 @@ self.addEventListener("fetch", event => {
 
   if (request.method !== "GET" || url.pathname.startsWith("/api/")) return;
 
+  if (request.mode === "navigate" || request.headers.get("accept")?.includes("text/html")) {
+    event.respondWith(
+      fetch(request, { cache: "no-store" })
+        .catch(() => caches.match("/fitness-plan-app.html").then(cached => cached || Response.error()))
+    );
+    return;
+  }
+
   event.respondWith(
     fetch(request)
       .then(response => {
@@ -32,6 +39,6 @@ self.addEventListener("fetch", event => {
         caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
         return response;
       })
-      .catch(() => caches.match(request).then(cached => cached || caches.match("/")))
+      .catch(() => caches.match(request))
   );
 });
