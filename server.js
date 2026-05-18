@@ -13,42 +13,61 @@ const PWA_HEAD = `
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ReBourne">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="manifest" href="/manifest.webmanifest?v=8">
-<link rel="apple-touch-icon" href="/assets/icons/icon.svg?v=8">
-<link rel="icon" type="image/svg+xml" href="/assets/icons/icon.svg?v=8">
+<link rel="manifest" href="/manifest.webmanifest?v=9">
+<link rel="apple-touch-icon" href="/assets/icons/icon.svg?v=9">
+<link rel="icon" type="image/svg+xml" href="/assets/icons/icon.svg?v=9">
 `;
 
 const PWA_SCRIPT = `
 <script>
 if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost')){
   window.addEventListener('load',function(){
-    navigator.serviceWorker.register('/sw.js?v=8').then(function(reg){ return reg.update(); }).catch(function(){});
+    navigator.serviceWorker.register('/sw.js?v=9').then(function(reg){ return reg.update(); }).catch(function(){});
   });
 }
 </script>
 `;
 
 const FEATURE_SCRIPT = `
-<script src="/assets/feature-upgrades.js?v=2"></script>
+<script src="/assets/feature-upgrades.js?v=3"></script>
 `;
+
+const RESET_HTML = `<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Refreshing ReBourne</title>
+<style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#05080F;color:#F0F4FF;font-family:Arial,sans-serif;text-align:center}p{color:#8EA6C8}</style>
+</head><body><main><h1>Refreshing ReBourne</h1><p>Clearing the old app shell...</p></main>
+<script>
+(async function(){
+  try{
+    if('serviceWorker' in navigator){
+      var regs=await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(function(reg){return reg.unregister();}));
+    }
+    if(window.caches){
+      var keys=await caches.keys();
+      await Promise.all(keys.map(function(key){return caches.delete(key);}));
+    }
+  }catch(e){}
+  location.replace('/?v=9&fresh=1');
+})();
+</script></body></html>`;
 
 const R_PATH = "M138 112h205c63 0 105 38 105 96 0 47-27 82-73 95l92 137h-88l-82-126h-34v126h-87V162h-38v-50Zm125 64v80h77c29 0 47-15 47-40 0-24-18-40-47-40h-77ZM138 112l113 126h-32L110 112h28Z";
 
 const ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" fill="#05080F"/><defs><linearGradient id="g" x1="90" y1="70" x2="420" y2="440" gradientUnits="userSpaceOnUse"><stop stop-color="#7E98BC"/><stop offset="0.48" stop-color="#3A5F96"/><stop offset="1" stop-color="#162A46"/></linearGradient></defs><path fill="url(#g)" d="${R_PATH}"/><text x="256" y="482" fill="#F0F4FF" font-family="Arial, sans-serif" font-size="36" letter-spacing="14" text-anchor="middle">REBOURNE</text></svg>`;
 
-const LOGO_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 560" role="img" aria-label="ReBourne"><defs><linearGradient id="rb" x1="280" y1="70" x2="690" y2="420" gradientUnits="userSpaceOnUse"><stop stop-color="#86A2CF"/><stop offset="0.46" stop-color="#456AA3"/><stop offset="1" stop-color="#162A46"/></linearGradient><filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#3A5F96" flood-opacity=".22"/></filter></defs><g filter="url(#soft)"><g transform="translate(260 58) scale(.88)"><path fill="url(#rb)" d="${R_PATH}"/></g><text x="490" y="414" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="76" font-weight="300" letter-spacing="44" fill="#EEF4FF">REBOURNE</text><g fill="#86A2CF"><rect x="108" y="484" width="142" height="3" rx="1.5"/><rect x="730" y="484" width="142" height="3" rx="1.5"/></g><text x="490" y="496" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="23" font-weight="600" letter-spacing="20" fill="#F5F7FF">REINVENT YOUR POTENTIAL</text></g></svg>`;
-
 function injectPwa(html) {
   let output = html;
   if (!output.includes("manifest.webmanifest")) output = output.replace("</head>", PWA_HEAD + "</head>");
   output = output
-    .replace(/<link rel="manifest" href="[^"]+">/g, '<link rel="manifest" href="/manifest.webmanifest?v=8">')
-    .replace(/<link rel="apple-touch-icon" href="[^"]+">/g, '<link rel="apple-touch-icon" href="/assets/icons/icon.svg?v=8">')
-    .replace(/<link rel="icon"[^>]+href="[^"]+">/g, '<link rel="icon" type="image/svg+xml" href="/assets/icons/icon.svg?v=8">')
-    .replace(/navigator\.serviceWorker\.register\(['"](?:\.\/)?sw\.js(?:\?v=\d+)?['"]\)/g, "navigator.serviceWorker.register('/sw.js?v=8')")
-    .replace(/navigator\.serviceWorker\.register\(['"]\/sw\.js(?:\?v=\d+)?['"]\)/g, "navigator.serviceWorker.register('/sw.js?v=8')")
-    .replace(/assets\/rebourne-logo-transparent\.png(?:\?v=\d+)?/g, 'assets/rebourne-logo-transparent.png?v=8')
-    .replace(/assets\/rebourne-logo\.png(?:\?v=\d+)?/g, 'assets/rebourne-logo.png?v=8');
+    .replace(/<link rel="manifest" href="[^"]+">/g, '<link rel="manifest" href="/manifest.webmanifest?v=9">')
+    .replace(/<link rel="apple-touch-icon" href="[^"]+">/g, '<link rel="apple-touch-icon" href="/assets/icons/icon.svg?v=9">')
+    .replace(/<link rel="icon"[^>]+href="[^"]+">/g, '<link rel="icon" type="image/svg+xml" href="/assets/icons/icon.svg?v=9">')
+    .replace(/navigator\.serviceWorker\.register\(['"](?:\.\/)?sw\.js(?:\?v=\d+)?['"]\)/g, "navigator.serviceWorker.register('/sw.js?v=9')")
+    .replace(/navigator\.serviceWorker\.register\(['"]\/sw\.js(?:\?v=\d+)?['"]\)/g, "navigator.serviceWorker.register('/sw.js?v=9')")
+    .replace(/assets\/rebourne-logo-transparent\.png(?:\?v=\d+)?/g, 'assets/rebourne-logo-transparent.png?v=9')
+    .replace(/assets\/rebourne-logo\.png(?:\?v=\d+)?/g, 'assets/rebourne-logo.png?v=9');
   if (!output.includes("serviceWorker.register")) output = output.replace("</body>", PWA_SCRIPT + "</body>");
   if (!output.includes("/assets/feature-upgrades.js")) output = output.replace("</body>", FEATURE_SCRIPT + "</body>");
   return output;
@@ -108,11 +127,6 @@ function serveAsset(res, assetPath) {
     res.end(ICON_SVG);
     return;
   }
-  if (cleanPath === "assets/rebourne-logo-transparent.png" || cleanPath === "assets/rebourne-logo.png") {
-    res.writeHead(200, { "Content-Type": "image/svg+xml; charset=utf-8", "X-Content-Type-Options": "nosniff", ...noStoreHeaders() });
-    res.end(LOGO_SVG);
-    return;
-  }
   const filePath = path.join(__dirname, cleanPath);
   const ext = path.extname(filePath).toLowerCase();
   const types = {
@@ -148,6 +162,12 @@ const server = http.createServer(async (req, res) => {
 
   if (req.method === "GET" && (reqUrl.pathname === "/" || reqUrl.pathname === "/index.html" || reqUrl.pathname === "/fitness-plan-app.html" || reqUrl.pathname === "/app")) {
     return serveFile(res, "fitness-plan-app.html", "text/html");
+  }
+
+  if (req.method === "GET" && reqUrl.pathname === "/reset-app") {
+    res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", ...noStoreHeaders() });
+    res.end(RESET_HTML);
+    return;
   }
 
   if (req.method === "GET" && reqUrl.pathname === "/coach") {
