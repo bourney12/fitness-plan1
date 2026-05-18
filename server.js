@@ -37,6 +37,12 @@ function injectPwa(html) {
   return output;
 }
 
+function escapeInlineScriptEndTags(html) {
+  return html.replace(/(<script\b[^>]*>)([\s\S]*?)(<\/script>)/gi, function(_, open, body, close) {
+    return open + body.replace(/<\//g, "<\\/") + close;
+  });
+}
+
 function noStoreHeaders() {
   return {
     "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
@@ -55,7 +61,9 @@ function serveFile(res, filename, contentType) {
       return;
     }
     let body = content;
-    if (filename === "fitness-plan-app.html") body = Buffer.from(injectPwa(content.toString("utf8")));
+    if (filename === "fitness-plan-app.html") {
+      body = Buffer.from(escapeInlineScriptEndTags(injectPwa(content.toString("utf8"))));
+    }
     const type = contentType.startsWith("image/") || contentType === "application/octet-stream"
       ? contentType
       : contentType + "; charset=utf-8";
