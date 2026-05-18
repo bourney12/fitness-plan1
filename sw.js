@@ -1,9 +1,9 @@
-const CACHE_NAME = "rebourne-shell-v4";
-const FEATURE_SCRIPT = '<script src="/assets/feature-upgrades.js?v=1"></script>';
+const CACHE_NAME = "rebourne-shell-v5";
+const FEATURE_SCRIPT = '<script src="/assets/feature-upgrades.js?v=2"></script>';
 const STATIC_ASSETS = [
-  "/assets/icons/icon.svg",
-  "/manifest.webmanifest",
-  "/assets/feature-upgrades.js?v=1"
+  "/assets/icons/icon.svg?v=8",
+  "/manifest.webmanifest?v=8",
+  "/assets/feature-upgrades.js?v=2"
 ];
 
 function withFeatureUpgrades(html) {
