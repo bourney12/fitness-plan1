@@ -22,13 +22,17 @@ const PWA_SCRIPT = `
 <script>
 if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost')){
   window.addEventListener('load',function(){
-    navigator.serviceWorker.register('/sw.js?v=5').then(function(reg){ return reg.update(); }).catch(function(){});
+    navigator.serviceWorker.register('/sw.js?v=6').then(function(reg){ return reg.update(); }).catch(function(){});
   });
 }
 </script>
 `;
 
-const ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" fill="#05080F"/><defs><linearGradient id="g" x1="90" y1="70" x2="420" y2="440" gradientUnits="userSpaceOnUse"><stop stop-color="#7E98BC"/><stop offset="0.48" stop-color="#3A5F96"/><stop offset="1" stop-color="#162A46"/></linearGradient></defs><path fill="url(#g)" d="M138 112h205c63 0 105 38 105 96 0 47-27 82-73 95l92 137h-88l-82-126h-34v126h-87V162h-38v-50Zm125 64v80h77c29 0 47-15 47-40 0-24-18-40-47-40h-77ZM138 112l113 126h-32L110 112h28Z"/><text x="256" y="482" fill="#F0F4FF" font-family="Arial, sans-serif" font-size="36" letter-spacing="14" text-anchor="middle">REBOURNE</text></svg>`;
+const R_PATH = "M138 112h205c63 0 105 38 105 96 0 47-27 82-73 95l92 137h-88l-82-126h-34v126h-87V162h-38v-50Zm125 64v80h77c29 0 47-15 47-40 0-24-18-40-47-40h-77ZM138 112l113 126h-32L110 112h28Z";
+
+const ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" fill="#05080F"/><defs><linearGradient id="g" x1="90" y1="70" x2="420" y2="440" gradientUnits="userSpaceOnUse"><stop stop-color="#7E98BC"/><stop offset="0.48" stop-color="#3A5F96"/><stop offset="1" stop-color="#162A46"/></linearGradient></defs><path fill="url(#g)" d="${R_PATH}"/><text x="256" y="482" fill="#F0F4FF" font-family="Arial, sans-serif" font-size="36" letter-spacing="14" text-anchor="middle">REBOURNE</text></svg>`;
+
+const LOGO_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 560" role="img" aria-label="ReBourne"><defs><linearGradient id="rb" x1="280" y1="70" x2="690" y2="420" gradientUnits="userSpaceOnUse"><stop stop-color="#86A2CF"/><stop offset="0.46" stop-color="#456AA3"/><stop offset="1" stop-color="#162A46"/></linearGradient><filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#3A5F96" flood-opacity=".22"/></filter></defs><g filter="url(#soft)"><g transform="translate(260 58) scale(.88)"><path fill="url(#rb)" d="${R_PATH}"/></g><text x="490" y="414" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="76" font-weight="300" letter-spacing="44" fill="#EEF4FF">REBOURNE</text><g fill="#86A2CF"><rect x="108" y="484" width="142" height="3" rx="1.5"/><rect x="730" y="484" width="142" height="3" rx="1.5"/></g><text x="490" y="496" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="23" font-weight="600" letter-spacing="20" fill="#F5F7FF">REINVENT YOUR POTENTIAL</text></g></svg>`;
 
 function injectPwa(html) {
   let output = html;
@@ -87,8 +91,13 @@ function sendJson(res, status, payload) {
 function serveAsset(res, assetPath) {
   const cleanPath = path.normalize(assetPath).replace(/^(\.\.[\/\\])+/, "");
   if (cleanPath === "assets/icons/icon.svg") {
-    res.writeHead(200, { "Content-Type": "image/svg+xml; charset=utf-8", "X-Content-Type-Options": "nosniff" });
+    res.writeHead(200, { "Content-Type": "image/svg+xml; charset=utf-8", "X-Content-Type-Options": "nosniff", ...noStoreHeaders() });
     res.end(ICON_SVG);
+    return;
+  }
+  if (cleanPath === "assets/rebourne-logo-transparent.png" || cleanPath === "assets/rebourne-logo.png") {
+    res.writeHead(200, { "Content-Type": "image/svg+xml; charset=utf-8", "X-Content-Type-Options": "nosniff", ...noStoreHeaders() });
+    res.end(LOGO_SVG);
     return;
   }
   const filePath = path.join(__dirname, cleanPath);
