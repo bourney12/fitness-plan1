@@ -1,0 +1,7 @@
+node_modules/
+dist/
+mobile-www/
+node-v*-win-x64/
+node-portable.zip
+server.out.log
+server.err.log
