@@ -13,16 +13,16 @@ const PWA_HEAD = `
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ReBourne">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="manifest" href="/manifest.webmanifest">
-<link rel="apple-touch-icon" href="/assets/icons/icon.svg">
-<link rel="icon" type="image/svg+xml" href="/assets/icons/icon.svg">
+<link rel="manifest" href="/manifest.webmanifest?v=7">
+<link rel="apple-touch-icon" href="/assets/icons/icon.svg?v=7">
+<link rel="icon" type="image/svg+xml" href="/assets/icons/icon.svg?v=7">
 `;
 
 const PWA_SCRIPT = `
 <script>
 if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost')){
   window.addEventListener('load',function(){
-    navigator.serviceWorker.register('/sw.js?v=6').then(function(reg){ return reg.update(); }).catch(function(){});
+    navigator.serviceWorker.register('/sw.js?v=7').then(function(reg){ return reg.update(); }).catch(function(){});
   });
 }
 </script>
@@ -37,6 +37,12 @@ const LOGO_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 560" 
 function injectPwa(html) {
   let output = html;
   if (!output.includes("manifest.webmanifest")) output = output.replace("</head>", PWA_HEAD + "</head>");
+  output = output
+    .replace(/<link rel="manifest" href="[^"]+">/g, '<link rel="manifest" href="/manifest.webmanifest?v=7">')
+    .replace(/<link rel="apple-touch-icon" href="[^"]+">/g, '<link rel="apple-touch-icon" href="/assets/icons/icon.svg?v=7">')
+    .replace(/<link rel="icon"[^>]+href="[^"]+">/g, '<link rel="icon" type="image/svg+xml" href="/assets/icons/icon.svg?v=7">')
+    .replace(/assets\/rebourne-logo-transparent\.png/g, 'assets/rebourne-logo-transparent.png?v=7')
+    .replace(/assets\/rebourne-logo\.png/g, 'assets/rebourne-logo.png?v=7');
   if (!output.includes("serviceWorker.register")) output = output.replace("</body>", PWA_SCRIPT + "</body>");
   return output;
 }
