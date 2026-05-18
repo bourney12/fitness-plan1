@@ -1,0 +1,12 @@
+{
+  "appId": "com.rebourne.fitnessplan",
+  "appName": "ReBourne",
+  "webDir": "mobile-www",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  },
+  "ios": {
+    "contentInset": "always"
+  }
+}
