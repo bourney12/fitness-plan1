@@ -13,19 +13,23 @@ const PWA_HEAD = `
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ReBourne">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="manifest" href="/manifest.webmanifest?v=7">
-<link rel="apple-touch-icon" href="/assets/icons/icon.svg?v=7">
-<link rel="icon" type="image/svg+xml" href="/assets/icons/icon.svg?v=7">
+<link rel="manifest" href="/manifest.webmanifest?v=8">
+<link rel="apple-touch-icon" href="/assets/icons/icon.svg?v=8">
+<link rel="icon" type="image/svg+xml" href="/assets/icons/icon.svg?v=8">
 `;
 
 const PWA_SCRIPT = `
 <script>
 if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost')){
   window.addEventListener('load',function(){
-    navigator.serviceWorker.register('/sw.js?v=7').then(function(reg){ return reg.update(); }).catch(function(){});
+    navigator.serviceWorker.register('/sw.js?v=8').then(function(reg){ return reg.update(); }).catch(function(){});
   });
 }
 </script>
+`;
+
+const FEATURE_SCRIPT = `
+<script src="/assets/feature-upgrades.js?v=2"></script>
 `;
 
 const R_PATH = "M138 112h205c63 0 105 38 105 96 0 47-27 82-73 95l92 137h-88l-82-126h-34v126h-87V162h-38v-50Zm125 64v80h77c29 0 47-15 47-40 0-24-18-40-47-40h-77ZM138 112l113 126h-32L110 112h28Z";
@@ -38,12 +42,15 @@ function injectPwa(html) {
   let output = html;
   if (!output.includes("manifest.webmanifest")) output = output.replace("</head>", PWA_HEAD + "</head>");
   output = output
-    .replace(/<link rel="manifest" href="[^"]+">/g, '<link rel="manifest" href="/manifest.webmanifest?v=7">')
-    .replace(/<link rel="apple-touch-icon" href="[^"]+">/g, '<link rel="apple-touch-icon" href="/assets/icons/icon.svg?v=7">')
-    .replace(/<link rel="icon"[^>]+href="[^"]+">/g, '<link rel="icon" type="image/svg+xml" href="/assets/icons/icon.svg?v=7">')
-    .replace(/assets\/rebourne-logo-transparent\.png/g, 'assets/rebourne-logo-transparent.png?v=7')
-    .replace(/assets\/rebourne-logo\.png/g, 'assets/rebourne-logo.png?v=7');
+    .replace(/<link rel="manifest" href="[^"]+">/g, '<link rel="manifest" href="/manifest.webmanifest?v=8">')
+    .replace(/<link rel="apple-touch-icon" href="[^"]+">/g, '<link rel="apple-touch-icon" href="/assets/icons/icon.svg?v=8">')
+    .replace(/<link rel="icon"[^>]+href="[^"]+">/g, '<link rel="icon" type="image/svg+xml" href="/assets/icons/icon.svg?v=8">')
+    .replace(/navigator\.serviceWorker\.register\(['"](?:\.\/)?sw\.js(?:\?v=\d+)?['"]\)/g, "navigator.serviceWorker.register('/sw.js?v=8')")
+    .replace(/navigator\.serviceWorker\.register\(['"]\/sw\.js(?:\?v=\d+)?['"]\)/g, "navigator.serviceWorker.register('/sw.js?v=8')")
+    .replace(/assets\/rebourne-logo-transparent\.png(?:\?v=\d+)?/g, 'assets/rebourne-logo-transparent.png?v=8')
+    .replace(/assets\/rebourne-logo\.png(?:\?v=\d+)?/g, 'assets/rebourne-logo.png?v=8');
   if (!output.includes("serviceWorker.register")) output = output.replace("</body>", PWA_SCRIPT + "</body>");
+  if (!output.includes("/assets/feature-upgrades.js")) output = output.replace("</body>", FEATURE_SCRIPT + "</body>");
   return output;
 }
 
