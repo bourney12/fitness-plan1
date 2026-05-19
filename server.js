@@ -30,6 +30,7 @@ if('serviceWorker' in navigator && (location.protocol==='https:' || location.hos
 
 const FEATURE_SCRIPT = `
 <script src="/assets/feature-upgrades.js?v=4"></script>
+<script src="/assets/progress-analytics.js?v=1"></script>
 `;
 
 const RESET_HTML = `<!doctype html>
