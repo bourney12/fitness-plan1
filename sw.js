@@ -1,10 +1,11 @@
-const CACHE_NAME = "rebourne-shell-v7";
-const FEATURE_SCRIPT = '<script src="/assets/feature-upgrades.js?v=4"></script>';
+const CACHE_NAME = "rebourne-shell-v8";
+const FEATURE_SCRIPT = '<script src="/assets/feature-upgrades.js?v=4"></script><script src="/assets/progress-analytics.js?v=1"></script>';
 const STATIC_ASSETS = [
   "/assets/rebourne-logo-transparent.png?v=10",
   "/assets/icons/icon.svg?v=10",
   "/manifest.webmanifest?v=10",
-  "/assets/feature-upgrades.js?v=4"
+  "/assets/feature-upgrades.js?v=4",
+  "/assets/progress-analytics.js?v=1"
 ];
 
 function withFeatureUpgrades(html) {
