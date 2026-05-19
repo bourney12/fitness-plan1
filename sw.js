@@ -1,5 +1,6 @@
 const CACHE_NAME = "rebourne-shell-v8";
 const FEATURE_SCRIPT = '<script src="/assets/feature-upgrades.js?v=4"></script><script src="/assets/progress-analytics.js?v=1"></script>';
+const PROGRESS_SCRIPT = '<script src="/assets/progress-analytics.js?v=1"></script>';
 const STATIC_ASSETS = [
   "/assets/rebourne-logo-transparent.png?v=10",
   "/assets/icons/icon.svg?v=10",
@@ -9,7 +10,8 @@ const STATIC_ASSETS = [
 ];
 
 function withFeatureUpgrades(html) {
-  if (html.includes("/assets/feature-upgrades.js")) return html;
+  if (html.includes("/assets/progress-analytics.js")) return html;
+  if (html.includes("/assets/feature-upgrades.js")) return html.replace("</body>", PROGRESS_SCRIPT + "</body>");
   return html.replace("</body>", FEATURE_SCRIPT + "</body>");
 }
 
