@@ -2,8 +2,19 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>ReBourne — Reinvent Your Potential</title>
+<meta name="description" content="Personalised fitness, nutrition and progress planning.">
+<meta name="theme-color" content="#05080F">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ReBourne">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta property="og:title" content="ReBourne">
+<meta property="og:description" content="Personalised fitness, nutrition and progress planning.">
+<meta property="og:image" content="assets/icons/share-card.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/icons/icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -22,7 +33,7 @@
   --r:10px;--rl:16px;--rxl:20px;
 }
 html{scroll-behavior:smooth}
-body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;line-height:1.5}
+body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;line-height:1.5;padding-top:env(safe-area-inset-top);padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
 
 /* ── AMBIENT GLOW ── */
 body::before{content:'';position:fixed;top:-200px;left:50%;transform:translateX(-50%);width:800px;height:800px;background:radial-gradient(circle,rgba(58,95,150,.07) 0%,transparent 65%);pointer-events:none;z-index:0}
@@ -41,6 +52,12 @@ h1,h2,h3{font-family:'Playfair Display',serif;font-weight:600}
 .logo-name{font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;letter-spacing:.22em;color:var(--white);line-height:1}
 .logo-name span{color:var(--steel3);font-weight:300}
 .logo-tag{font-size:7px;font-weight:500;letter-spacing:.18em;color:var(--muted);text-transform:uppercase}
+.brand-logo-header{width:210px;height:58px;object-fit:contain;display:block;filter:drop-shadow(0 8px 24px rgba(58,95,150,.18))}
+.brand-logo-splash{width:min(420px,82vw);display:block;margin:0 auto 34px;filter:drop-shadow(0 18px 46px rgba(58,95,150,.24));opacity:.96}
+.brand-logo-loader{width:54px;height:42px;object-fit:contain;display:block}
+.brand-logo-print{width:260px;height:auto;display:block;margin:0 auto 10px}
+body.splash-mode .site-header{display:none}
+body.splash-mode .wrap{padding-top:0}
 .hdr-week{font-size:9px;font-weight:600;color:var(--steel3);background:rgba(58,95,150,.12);border:1px solid var(--border);padding:5px 10px;border-radius:100px;letter-spacing:.06em}
 
 /* ── SPLASH ── */
@@ -52,9 +69,29 @@ h1,h2,h3{font-family:'Playfair Display',serif;font-weight:600}
 .splash-tag{font-size:9px;font-weight:500;letter-spacing:.28em;color:var(--steel3);text-transform:uppercase;white-space:nowrap}
 .splash-divider{width:1px;height:40px;background:linear-gradient(to bottom,var(--steel),transparent);margin-bottom:40px}
 .splash-headline{font-family:'Playfair Display',serif;font-size:22px;font-weight:400;font-style:italic;color:var(--white);line-height:1.6;margin-bottom:40px;max-width:420px}
+.splash-copy{font-size:14px;color:var(--silver);line-height:1.75;max-width:520px;margin:0 auto 32px}
 .splash-btn{background:transparent;border:1px solid var(--steel);color:var(--white);font-size:11px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;padding:16px 48px;border-radius:2px;cursor:pointer;transition:all .3s;font-family:inherit;margin-bottom:16px}
 .splash-btn:hover{background:var(--steel);box-shadow:0 4px 30px rgba(58,95,150,.4)}
 .splash-sub{font-size:10px;font-weight:400;letter-spacing:.18em;color:var(--steel);text-transform:uppercase;margin-top:12px}
+.splash-actions{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.splash-secondary{background:rgba(58,95,150,.1);border:1px solid var(--border2);color:var(--silver);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:13px 20px;border-radius:var(--r);cursor:pointer;font-family:inherit}
+.splash-mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0 22px}
+.splash-mini{background:rgba(13,21,37,.72);border:1px solid var(--border);border-radius:var(--r);padding:10px}
+.splash-mini-val{font-size:13px;font-weight:800;color:var(--white);margin-bottom:3px}
+.splash-mini-lbl{font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--steel3);line-height:1.35}
+.entry-wrap{min-height:96vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px 18px;background:var(--bg)}
+.entry-panel{width:min(760px,100%);background:linear-gradient(145deg,var(--card),rgba(10,17,32,.96));border:1px solid var(--border);border-radius:var(--rl);padding:24px;box-shadow:0 10px 36px rgba(0,0,0,.2)}
+.entry-kicker{font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--steel3);margin-bottom:10px}
+.entry-title{font-size:30px;font-weight:800;color:var(--white);line-height:1.15;letter-spacing:0;margin-bottom:10px}
+.entry-sub{font-size:13px;color:var(--silver);line-height:1.7;max-width:560px;margin:0 auto 24px}
+.entry-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;margin:0 auto 14px}
+.entry-card{background:linear-gradient(145deg,rgba(19,34,54,.9),rgba(8,14,26,.96));border:1px solid var(--border);border-radius:var(--rl);padding:22px;text-align:left;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;font-family:inherit;color:inherit}
+.entry-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 14px 38px rgba(58,95,150,.18)}
+.entry-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(to bottom,var(--steel),var(--steel2));opacity:.85}
+#entry-membership{background:linear-gradient(145deg,var(--card2),var(--card3));border-color:var(--border2)}
+.entry-card-title{font-size:17px;font-weight:800;color:var(--white);margin-bottom:6px}
+.entry-card-copy{font-size:12px;color:var(--silver);line-height:1.65;margin-bottom:14px}
+.entry-card-meta{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--steel3)}
 
 /* ── LANDING ── */
 .hero{text-align:center;padding:60px 20px 40px;position:relative}
@@ -120,10 +157,15 @@ input[type=text],input[type=number],select,textarea{
   outline:none;transition:all .2s;-webkit-appearance:none;appearance:none
 }
 input:focus,select:focus,textarea:focus{border-color:var(--steel2);box-shadow:0 0 0 3px rgba(58,95,150,.12);background:var(--bg3)}
+input.invalid,select.invalid,textarea.invalid{border-color:var(--red);box-shadow:0 0 0 3px rgba(255,107,107,.12)}
 textarea{min-height:80px;resize:vertical}
 select option{background:var(--bg2)}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
+.notice{display:none;margin-bottom:14px;padding:12px 14px;border-radius:var(--r);font-size:12px;font-weight:500;line-height:1.6}
+.notice.show{display:block}
+.notice.error{background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.24);color:var(--red)}
+.notice.info{background:rgba(58,95,150,.1);border:1px solid var(--border2);color:var(--silver)}
 
 /* Activity selector */
 .act-list{display:flex;flex-direction:column;gap:7px}
@@ -266,13 +308,13 @@ input[type=range]{padding:0;border:none;background:var(--border);height:3px;bord
 .dash-context-badge{font-size:9px;font-weight:600;letter-spacing:.06em;padding:5px 12px;border-radius:100px;background:rgba(58,95,150,.15);color:var(--steel3);border:1px solid var(--border)}
 
 /* Bottom nav */
-.dash-bottom-nav{display:flex;border-top:1px solid var(--border);background:rgba(5,8,15,.95);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);position:sticky;bottom:0;z-index:50;padding:2px 0 4px}
-.dbn{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 4px 12px;cursor:pointer;color:var(--muted);transition:all .2s;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border:none;background:transparent;font-family:inherit;position:relative;min-width:0}
+.dash-bottom-nav{display:flex;border-top:1px solid var(--border);background:rgba(5,8,15,.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);position:sticky;bottom:0;z-index:50;padding:7px 8px calc(9px + env(safe-area-inset-bottom));gap:6px}
+.dbn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:62px;padding:9px 4px 10px;cursor:pointer;color:var(--muted);transition:all .2s;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border:1px solid transparent;border-radius:var(--r);background:transparent;font-family:inherit;position:relative;min-width:0}
 .dbn:hover{color:var(--silver)}
-.dbn.active{color:var(--steel3)}
-.dbn.active::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:32px;height:2.5px;background:linear-gradient(to right,var(--steel),var(--steel3));border-radius:0 0 3px 3px}
-.dbn i{font-size:28px;line-height:1}
-.dbn span{font-size:10px;font-weight:700;letter-spacing:.04em;white-space:nowrap}
+.dbn.active{color:var(--white);background:rgba(58,95,150,.16);border-color:var(--border2);box-shadow:0 8px 26px rgba(58,95,150,.16)}
+.dbn.active::before{content:'';position:absolute;top:-7px;left:50%;transform:translateX(-50%);width:36px;height:3px;background:linear-gradient(to right,var(--steel),var(--steel3));border-radius:0 0 3px 3px}
+.dbn-icon{width:22px;height:22px;color:currentColor;display:block;opacity:.9}
+.dbn span{font-size:10px;font-weight:800;letter-spacing:.045em;white-space:nowrap}
 
 /* Week/day nav */
 .week-nav{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
@@ -299,6 +341,15 @@ input[type=range]{padding:0;border:none;background:var(--border);height:3px;bord
 .meal-card-cals{font-size:15px;font-weight:700;color:var(--white);text-align:right;flex-shrink:0;margin-left:12px}
 .meal-card-hint{font-size:9px;color:var(--steel3);margin-top:8px;letter-spacing:.05em}
 .meal-card-actions{display:flex;gap:6px;margin-top:10px}
+.quick-add-meal{width:100%;margin:0 0 10px;padding:11px 14px;border-radius:var(--r);border:1px dashed var(--border2);background:rgba(58,95,150,.08);color:var(--steel3);font-family:inherit;font-size:10px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.quick-add-meal:hover{border-style:solid;background:rgba(58,95,150,.16);color:var(--white)}
+.saved-meal-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:14px}
+.saved-meal-btn{border:1px solid var(--border);border-radius:var(--r);background:rgba(13,21,37,.68);color:var(--silver);font-family:inherit;text-align:left;padding:10px;cursor:pointer;transition:all .2s}
+.saved-meal-btn:hover{border-color:var(--border2);background:var(--card2);color:var(--white)}
+.saved-meal-name{font-size:11px;font-weight:800;color:var(--white);line-height:1.35;margin-bottom:4px}
+.saved-meal-meta{font-size:9px;color:var(--muted);line-height:1.45}
+.save-fav-row{display:flex;align-items:center;gap:9px;padding:10px 0 2px;color:var(--silver);font-size:11px;font-weight:600}
+.save-fav-row input{width:16px;height:16px;accent-color:var(--steel2)}
 .meal-action-btn{flex:1;padding:8px;border-radius:var(--r);font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;letter-spacing:.04em;transition:all .2s;text-align:center}
 .meal-action-recipe{border:1px solid var(--border2);background:transparent;color:var(--steel3)}
 .meal-action-recipe:hover{border-color:var(--steel2);background:rgba(58,95,150,.1)}
@@ -321,6 +372,24 @@ input[type=range]{padding:0;border:none;background:var(--border);height:3px;bord
 .ring-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--white)}
 .ring-info-title{font-size:11px;font-weight:600;color:var(--white);margin-bottom:2px}
 .ring-info-sub{font-size:10px;color:var(--muted)}
+.today-glance-panel{background:linear-gradient(145deg,var(--card),rgba(16,28,48,.94));border:1px solid var(--border);border-radius:var(--rl);padding:14px;margin-bottom:14px}
+.today-glance-top{display:grid;grid-template-columns:1.05fr .95fr;gap:10px;margin-bottom:10px}
+.macro-ring-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.macro-ring-card{background:rgba(13,21,37,.68);border:1px solid var(--border);border-radius:var(--r);padding:12px 10px;display:flex;align-items:center;gap:10px;min-height:78px}
+.macro-ring-card.calories{flex-direction:row;justify-content:flex-start;text-align:left}
+.macro-ring-card .ring{width:54px;height:54px}
+.macro-ring-card .ring-label{font-size:10px}
+.macro-ring-title{font-size:11px;font-weight:700;color:var(--white);margin-bottom:2px}
+.macro-ring-sub{font-size:10px;color:var(--muted);line-height:1.35}
+.today-hero{background:linear-gradient(135deg,rgba(58,95,150,.20),rgba(10,17,32,.78));border:1px solid var(--border);border-radius:var(--r);padding:14px;position:relative;overflow:hidden}
+.today-hero::before{content:'';position:absolute;inset:0;background:linear-gradient(110deg,rgba(255,255,255,.04),transparent 48%);pointer-events:none}
+.today-hero-title{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--steel3);margin-bottom:4px;position:relative}
+.today-hero-main{font-family:'Montserrat',sans-serif;font-size:34px;font-weight:800;line-height:1;color:var(--white);position:relative;letter-spacing:0}
+.today-hero-sub{font-size:11px;color:var(--silver);margin-top:6px;position:relative}
+.today-target-card{background:rgba(13,21,37,.68);border:1px solid var(--border);border-radius:var(--r);padding:14px;display:flex;align-items:center;gap:12px}
+.today-target-card .ring{width:72px;height:72px}
+.today-target-card .ring-label{font-size:13px}
+.swap-choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 
 /* Macro bars */
 .mb-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:15px;margin-bottom:14px;position:relative;overflow:hidden}
@@ -410,11 +479,65 @@ input[type=range]{padding:0;border:none;background:var(--border);height:3px;bord
 .add-set-btn{font-size:10px;font-weight:600;color:var(--steel3);background:none;border:1px solid var(--border);border-radius:var(--r);padding:5px 12px;cursor:pointer;font-family:inherit;margin-top:4px;letter-spacing:.04em;transition:all .2s}
 .add-set-btn:hover{border-color:var(--steel2);color:var(--white)}
 .pb-badge{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:100px;background:rgba(201,169,110,.12);color:var(--gold);font-size:9px;font-weight:700;margin-left:7px;border:1px solid rgba(201,169,110,.2)}
+.overload-panel{margin:9px 0 10px;background:linear-gradient(145deg,rgba(13,21,37,.72),rgba(10,17,32,.86));border:1px solid var(--border);border-radius:var(--r);padding:11px}
+.overload-panel.empty{border-style:dashed;background:rgba(13,21,37,.38)}
+.overload-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:9px}
+.overload-title{font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--steel3)}
+.overload-badge{font-size:8px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;border-radius:100px;padding:3px 8px;border:1px solid var(--border);color:var(--muted);white-space:nowrap}
+.overload-badge.progress{background:rgba(78,204,163,.1);border-color:rgba(78,204,163,.24);color:var(--green)}
+.overload-badge.hold{background:rgba(201,169,110,.1);border-color:rgba(201,169,110,.22);color:var(--gold)}
+.overload-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:9px}
+.overload-stat{background:rgba(5,8,15,.32);border:1px solid var(--border);border-radius:8px;padding:8px}
+.overload-stat-val{font-size:13px;font-weight:800;color:var(--white);line-height:1.1}
+.overload-stat-lbl{font-size:8px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-top:3px;line-height:1.3}
+.overload-target{font-size:11px;color:var(--silver);line-height:1.55}
+.overload-target strong{color:var(--white)}
+.overload-note{font-size:10px;color:var(--muted);line-height:1.45;margin-top:6px}
 
 /* Charts */
 .chart-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:16px;margin-bottom:13px;position:relative;overflow:hidden}
 .chart-wrap::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,var(--steel),transparent);opacity:.3}
 .chart-title{font-size:12px;font-weight:600;color:var(--white);margin-bottom:13px;display:flex;justify-content:space-between;align-items:center}
+.macro-card{padding:20px}
+.macro-layout{display:grid;grid-template-columns:190px 1fr;gap:24px;align-items:center}
+.macro-donut{width:176px;height:176px}
+.macro-list{display:flex;flex-direction:column;gap:10px}
+.macro-row{display:grid;grid-template-columns:14px minmax(82px,1fr) auto 42px;align-items:center;gap:9px;font-size:13px}
+.macro-dot{width:12px;height:12px;border-radius:3px}
+.macro-name{color:var(--silver);font-weight:600}
+.macro-value{font-weight:800;color:var(--white)}
+.macro-percent{color:var(--muted);text-align:right}
+.macro-track{grid-column:2 / 5;height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden}
+.macro-fill{height:100%;border-radius:3px}
+.adh-wheel-card{display:flex;align-items:center;gap:18px;background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:16px;margin-bottom:13px}
+.adh-wheel-card .ring{width:76px;height:76px}
+.adh-wheel-card .ring-label{font-size:13px}
+.adh-wheel-title{font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px}
+.adh-wheel-sub{font-size:12px;color:var(--silver);line-height:1.6}
+.supp-compact-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.supp-compact{display:flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:10px}
+.supp-compact-icon{font-size:18px;line-height:1}
+.supp-compact-name{font-size:11px;font-weight:700;color:var(--white)}
+.supp-compact-dose{font-size:10px;color:var(--steel3);margin-top:2px}
+.ov-actions{display:flex;justify-content:center;gap:10px;margin-top:20px;flex-wrap:wrap}
+.ov-actions .dl-btn-sm,.ov-actions .reset-btn{width:auto;margin-top:0;min-width:210px}
+.ov-actions .dl-btn-sm{background:linear-gradient(135deg,var(--steel),var(--steel2));border-color:var(--steel2);color:var(--white);box-shadow:0 8px 24px rgba(58,95,150,.28)}
+.training-hero,.progress-hero{background:linear-gradient(135deg,rgba(58,95,150,.22),rgba(10,17,32,.94));border:1px solid var(--border2);border-radius:var(--rl);padding:18px;margin-bottom:16px;position:relative;overflow:hidden}
+.training-hero::after,.progress-hero::after{content:'';position:absolute;right:-70px;top:-80px;width:180px;height:180px;border-radius:50%;border:1px solid rgba(126,152,188,.14)}
+.training-hero-title,.progress-hero-title{font-size:22px;font-weight:700;color:var(--white);margin-bottom:4px}
+.training-hero-sub,.progress-hero-sub{font-size:12px;color:var(--silver);margin-bottom:10px}
+.training-hero-tags{display:flex;gap:7px;flex-wrap:wrap}
+.training-tag{font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--steel3);background:rgba(58,95,150,.16);border:1px solid var(--border);border-radius:100px;padding:5px 11px}
+.performance-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px}
+.performance-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:14px}
+.performance-val{font-family:'Montserrat',sans-serif;font-size:25px;font-weight:800;color:var(--white);line-height:1;white-space:nowrap;letter-spacing:0}
+.performance-lbl{font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--steel3);margin-top:7px}
+.performance-sub{font-size:10px;color:var(--muted);margin-top:3px;line-height:1.4}
+.slider-metric{margin-bottom:14px}
+.slider-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.slider-title{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--silver)}
+.slider-value{font-size:12px;font-weight:800;color:var(--steel3)}
+.wellness-slider{width:100%;height:5px;padding:0;border:none;background:rgba(255,255,255,.07);accent-color:var(--steel2);box-shadow:none}
 .chart-select{padding:4px 10px;border:1px solid var(--border);border-radius:var(--r);background:var(--midnight2,var(--bg3));color:var(--white);font-family:inherit;font-size:10px;outline:none}
 .chart-svg{width:100%;overflow:visible}
 .chart-line{fill:none;stroke:var(--steel2);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
@@ -494,6 +617,10 @@ input[type=range]{padding:0;border:none;background:var(--border);height:3px;bord
 .ov-card:hover{border-color:var(--border2)}
 .ov-val{font-family:'Playfair Display',serif;font-size:22px;color:var(--white);margin-bottom:2px}
 .ov-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.09em;font-weight:600}
+.ov-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 9px;background:rgba(126,152,188,.12);border:1px solid var(--border);color:var(--steel3);font-size:14px;font-weight:800}
+.ov-card.hi .ov-icon{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.22);color:var(--white)}
+.ov-meter{height:4px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;margin-top:10px}
+.ov-meter-fill{height:100%;border-radius:3px;background:linear-gradient(to right,var(--steel),var(--green))}
 .coach-note-box{border-left:2px solid var(--steel2);padding:12px 15px;background:var(--card);border-radius:0 var(--r) var(--r) 0;font-size:13px;color:var(--silver);line-height:1.8;margin-bottom:18px;font-style:italic}
 
 /* Misc */
@@ -636,6 +763,34 @@ input[type=range]{padding:0;border:none;background:var(--border);height:3px;bord
 .insight-title{font-size:13px;font-weight:600;color:var(--white);margin-bottom:5px}
 .insight-body{font-size:12px;color:var(--silver);line-height:1.7}
 .insight-action{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--steel3);margin-top:10px;cursor:pointer}
+.coach-review-card{background:linear-gradient(145deg,rgba(15,26,46,.98),rgba(10,17,32,.96));border:1px solid var(--border2);border-radius:var(--rl);padding:18px;margin:0 0 16px;position:relative;overflow:hidden}
+.coach-review-card::after{content:'';position:absolute;right:-80px;top:-90px;width:210px;height:210px;border-radius:50%;border:1px solid rgba(126,152,188,.12);pointer-events:none}
+.coach-review-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:14px;position:relative;z-index:1}
+.coach-review-kicker{font-size:9px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--steel3);margin-bottom:4px}
+.coach-review-title{font-size:17px;font-weight:800;color:var(--white);line-height:1.25}
+.coach-readiness{width:74px;height:74px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;background:rgba(13,21,37,.85);border:1px solid var(--border);box-shadow:inset 0 0 0 6px rgba(58,95,150,.12)}
+.coach-readiness-val{font-size:20px;font-weight:800;color:var(--white);line-height:1}
+.coach-readiness-lbl{font-size:8px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.coach-review-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;position:relative;z-index:1}
+.coach-review-stat{background:rgba(13,21,37,.72);border:1px solid var(--border);border-radius:var(--r);padding:10px}
+.coach-review-stat-val{font-size:15px;font-weight:800;color:var(--white);margin-bottom:2px}
+.coach-review-stat-lbl{font-size:8px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);line-height:1.35}
+.coach-action-list{display:grid;gap:8px;position:relative;z-index:1}
+.coach-action{display:flex;gap:10px;align-items:flex-start;background:rgba(5,8,15,.34);border:1px solid var(--border);border-radius:var(--r);padding:11px}
+.coach-action-dot{width:9px;height:9px;border-radius:50%;background:var(--steel2);margin-top:5px;flex-shrink:0}
+.coach-action.high .coach-action-dot{background:var(--green)}
+.coach-action.medium .coach-action-dot{background:var(--gold)}
+.coach-action.low .coach-action-dot{background:var(--steel3)}
+.coach-action-title{font-size:12px;font-weight:800;color:var(--white);margin-bottom:3px}
+.coach-action-body{font-size:11px;color:var(--silver);line-height:1.55}
+.coach-review-foot{margin-top:12px;font-size:10px;color:var(--muted);line-height:1.6;position:relative;z-index:1}
+.coach-adjust-card{margin-top:12px;background:rgba(58,95,150,.1);border:1px solid var(--border2);border-radius:var(--r);padding:12px;position:relative;z-index:1}
+.coach-adjust-title{font-size:12px;font-weight:800;color:var(--white);margin-bottom:4px}
+.coach-adjust-body{font-size:11px;color:var(--silver);line-height:1.55;margin-bottom:10px}
+.coach-adjust-actions{display:flex;gap:8px;flex-wrap:wrap}
+.coach-adjust-btn{flex:1;min-width:130px;padding:9px 12px;border-radius:var(--r);border:1px solid var(--steel2);background:linear-gradient(135deg,var(--steel),var(--steel2));color:var(--white);font-family:inherit;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.coach-adjust-reset{background:transparent;border-color:var(--border);color:var(--steel3)}
+.target-offset-pill{display:inline-flex;align-items:center;gap:5px;margin-left:7px;padding:3px 8px;border-radius:100px;background:rgba(78,204,163,.1);border:1px solid rgba(78,204,163,.22);color:var(--green);font-size:9px;font-weight:800;letter-spacing:.04em;vertical-align:middle}
 
 /* ── STREAK ──────────────────────────────────────── */
 .streak-card{background:linear-gradient(135deg,var(--card2),var(--card3));border:1px solid var(--border2);border-radius:var(--rl);padding:20px;margin-bottom:14px;text-align:center;position:relative;overflow:hidden}
@@ -689,35 +844,35 @@ input[type=range]{padding:0;border:none;background:var(--border);height:3px;bord
 
 /* ── SUBSCRIPTION PAGE ───────────────────────────── */
 .sub-page{min-height:100vh;background:var(--bg);position:relative;overflow:hidden}
-.sub-page::before{content:'';position:fixed;top:-200px;left:50%;transform:translateX(-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(58,95,150,.1),transparent 65%);pointer-events:none;border-radius:50%}
-.sub-hero{padding:60px 24px 40px;text-align:center;position:relative;z-index:1}
-.sub-hero-eyebrow{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--steel3);margin-bottom:14px}
-.sub-hero-title{font-family:'Playfair Display',serif;font-size:36px;font-weight:600;color:var(--white);line-height:1.15;margin-bottom:12px}
-.sub-hero-title em{color:var(--steel3);font-style:italic}
-.sub-hero-sub{font-size:14px;color:var(--silver);line-height:1.8;max-width:480px;margin:0 auto 36px}
-.sub-toggle{display:flex;background:var(--card);border:1px solid var(--border);border-radius:100px;padding:4px;gap:0;width:fit-content;margin:0 auto 40px}
+.sub-hero{max-width:900px;margin:0 auto;padding:26px 20px 16px;text-align:left;position:relative;z-index:1}
+.sub-hero-panel{background:linear-gradient(145deg,var(--card),rgba(10,17,32,.96));border:1px solid var(--border);border-radius:var(--rl);padding:20px;display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center}
+.sub-hero-eyebrow{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--steel3);margin-bottom:7px}
+.sub-hero-title{font-size:24px;font-weight:800;color:var(--white);line-height:1.2;margin-bottom:8px;letter-spacing:0}
+.sub-hero-title em{color:var(--white);font-style:normal}
+.sub-hero-sub{font-size:13px;color:var(--silver);line-height:1.65;max-width:560px;margin:0}
+.sub-toggle{display:flex;background:rgba(13,21,37,.75);border:1px solid var(--border);border-radius:var(--r);padding:4px;gap:4px;width:fit-content;margin:0}
 .sub-toggle-btn{padding:9px 24px;border-radius:100px;border:none;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;letter-spacing:.04em;transition:all .2s}
-.sub-toggle-btn.active{background:var(--steel);color:var(--white);box-shadow:0 2px 12px rgba(58,95,150,.4)}
+.sub-toggle-btn.active{background:var(--steel);color:var(--white);box-shadow:0 2px 12px rgba(58,95,150,.28)}
 .sub-toggle-btn:not(.active){background:transparent;color:var(--muted)}
 .sub-toggle-save{font-size:11px;font-weight:700;color:var(--green);background:rgba(78,204,163,.1);border:1px solid rgba(78,204,163,.2);padding:3px 10px;border-radius:100px;margin-left:8px;vertical-align:middle}
 .plans-wrap{max-width:900px;margin:0 auto;padding:0 20px 60px;position:relative;z-index:1}
-.plans-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:40px}
-.plan-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rxl);padding:28px 22px;position:relative;overflow:hidden;transition:border-color .2s}
+.plans-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px}
+.plan-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:18px;position:relative;overflow:hidden;transition:border-color .2s}
 .plan-card:hover{border-color:var(--border2)}
-.plan-card.featured{background:linear-gradient(160deg,var(--card2),var(--card3));border-color:var(--steel2);box-shadow:0 0 40px rgba(58,95,150,.2)}
-.plan-card.featured::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(to right,var(--steel),var(--steel3))}
+.plan-card.featured{background:linear-gradient(160deg,var(--card2),var(--card3));border-color:var(--steel2);box-shadow:0 8px 28px rgba(58,95,150,.14)}
+.plan-card.featured::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,var(--steel),var(--steel3))}
 .plan-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:16px}
 .plan-badge-free{background:rgba(255,255,255,.08);color:var(--silver)}
 .plan-badge-pop{background:linear-gradient(to right,var(--steel),var(--steel2));color:var(--white)}
 .plan-badge-elite{background:rgba(201,169,110,.15);color:var(--gold);border:1px solid rgba(201,169,110,.2)}
-.plan-name{font-size:20px;font-weight:700;color:var(--white);margin-bottom:6px}
-.plan-price-wrap{margin:16px 0 20px}
-.plan-price{font-family:'Playfair Display',serif;font-size:42px;font-weight:600;color:var(--white);line-height:1}
+.plan-name{font-size:17px;font-weight:800;color:var(--white);margin-bottom:6px}
+.plan-price-wrap{margin:12px 0 14px}
+.plan-price{font-family:'Montserrat',sans-serif;font-size:34px;font-weight:800;color:var(--white);line-height:1;letter-spacing:0}
 .plan-price-period{font-size:13px;color:var(--muted);margin-top:4px}
 .plan-price-annual{font-size:12px;color:var(--green);font-weight:600;margin-top:4px}
-.plan-desc{font-size:13px;color:var(--silver);line-height:1.7;margin-bottom:20px}
-.plan-features{list-style:none;margin-bottom:24px;display:flex;flex-direction:column;gap:9px}
-.plan-feature{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--silver)}
+.plan-desc{font-size:12px;color:var(--silver);line-height:1.6;margin-bottom:14px}
+.plan-features{list-style:none;margin-bottom:18px;display:flex;flex-direction:column;gap:7px}
+.plan-feature{display:flex;align-items:flex-start;gap:9px;font-size:12px;color:var(--silver)}
 .plan-feature-tick{color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
 .plan-feature-cross{color:var(--muted);flex-shrink:0;margin-top:1px}
 .plan-feature.dim{color:var(--muted)}
@@ -747,47 +902,45 @@ input[type=range]{padding:0;border:none;background:var(--border);height:3px;bord
 .faq-item.open .faq-a{display:block}
 .faq-item.open .faq-chevron{transform:rotate(180deg)}
 .faq-chevron{transition:transform .2s;flex-shrink:0;color:var(--muted)}
-@media(max-width:600px){.plans-grid{grid-template-columns:1fr}.ct-head-row,.ct-row{grid-template-columns:1.5fr 1fr 1fr}}
+@media(max-width:760px){
+  .site-header{padding:10px 14px}
+  .brand-logo-header{width:176px;height:50px}
+  .wrap{padding:0 14px 88px}
+  .hero{padding:38px 8px 28px}
+  .hero h1{font-size:32px}
+  .plan-type-grid,.goal-grid,.diet-grid,.row2,.row3,.ring-row,.plans-grid{grid-template-columns:1fr}
+  .dur-grid{grid-template-columns:1fr 1fr}
+  .form-card{padding:20px 16px}
+  .btn-row{position:sticky;bottom:0;z-index:20;background:linear-gradient(to top,var(--bg) 78%,rgba(5,8,15,0));padding-top:18px;margin-left:-16px;margin-right:-16px;padding-left:16px;padding-right:16px}
+  .nav-btn,.pri-btn,.cta-btn{min-height:44px}
+  .dash-context-bar,.price-callout{align-items:flex-start;flex-direction:column}
+  .dash-bottom-nav{overflow-x:auto;gap:6px;padding-left:8px;padding-right:8px}
+  .dbn{flex:0 0 84px;min-height:66px}
+  .dbn span{font-size:9px}
+  .splash-headline{font-size:25px}
+  .splash-brand-row{align-items:flex-start;flex-direction:column}
+  .splash-mini-grid{grid-template-columns:1fr}
+  .splash-actions{flex-direction:column}
+  .splash-btn,.splash-secondary{width:min(360px,100%)}
+  .entry-grid{grid-template-columns:1fr}
+  .sub-hero-panel{grid-template-columns:1fr}
+  .sub-toggle{width:100%}
+  .sub-toggle-btn{flex:1;padding-left:10px;padding-right:10px}
+  .macro-layout{grid-template-columns:1fr}
+  .macro-donut{width:168px;height:168px;margin:0 auto}
+  .today-glance-top,.macro-ring-grid,.swap-choice-grid{grid-template-columns:1fr}
+  .supp-compact-grid,.performance-grid,.coach-review-grid,.overload-grid{grid-template-columns:1fr}
+  .coach-review-hd{align-items:center}
+  .ct-head-row,.ct-row{grid-template-columns:1.5fr 1fr 1fr}
+}
 </style>
-</head>
 </head>
 <body>
 
 <!-- HEADER -->
 <header class="site-header">
   <div class="logo-mark">
-    <!-- Exact ReBourne R monogram from brand SVG file -->
-    <svg width="46" height="46" viewBox="140 150 540 510" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
-      <defs>
-        <linearGradient id="steelBlue" x1="180" y1="120" x2="650" y2="680" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#7E98BC"/>
-          <stop offset="45%" stop-color="#3A5F96"/>
-          <stop offset="100%" stop-color="#162A46"/>
-        </linearGradient>
-      </defs>
-      <path fill="url(#steelBlue)" fill-rule="evenodd" d="
-        M205 170 L475 170
-        C565 170 625 223 625 306
-        C625 372 586 421 521 438
-        L657 630 L534 630 L412 452 L362 452
-        L362 630 L240 630 L240 240 L205 170 Z
-        M362 260 L362 372 L470 372
-        C510 372 535 351 535 316
-        C535 282 510 260 470 260 L362 260 Z
-        M205 170 L363 347 L318 347 L165 170 L205 170 Z
-      "/>
-    </svg>
-    <!-- Wordmark + tagline -->
-    <div style="display:flex;flex-direction:column;gap:4px;margin-left:8px">
-      <div style="font-family:'Montserrat',sans-serif;font-size:16px;letter-spacing:.24em;line-height:1;white-space:nowrap">
-        <span style="font-weight:300;color:#7E98BC">RE</span><span style="font-weight:700;color:#F5F5F5">BOURNE</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:7px">
-        <div style="width:20px;height:1px;background:#3A5F96;flex-shrink:0"></div>
-        <div style="font-family:'Montserrat',sans-serif;font-size:6.5px;font-weight:500;letter-spacing:.22em;color:#7E98BC;text-transform:uppercase;white-space:nowrap">Reinvent Your Potential</div>
-        <div style="width:20px;height:1px;background:#3A5F96;flex-shrink:0"></div>
-      </div>
-    </div>
+    <img class="brand-logo-header" src="assets/rebourne-logo-transparent.png" alt="ReBourne">
   </div>
 </header>
 
@@ -902,10 +1055,50 @@ var SURPLUS_OPTS = [
 
 var ACT = {sedentary:1.2,light:1.375,moderate:1.55,active:1.725,very_active:1.9};
 var STEPS_LABELS = ['Select plan','About you','Your goal','Diet & food','Training','Your numbers'];
+var SMART_PRESETS = [
+  {k:'fat-loss-reset', title:'Fat Loss Reset', tag:'Most accessible', copy:'A sustainable cut with realistic training volume, high-protein meals and daily movement.', planType:'beginner', planWeeks:8, goal:'lose', deficitLevel:'moderate_loss', trainingDays:'4', steps:'9000', cardioTypes:['walking','incline_walk']},
+  {k:'hybrid-athlete', title:'Hybrid Athlete', tag:'Strength + engine', copy:'Balanced strength work, running capacity and recovery structure for all-round performance.', planType:'hybrid', planWeeks:8, goal:'maintain', trainingDays:'5', steps:'9000', cardioTypes:['running','rowing'], runningDays:'3'},
+  {k:'strength-rebuild', title:'Strength Rebuild', tag:'Gym focused', copy:'A structured lifting phase for confidence, progressive overload and lean muscle retention.', planType:'intermediate', planWeeks:8, goal:'gain', surplusLevel:'lean_gain', trainingDays:'4', steps:'8000', cardioTypes:['walking']},
+  {k:'run-engine', title:'5K/10K Engine', tag:'Run focused', copy:'A running-specific block with supporting strength and controlled weekly progression.', planType:'running', planWeeks:8, goal:'maintain', trainingDays:'5', steps:'10000', cardioTypes:['running'], runningDays:'4', distanceGoal:'10k'}
+];
 
 function g(id){return document.getElementById(id);}
 function tog(arr,v){var i=arr.indexOf(v);if(i===-1)arr.push(v);else arr.splice(i,1);}
 function bind(id,fn){var e=g(id);if(e)e.onclick=fn;}
+function esc(v){
+  return String(v==null?'':v).replace(/[&<>"']/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+function noticeHtml(id){
+  return '<div class="notice error" id="'+id+'" role="alert" aria-live="polite"></div>';
+}
+function showNotice(id,msg,type){
+  var el=g(id);
+  if(!el)return;
+  el.className='notice show '+(type||'error');
+  el.innerHTML=esc(msg);
+  el.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function clearNotice(id){
+  var el=g(id);
+  if(el){el.className='notice';el.innerHTML='';}
+  document.querySelectorAll('.invalid').forEach(function(x){x.classList.remove('invalid');});
+}
+function markInvalid(id){
+  var el=g(id);
+  if(el)el.classList.add('invalid');
+}
+
+function applySmartPreset(key){
+  var preset=SMART_PRESETS.find(function(p){return p.k===key;});
+  if(!preset)return;
+  Object.keys(preset).forEach(function(k){
+    if(['k','title','tag','copy'].indexOf(k)!==-1)return;
+    form[k]=Array.isArray(preset[k])?preset[k].slice():preset[k];
+  });
+  if(!form.equipment.length)form.equipment=['Full gym'];
+}
 
 function getAdj(){
   if(form.goal==='lose'){var d={mild_loss:-250,moderate_loss:-500,aggressive_loss:-750};return d[form.deficitLevel]||-500;}
@@ -962,6 +1155,7 @@ function planLabel(){
 
 function render(){
   var app=g('app');
+  document.body.classList.toggle('splash-mode',false);
 
   // ── SPLASH PAGE ──────────────────────────────────────────────────────────
   // ── SUBSCRIPTION PAGE ────────────────────────────────────────────────────
@@ -972,34 +1166,27 @@ function render(){
 
   if(step===-2){
     var splash = document.createElement('div');
-    splash.style.cssText = 'min-height:90vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;position:relative';
+    splash.className = 'splash-premium';
 
     splash.innerHTML = [
-      '<div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:60px;background:linear-gradient(to bottom,transparent,#3A5F96)"></div>',
-      '<svg width="160" height="160" viewBox="140 150 540 510" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:32px;filter:drop-shadow(0 0 32px rgba(58,95,150,0.35))">',
-        '<defs>',
-          '<linearGradient id="splashGrad" x1="180" y1="120" x2="650" y2="680" gradientUnits="userSpaceOnUse">',
-            '<stop offset="0%" stop-color="#7E98BC"/>',
-            '<stop offset="45%" stop-color="#3A5F96"/>',
-            '<stop offset="100%" stop-color="#162A46"/>',
-          '</linearGradient>',
-        '</defs>',
-        '<path fill="url(#splashGrad)" fill-rule="evenodd" d="M205 170 L475 170 C565 170 625 223 625 306 C625 372 586 421 521 438 L657 630 L534 630 L412 452 L362 452 L362 630 L240 630 L240 240 L205 170 Z M362 260 L362 372 L470 372 C510 372 535 351 535 316 C535 282 510 260 470 260 L362 260 Z M205 170 L363 347 L318 347 L165 170 L205 170 Z"/>',
-      '</svg>',
-      '<div class="splash-wordmark"><span class="splash-re">RE</span><span class="splash-bourne">BOURNE</span></div>',
-      '<div class="splash-tagline-row">',
-        '<div class="splash-line"></div>',
-        '<div class="splash-tag">Reinvent Your Potential</div>',
-        '<div class="splash-line"></div>',
+      '<div class="splash-orbit" aria-hidden="true"></div>',
+      '<div class="splash-premium-inner">',
+        '<img class="brand-logo-splash" src="assets/rebourne-logo-transparent.png" alt="ReBourne">',
+        '<div class="splash-eyebrow">Elite performance operating system</div>',
+        '<h1 class="splash-headline">Structure creates transformation.</h1>',
+        '<p class="splash-copy">Build a precise training, nutrition and progress plan around your body, schedule, recovery and ambition.</p>',
+        '<div class="splash-timeline">',
+          '<div class="splash-timeline-item"><span class="timeline-dot"></span><strong>Training</strong><em>Strength, running and hybrid sessions.</em></div>',
+          '<div class="splash-timeline-line" aria-hidden="true"></div>',
+          '<div class="splash-timeline-item"><span class="timeline-dot"></span><strong>Nutrition</strong><em>Calories, macros, meals and shopping.</em></div>',
+          '<div class="splash-timeline-line" aria-hidden="true"></div>',
+          '<div class="splash-timeline-item"><span class="timeline-dot"></span><strong>Progress</strong><em>Readiness, overload and analytics.</em></div>',
+        '</div>',
+        '<div class="splash-actions">',
+          '<button id="b-splash" class="splash-btn">Start assessment</button>',
+          '<button id="b-splash-demo" class="splash-secondary">Preview sample plan</button>',
+        '</div>',
       '</div>',
-      '<div class="splash-divider"></div>',
-      '<p class="splash-headline">Are you ready to reinvent your potential?</p>',
-      '<button id="b-splash" class="splash-btn">Build my programme</button>',
-      '<div style="margin-top:16px;display:flex;flex-direction:column;align-items:center;gap:10px">',
-        '<button id="b-sub" style="background:transparent;border:none;cursor:pointer;font-family:inherit;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--steel3);text-decoration:underline;text-decoration-color:rgba(58,95,150,.4);text-underline-offset:3px;padding:4px 0">View membership plans</button>',
-        '<div class="splash-sub">&mdash; Reinvent Your Potential &mdash;</div>',
-      '</div>',
-      '<div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:1px;height:60px;background:linear-gradient(to top,transparent,#3A5F96)"></div>'
     ].join('');
 
     app.innerHTML = '';
@@ -1009,15 +1196,61 @@ function render(){
     if(bSplash){
       bSplash.onmouseover = function(){ this.style.background='#3A5F96'; this.style.letterSpacing='.32em'; };
       bSplash.onmouseout  = function(){ this.style.background='transparent'; this.style.letterSpacing='.28em'; };
-      bSplash.onclick = function(){ goStep(-1); };
-    var bSub = g('b-sub');
-    if(bSub) bSub.onclick = function(){ step=-3; render(); window.scrollTo(0,0); };
+      bSplash.onclick = function(){ goStep(-4); };
     }
+    var bSplashDemo = g('b-splash-demo');
+    if(bSplashDemo)bSplashDemo.onclick=loadSamplePlan;
+    return;
+  }
+
+  if(step===-4){
+    app.innerHTML='<div class="entry-wrap premium-entry"><div class="entry-panel">'
+      +'<div class="entry-topline"><img class="entry-logo" src="assets/rebourne-logo-transparent.png" alt="ReBourne"><button id="entry-back" class="entry-text-btn">Back</button></div>'
+      +'<div class="entry-kicker">Choose how ReBourne supports you</div>'
+      +'<h1 class="entry-title">One system. Two ways to start.</h1>'
+      +'<p class="entry-sub">Start with a focused programme, or choose membership for ongoing adaptive planning and progress-led support.</p>'
+      +'<div class="entry-grid premium-choice-grid">'
+        +'<button class="entry-card premium-choice-card" id="entry-oneoff">'
+          +'<div class="entry-card-label">One-off</div>'
+          +'<div class="entry-card-title">Programme build</div>'
+          +'<div class="entry-card-copy">A fixed plan built around your current goal, training availability, food preferences and limitations.</div>'
+          +'<div class="choice-compare"><span>Best for</span><strong>Short-term focus</strong></div>'
+          +'<div class="choice-compare"><span>Payment</span><strong>Pay once</strong></div>'
+          +'<div class="choice-compare"><span>Includes</span><strong>Plan, food, tracking</strong></div>'
+          +'<div class="entry-card-meta">Start assessment</div>'
+        +'</button>'
+        +'<button class="entry-card premium-choice-card" id="entry-membership">'
+          +'<div class="entry-card-label">Membership</div>'
+          +'<div class="entry-card-title">Adaptive coaching</div>'
+          +'<div class="entry-card-copy">Ongoing planning for people who want progress loops, fresh programmes and longer-term transformation.</div>'
+          +'<div class="choice-compare"><span>Best for</span><strong>Long-term consistency</strong></div>'
+          +'<div class="choice-compare"><span>Payment</span><strong>Monthly</strong></div>'
+          +'<div class="choice-compare"><span>Includes</span><strong>Plan updates, reports</strong></div>'
+          +'<div class="entry-card-meta">View memberships</div>'
+        +'</button>'
+      +'</div>'
+      +'<button id="entry-demo" class="entry-demo-btn">Preview sample output</button>'
+      +'</div></div>';
+    var one=g('entry-oneoff'),mem=g('entry-membership'),back=g('entry-back'),demo=g('entry-demo');
+    if(one)one.onclick=function(){goStep(-1);};
+    if(mem)mem.onclick=function(){step=-3;render();window.scrollTo(0,0);};
+    if(back)back.onclick=function(){goStep(-2);};
+    if(demo)demo.onclick=loadSamplePlan;
     return;
   }
 
   // ── LANDING ──────────────────────────────────────────────────────────────
   if(step===-1){
+    var presetCards='<div class="preset-grid">';
+    SMART_PRESETS.forEach(function(preset){
+      var active=form.planType===preset.planType&&form.goal===preset.goal&&form.planWeeks===preset.planWeeks?' active':'';
+      presetCards+='<button class="preset-card'+active+'" id="preset-'+preset.k+'">'
+        +'<span>'+preset.tag+'</span>'
+        +'<strong>'+preset.title+'</strong>'
+        +'<em>'+preset.copy+'</em>'
+        +'</button>';
+    });
+    presetCards+='</div>';
     var ptCards='<div class="plan-type-grid">';
     for(var i=0;i<PLAN_TYPES.length;i++){
       var pt=PLAN_TYPES[i],sel=form.planType===pt.k?' sel':'';
@@ -1048,7 +1281,10 @@ function render(){
     }
     durCards+='</div>';
 
-    app.innerHTML='<div class="hero">'
+    app.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 0 0">'
+      +'<button id="b-startback" style="background:transparent;border:none;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;color:var(--muted);padding:8px 0;display:flex;align-items:center;gap:6px;letter-spacing:.04em">&larr; Back</button>'
+      +'<button id="b-membership" style="background:rgba(58,95,150,.1);border:1px solid var(--border);border-radius:var(--r);padding:8px 14px;color:var(--steel3);font-family:inherit;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">Membership options</button>'
+      +'</div><div class="hero">'
       +'<div class="hero-label">AI-powered coaching</div>'
       +'<h1>Reinvent Your<br><em style="font-family:\'Playfair Display\',serif;font-style:italic;font-weight:400">Potential</em></h1>'
       +'<div class="hero-tag">ReBourne Performance Plans</div>'
@@ -1060,6 +1296,9 @@ function render(){
         +'<div class="feat-pill"><div class="feat-pill-dot"></div>AI generated</div>'
       +'</div>'
       +'</div>'
+      +'<div class="section-label">Smart presets</div>'
+      +'<p class="guided-copy">Start from a proven structure, then fine-tune anything you want before generation.</p>'
+      +presetCards
       +'<div class="section-label">Choose your programme</div>'
       +ptCards
       +'<div class="section-label">Select duration</div>'
@@ -1145,10 +1384,15 @@ function render(){
     for(var pi=0;pi<PLAN_TYPES.length;pi++){
       (function(k){bind('pt-'+k,function(){form.planType=k;render();});})(PLAN_TYPES[pi].k);
     }
+    SMART_PRESETS.forEach(function(preset){
+      bind('preset-'+preset.k,function(){applySmartPreset(preset.k);render();});
+    });
     for(var di=0;di<DURATIONS.length;di++){
       (function(w){bind('dur-'+w,function(){form.planWeeks=w;render();});})(DURATIONS[di].w);
     }
     bind('b-start',function(){if(form.planType&&form.planWeeks)goStep(0);});
+    bind('b-startback',function(){step=-4;render();window.scrollTo(0,0);});
+    bind('b-membership',function(){step=-3;render();window.scrollTo(0,0);});
     return;
   }
 
@@ -1187,6 +1431,7 @@ function render(){
       +'</div>';
     body='<div class="form-card"><h2 class="form-card-title">About you</h2>'
       +'<p class="form-card-sub">Your physical stats let us calculate your precise calorie and macro targets. More accurate = better results.</p>'
+      +noticeHtml('form-notice')
       +unitToggle
       +'<div class="field"><label>Your name</label><input id="f-name" type="text" placeholder="First name" value="'+form.name+'"></div>'
       +'<div class="row2">'
@@ -1240,6 +1485,7 @@ function render(){
 
     body='<div class="form-card"><h2 class="form-card-title">Your goal</h2>'
       +'<p class="form-card-sub">Select your main goal, then fine-tune the intensity to match your ambition and timeline.</p>'
+      +noticeHtml('goal-notice')
       +gc+intensityHtml
       +'<div class="btn-row"><button class="nav-btn" id="b-back1">&larr; Back</button><button class="pri-btn" id="b-next1">Continue &rarr;</button></div>'
       +'</div>';
@@ -1343,8 +1589,14 @@ function render(){
     if(form.goal==='lose'){var df=DEFICIT_OPTS.find(function(x){return x.k===form.deficitLevel;});intName=df?df.label:'';}
     if(form.goal==='gain'){var sf=SURPLUS_OPTS.find(function(x){return x.k===form.surplusLevel;});intName=sf?sf.label:'';}
     var wl=form.planWeeks+'-week';
-    body='<div class="form-card"><h2 class="form-card-title">Your numbers, '+form.name+'</h2>'
-      +'<p class="form-card-sub">Calculated using the Mifflin-St Jeor formula, adjusted for your activity level and step target.</p>'
+    body='<div class="form-card plan-preview-card"><div class="preview-kicker">Pre-generation checkpoint</div><h2 class="form-card-title">Your plan preview, '+(form.name||'athlete')+'</h2>'
+      +'<p class="form-card-sub">Review the operating plan before ReBourne builds the full programme.</p>'
+      +'<div class="preview-summary-grid">'
+        +'<div><span>Programme</span><strong>'+planLabel()+'</strong></div>'
+        +'<div><span>Duration</span><strong>'+form.planWeeks+' weeks</strong></div>'
+        +'<div><span>Training</span><strong>'+form.trainingDays+' days/week</strong></div>'
+        +'<div><span>Movement</span><strong>'+Number(form.steps).toLocaleString()+' steps/day</strong></div>'
+      +'</div>'
       +'<div class="stat-grid">'
         +'<div class="stat"><div class="stat-lbl">BMR</div><div class="stat-val">'+c.bmr.toLocaleString()+'</div><div class="stat-unit">kcal at complete rest</div></div>'
         +'<div class="stat"><div class="stat-lbl">TDEE</div><div class="stat-val">'+c.tdee.toLocaleString()+'</div><div class="stat-unit">total daily burn</div></div>'
@@ -1400,6 +1652,16 @@ function render(){
         +'<span class="bdg bdg-steel">'+wl+' programme</span>'
         +'<span class="bdg bdg-steel">'+Number(form.steps).toLocaleString()+' steps/day</span>'
       +'</div>'
+      +'<div class="preview-includes">'
+        +'<div class="preview-section-title">What ReBourne will build</div>'
+        +'<div class="preview-include-grid">'
+          +'<div><strong>Daily meals</strong><span>'+form.meals+' meals and '+form.snacks+' snack(s) per day.</span></div>'
+          +'<div><strong>Training plan</strong><span>Sessions matched to equipment, cardio access and injuries.</span></div>'
+          +'<div><strong>Progress system</strong><span>Readiness, overload, measurements and analytics.</span></div>'
+          +'<div><strong>Support tools</strong><span>Recipes, shopping list, swaps and manual meal logging.</span></div>'
+        +'</div>'
+      +'</div>'
+      +'<div class="confidence-strip"><strong>Confidence cue</strong><span>'+((form.injuries||'').trim()?'Injury notes will shape exercise selection and substitutions.':'Add injury notes if anything should be avoided before generating.')+'</span></div>'
       // Price summary before generate
       +(function(){
         var price=getPlanPrice(form.planType,form.planWeeks);
@@ -1412,8 +1674,8 @@ function render(){
           +'<div style="font-size:26px;font-weight:700;color:#fff;flex-shrink:0">'+formatPrice(price)+'</div>'
           +'</div>';
       })()
-      +'<div class="btn-row"><button class="nav-btn" id="b-back4">&larr; Edit</button>'
-        +'<button class="pri-btn" id="b-gen">Get my plan &mdash; '+formatPrice(getPlanPrice(form.planType,form.planWeeks))+' &rarr;</button>'
+      +'<div class="btn-row"><button class="nav-btn" id="b-back4">&larr; Edit inputs</button>'
+        +'<button class="pri-btn" id="b-gen">Generate programme &mdash; '+formatPrice(getPlanPrice(form.planType,form.planWeeks))+' &rarr;</button>'
       +'</div></div>';
   }
 
@@ -1463,12 +1725,7 @@ function render(){
           +'<div class="load-ring load-ring-2"></div>'
           +'<div class="load-ring load-ring-3"></div>'
           +'<div class="load-ring-logo">'
-            +'<svg width="44" height="44" viewBox="140 150 540 510" aria-label="ReBourne">'
-              +'<defs><linearGradient id="lg-load" x1="180" y1="120" x2="650" y2="680" gradientUnits="userSpaceOnUse">'
-                +'<stop offset="0%" stop-color="#7E98BC"/><stop offset="45%" stop-color="#3A5F96"/><stop offset="100%" stop-color="#162A46"/>'
-              +'</linearGradient></defs>'
-              +'<path fill="url(#lg-load)" fill-rule="evenodd" d="M205 170 L475 170 C565 170 625 223 625 306 C625 372 586 421 521 438 L657 630 L534 630 L412 452 L362 452 L362 630 L240 630 L240 240 L205 170 Z M362 260 L362 372 L470 372 C510 372 535 351 535 316 C535 282 510 260 470 260 L362 260 Z M205 170 L363 347 L318 347 L165 170 L205 170 Z"/>'
-            +'</svg>'
+            +'<img class="brand-logo-loader" src="assets/rebourne-logo-transparent.png" alt="ReBourne">'
           +'</div>'
         +'</div>'
         +'<div style="font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--steel3);margin-bottom:8px">Building your programme</div>'
@@ -1488,7 +1745,7 @@ function render(){
       return;
     }
     if(apiErr){
-      app.innerHTML=prog+'<div class="form-card"><div class="err-box"><strong>Could not generate plan:</strong> '+apiErr+'</div>'
+      app.innerHTML=prog+'<div class="form-card"><div class="err-box"><strong>Could not generate plan:</strong> '+esc(apiErr)+'</div>'
         +'<button class="pri-btn" id="b-retry">Try again</button></div>';
       var e2=g('b-retry');if(e2)e2.onclick=startGenerate;
       return;
@@ -1501,19 +1758,50 @@ function render(){
     return;
   }
 
-  app.innerHTML=prog+body;
+  var assessmentMeta=[
+    {k:'Profile',t:'Who are we building this around?',d:'Age, sex, height, weight and daily activity give the engine the baseline it needs for useful targets.',s:'Body data',cue:'Accurate body data improves calories and macro targets.'},
+    {k:'Goal',t:'What are we building towards?',d:'The goal and intensity decide whether the plan prioritises fat loss, performance maintenance or muscle gain.',s:'Direction',cue:'The plan will match pace of change to your chosen level of aggression.'},
+    {k:'Nutrition',t:'What food rules should the plan respect?',d:'Diet type, meal frequency, allergies and dislikes shape meals that fit real life instead of generic templates.',s:'Food system',cue:'Your dislikes and allergies are used to keep meals usable.'},
+    {k:'Training',t:'What can your week realistically handle?',d:'Schedule, equipment, cardio access and injury notes keep the plan ambitious without becoming unrealistic.',s:'Capacity',cue:'Injury notes and equipment access modify exercise selection.'},
+    {k:'Preview',t:'Review the plan before generation.',d:'Check your calories, macros, training structure and included tools before the plan is generated.',s:'Plan preview',cue:'This is the final checkpoint before building the programme.'}
+  ];
+  var meta=assessmentMeta[step]||assessmentMeta[0];
+  var guidedProgress='<div class="assessment-rail">';
+  assessmentMeta.forEach(function(m,i){
+    guidedProgress+='<div class="assessment-step '+(i===step?'active':i<step?'done':'')+'"><span>'+(i+1)+'</span><strong>'+m.k+'</strong></div>';
+  });
+  guidedProgress+='</div>';
+  app.innerHTML='<div class="assessment-shell">'
+    +'<div class="assessment-hero">'
+      +'<div class="assessment-kicker">ReBourne assessment</div>'
+      +'<h1>'+meta.t+'</h1>'
+      +guidedProgress
+    +'</div>'
+    +'<div class="assessment-layout assessment-layout-stacked">'
+      +'<section class="assessment-side assessment-side-stacked">'
+        +'<div class="assessment-side-label">'+meta.s+'</div>'
+        +'<div class="assessment-insight-grid">'
+          +'<div class="assessment-insight-card insight-main"><span>Context</span><strong>Why this matters</strong><p>'+meta.d+'</p></div>'
+          +'<div class="assessment-insight-card"><span>Engine logic</span><p>'+meta.cue+'</p></div>'
+          +'<div class="assessment-insight-card insight-progress"><span>Progress</span><strong>'+Math.max(1,step+1)+'/5</strong><p>Structured inputs before plan generation</p></div>'
+        +'</div>'
+      +'</section>'
+      +'<main class="assessment-main">'+prog+body+'</main>'
+    +'</div>'
+  +'</div>';
 
   // ── BIND ALL HANDLERS ────────────────────────────────────────────────────
   function bnd(id,fn){var e=g(id);if(e)e.onclick=fn;}
 
   // Step 0
   bnd('b-bio',function(){
+    clearNotice('form-notice');
     var n=g('f-name'),ag=g('f-age'),wEl=g('f-weight'),hEl=g('f-height'),sexEl=g('f-sex');
     var hFt=g('f-height-ft'),hIn=g('f-height-in');
     var nv=n?n.value.trim():'',av=ag?ag.value.trim():'',wv=wEl?wEl.value.trim():'';
     var hv='';
     if(form.units==='imperial'){
-      if(!hFt||!hFt.value.trim()){alert('Please enter your height.');return;}
+      if(!hFt||!hFt.value.trim()){markInvalid('f-height-ft');showNotice('form-notice','Please enter your height before continuing.');return;}
       form.heightFt=hFt.value.trim();form.heightIn=hIn?hIn.value.trim():'0';
       var totalIn3=parseInt(form.heightFt)*12+(parseInt(form.heightIn)||0);
       hv=Math.round(totalIn3*2.54)+''; // store as cm internally
@@ -1522,8 +1810,17 @@ function render(){
     } else {
       hv=hEl?hEl.value.trim():'';
     }
-    if(!nv||!av||!wv||!hv){alert('Please fill in all fields.');return;}
-    if(!form.activity){alert('Please select your activity level.');return;}
+    if(!nv||!av||!wv||!hv){
+      if(!nv)markInvalid('f-name');
+      if(!av)markInvalid('f-age');
+      if(!wv)markInvalid('f-weight');
+      if(!hv)markInvalid(form.units==='imperial'?'f-height-ft':'f-height');
+      showNotice('form-notice','Please complete your name, age, bodyweight and height.');
+      return;
+    }
+    if(parseInt(av)<16||parseInt(av)>80){markInvalid('f-age');showNotice('form-notice','Age should be between 16 and 80.');return;}
+    if(parseFloat(wv)<=0||parseFloat(hv)<=0){showNotice('form-notice','Please enter realistic bodyweight and height values.');return;}
+    if(!form.activity){showNotice('form-notice','Please select the activity level that best describes your usual day.');return;}
     form.name=nv;form.age=av;form.weight=wv;form.height=hv;if(sexEl)form.sex=sexEl.value;
     goStep(1);
   });
@@ -1560,7 +1857,7 @@ function render(){
 
   // Step 1
   bnd('b-back1',function(){goStep(0);});
-  bnd('b-next1',function(){if(!form.goal){alert('Please select a goal.');return;}goStep(2);});
+  bnd('b-next1',function(){clearNotice('goal-notice');if(!form.goal){showNotice('goal-notice','Please select your main goal before continuing.');return;}goStep(2);});
   ['lose','maintain','gain'].forEach(function(k){bnd('goal-'+k,function(){form.goal=k;render();});});
   DEFICIT_OPTS.forEach(function(d){bnd('def-'+d.k,function(){form.deficitLevel=d.k;render();});});
   SURPLUS_OPTS.forEach(function(s){bnd('sur-'+s.k,function(){form.surplusLevel=s.k;render();});});
@@ -1598,6 +1895,88 @@ function render(){
 
 
 // ── API ──────────────────────────────────────────────────────────────────────
+function getStoredApiKey(){try{return localStorage.getItem('rb_api_key')||'';}catch(e){return'';}}
+function getApiBaseUrl(){try{return (localStorage.getItem('rb_api_base_url')||'').replace(/\/$/,'');}catch(e){return'';}}
+function promptForApiKey(){
+  return new Promise(function(resolve){
+    var existing=g('modal-overlay');if(existing)existing.parentNode.removeChild(existing);
+    var overlay=document.createElement('div');overlay.className='modal-overlay';overlay.id='modal-overlay';
+    overlay.innerHTML='<div class="modal"><div class="modal-hd"><div><div class="modal-title">Connect plan generation</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Enter your Anthropic API key for this device.</div></div><button class="modal-close" id="api-key-cancel">&times;</button></div>'
+      +'<div class="modal-body">'
+      +'<div class="field"><label>Anthropic API key</label><input type="password" id="api-key-input" autocomplete="off" placeholder="sk-ant-..."><div class="field-hint">Stored locally in this app only. It is sent only to the local ReBourne server when generating plans, recipes or swaps.</div></div>'
+      +'<button class="log-btn" id="api-key-save">Save key and continue</button>'
+      +'<button class="swap-btn" id="api-key-skip">Cancel</button>'
+      +'</div></div>';
+    document.body.appendChild(overlay);
+    var input=g('api-key-input'),save=g('api-key-save'),skip=g('api-key-skip'),cancel=g('api-key-cancel');
+    function finish(value){
+      if(overlay&&overlay.parentNode)overlay.parentNode.removeChild(overlay);
+      resolve(value||'');
+    }
+    if(input)setTimeout(function(){input.focus();},50);
+    if(save)save.onclick=function(){
+      var key=(input&&input.value.trim())||'';
+      if(!key){if(input)input.focus();return;}
+      try{localStorage.setItem('rb_api_key',key);}catch(e){}
+      finish(key);
+    };
+    if(input)input.onkeydown=function(e){if(e.key==='Enter'&&save)save.click();};
+    if(skip)skip.onclick=function(){finish('');};
+    if(cancel)cancel.onclick=function(){finish('');};
+    overlay.onclick=function(e){if(e.target===overlay)finish('');};
+  });
+}
+function promptForApiBaseUrl(){
+  return new Promise(function(resolve){
+    var existing=g('modal-overlay');if(existing)existing.parentNode.removeChild(existing);
+    var overlay=document.createElement('div');overlay.className='modal-overlay';overlay.id='modal-overlay';
+    overlay.innerHTML='<div class="modal"><div class="modal-hd"><div><div class="modal-title">Connect ReBourne server</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Mobile builds need your hosted backend URL.</div></div><button class="modal-close" id="api-base-cancel">&times;</button></div>'
+      +'<div class="modal-body">'
+      +'<div class="field"><label>Backend URL</label><input type="url" id="api-base-input" autocomplete="off" placeholder="https://api.rebourne.co.uk"><div class="field-hint">This is where the app sends plan-generation requests. For production, this backend stores your model API key securely.</div></div>'
+      +'<button class="log-btn" id="api-base-save">Save server and continue</button>'
+      +'<button class="swap-btn" id="api-base-skip">Cancel</button>'
+      +'</div></div>';
+    document.body.appendChild(overlay);
+    var input=g('api-base-input'),save=g('api-base-save'),skip=g('api-base-skip'),cancel=g('api-base-cancel');
+    function finish(value){if(overlay&&overlay.parentNode)overlay.parentNode.removeChild(overlay);resolve(value||'');}
+    if(input){input.value=getApiBaseUrl();setTimeout(function(){input.focus();},50);}
+    if(save)save.onclick=function(){
+      var url=(input&&input.value.trim().replace(/\/$/,''))||'';
+      if(!url){if(input)input.focus();return;}
+      try{localStorage.setItem('rb_api_base_url',url);}catch(e){}
+      finish(url);
+    };
+    if(input)input.onkeydown=function(e){if(e.key==='Enter'&&save)save.click();};
+    if(skip)skip.onclick=function(){finish('');};
+    if(cancel)cancel.onclick=function(){finish('');};
+    overlay.onclick=function(e){if(e.target===overlay)finish('');};
+  });
+}
+async function apiMessage(payload){
+  var headers={'Content-Type':'application/json'};
+  var key=getStoredApiKey();
+  if(key)headers['x-client-api-key']=key;
+  var apiBase=getApiBaseUrl();
+  var endpoint=(apiBase||'')+'/api/message';
+  if(!apiBase&&location.protocol==='capacitor:'){
+    apiBase=await promptForApiBaseUrl();
+    endpoint=(apiBase||'')+'/api/message';
+    if(!apiBase)throw new Error('A hosted ReBourne backend is needed for mobile plan generation.');
+  }
+  var res=await fetch(endpoint,{method:'POST',headers:headers,body:JSON.stringify(payload)});
+  if(!res.ok){
+    var err=await res.clone().json().catch(function(){return{};});
+    var msg=(err.error&&err.error.message)||'';
+    if(msg.indexOf('ANTHROPIC_API_KEY')>=0){
+      key=await promptForApiKey();
+      if(key){
+        headers['x-client-api-key']=key;
+        res=await fetch(endpoint,{method:'POST',headers:headers,body:JSON.stringify(payload)});
+      }
+    }
+  }
+  return res;
+}
 async function generateWeek(weekNum,totalWeeks,overrideNote){
   var c=calc;
   var gl=form.goal==='lose'?'Fat loss':form.goal==='gain'?'Muscle gain':'Maintain/Recomp';
@@ -1635,19 +2014,21 @@ async function generateWeek(weekNum,totalWeeks,overrideNote){
     +'JSON format: {"mealPlan":[{"day":"Monday","meals":[{"type":"Breakfast","name":"...","calories":0,"protein":0,"carbs":0,"fat":0}]}],"trainingPlan":[{"day":"Monday","type":"Push","focus":"...","exercises":["Bench press 4x8 RPE8"]}],"coachNotes":"..."}. '
     +'All 7 days. Train '+form.trainingDays+' days, rest others. Respect injuries. Follow diet. Snacks as meal entries.';
 
-  var res=await fetch('/api/message',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:4000,messages:[{role:'user',content:prompt}]})
-  });
+  var res=await apiMessage({model:'claude-haiku-4-5-20251001',max_tokens:4000,messages:[{role:'user',content:prompt}]});
   if(!res.ok){var e=await res.json().catch(function(){return{};});throw new Error((e.error&&e.error.message)||'API error '+res.status);}
-  var data=await res.json();
+  var data=await res.json().catch(function(){return{};});
+  if(data.error&&data.error.message)throw new Error(data.error.message);
   if(data.stop_reason==='max_tokens')throw new Error('Response cut off on week '+weekNum+'. Please try again.');
   var text='';
-  for(var bi=0;bi<data.content.length;bi++){if(data.content[bi].type==='text'){text=data.content[bi].text;break;}}
+  var blocks=Array.isArray(data.content)?data.content:[];
+  for(var bi=0;bi<blocks.length;bi++){if(blocks[bi].type==='text'){text=blocks[bi].text;break;}}
   var s=text.indexOf('{'),e2=text.lastIndexOf('}');
   if(s===-1||e2<=s)throw new Error('Unexpected response on week '+weekNum+'. Please try again.');
-  return JSON.parse(text.slice(s,e2+1));
+  try{
+    return JSON.parse(text.slice(s,e2+1));
+  }catch(parseErr){
+    throw new Error('The plan response was not valid JSON on week '+weekNum+'. Please try again.');
+  }
 }
 
 async function startGenerate(){
@@ -1669,6 +2050,97 @@ async function startGenerate(){
   loading=false;
   if(allWeeks.length>0) saveClientToCoach();
   render();
+}
+
+function loadSamplePlan(){
+  form.planType='hybrid';
+  form.planWeeks=1;
+  form.units='metric';
+  form.name='Preview Client';
+  form.age='32';
+  form.sex='female';
+  form.weight='68';
+  form.height='168';
+  form.activity='moderate';
+  form.goal='maintain';
+  form.dietType='highprotein';
+  form.allergies='None';
+  form.dislikes='Mushrooms';
+  form.meals='3';
+  form.snacks='1';
+  form.trainingDays='4';
+  form.steps='9000';
+  form.equipment=['Full gym','Resistance bands'];
+  form.cardioTypes=['running','cycling'];
+  form.injuries='Occasional tight hips after long sitting.';
+  form.notes='Prefers efficient sessions under 60 minutes.';
+  calc=doCalc();
+  allWeeks=[{
+    coachNotes:'This sample hybrid week balances strength, conditioning and recovery. The key usability question is whether the output feels easy to scan and act on each day.',
+    mealPlan:[
+      {day:'Monday',meals:[
+        {type:'Breakfast',name:'Greek yoghurt bowl with berries, oats and whey',calories:520,protein:42,carbs:58,fat:14},
+        {type:'Lunch',name:'Chicken rice bowl with avocado and mixed peppers',calories:650,protein:48,carbs:72,fat:18},
+        {type:'Snack',name:'Apple with peanut butter and a protein shake',calories:310,protein:28,carbs:30,fat:10},
+        {type:'Dinner',name:'Salmon, sweet potato and green beans',calories:610,protein:44,carbs:50,fat:24}
+      ]},
+      {day:'Tuesday',meals:[
+        {type:'Breakfast',name:'Spinach omelette with sourdough toast',calories:480,protein:36,carbs:36,fat:20},
+        {type:'Lunch',name:'Turkey pasta salad with tomato and rocket',calories:640,protein:46,carbs:78,fat:16},
+        {type:'Snack',name:'Cottage cheese with pineapple',calories:240,protein:28,carbs:22,fat:4},
+        {type:'Dinner',name:'Lean beef chilli with rice and salad',calories:690,protein:52,carbs:68,fat:22}
+      ]},
+      {day:'Wednesday',meals:[
+        {type:'Breakfast',name:'Protein oats with banana and cinnamon',calories:510,protein:38,carbs:70,fat:10},
+        {type:'Lunch',name:'Tuna jacket potato with sweetcorn salad',calories:590,protein:45,carbs:72,fat:12},
+        {type:'Snack',name:'Protein bar and strawberries',calories:260,protein:22,carbs:28,fat:7},
+        {type:'Dinner',name:'Chicken fajita bowl with rice and salsa',calories:660,protein:50,carbs:70,fat:18}
+      ]},
+      {day:'Thursday',meals:[
+        {type:'Breakfast',name:'Eggs, smoked salmon and rye toast',calories:500,protein:40,carbs:35,fat:22},
+        {type:'Lunch',name:'Halloumi and chicken couscous salad',calories:650,protein:46,carbs:58,fat:26},
+        {type:'Snack',name:'Skyr yoghurt with granola',calories:280,protein:26,carbs:32,fat:6},
+        {type:'Dinner',name:'Prawn stir fry with noodles and vegetables',calories:620,protein:44,carbs:76,fat:14}
+      ]},
+      {day:'Friday',meals:[
+        {type:'Breakfast',name:'Bagel with eggs and turkey bacon',calories:540,protein:40,carbs:58,fat:16},
+        {type:'Lunch',name:'Chicken Caesar wrap with extra salad',calories:610,protein:48,carbs:54,fat:20},
+        {type:'Snack',name:'Banana and whey protein shake',calories:260,protein:28,carbs:32,fat:2},
+        {type:'Dinner',name:'Turkey meatballs with spaghetti and greens',calories:700,protein:52,carbs:82,fat:16}
+      ]},
+      {day:'Saturday',meals:[
+        {type:'Breakfast',name:'Protein pancakes with berries',calories:520,protein:42,carbs:60,fat:12},
+        {type:'Lunch',name:'Chicken burrito bowl with beans and rice',calories:720,protein:50,carbs:86,fat:18},
+        {type:'Snack',name:'Rice cakes with cottage cheese',calories:230,protein:22,carbs:28,fat:3},
+        {type:'Dinner',name:'Steak, roasted potatoes and asparagus',calories:690,protein:54,carbs:52,fat:26}
+      ]},
+      {day:'Sunday',meals:[
+        {type:'Breakfast',name:'Overnight oats with whey and blueberries',calories:500,protein:38,carbs:66,fat:10},
+        {type:'Lunch',name:'Chicken pesto pasta with spinach',calories:680,protein:48,carbs:76,fat:20},
+        {type:'Snack',name:'Greek yoghurt with honey',calories:220,protein:24,carbs:24,fat:3},
+        {type:'Dinner',name:'Cod, rice and roasted vegetables',calories:590,protein:46,carbs:62,fat:12}
+      ]}
+    ],
+    trainingPlan:[
+      {day:'Monday',type:'Lower strength',focus:'Glutes, quads and controlled strength work.',exercises:['Back squat 4x6 RPE 7','Romanian deadlift 3x8','Walking lunges 3x10 each leg','Leg press 3x12','Cable abduction 3x15','Dead bug 3x10 each side']},
+      {day:'Tuesday',type:'Conditioning',focus:'Zone 2 aerobic base with relaxed breathing.',exercises:['Easy run 35 minutes zone 2','Mobility flow 10 minutes','Hip flexor stretch 2x45s each side']},
+      {day:'Wednesday',type:'Upper strength',focus:'Push, pull and trunk stability.',exercises:['Bench press 4x6 RPE 7','Lat pulldown 4x8','Seated dumbbell shoulder press 3x10','Cable row 3x10','Incline dumbbell press 3x10','Pallof press 3x12 each side']},
+      {day:'Thursday',type:'Recovery',focus:'Low stress movement and tissue quality.',exercises:[]},
+      {day:'Friday',type:'Hybrid full body',focus:'Strength endurance without losing form.',exercises:['Trap bar deadlift 4x5','Kettlebell swings 4x15','Sled push 6x20m','Assault bike 8x30s hard / 90s easy','Farmer carry 4x40m','Plank 3x45s']},
+      {day:'Saturday',type:'Endurance',focus:'Longer steady effort to build capacity.',exercises:['Bike 50 minutes zone 2','Optional 6x20s cadence pickups','Full body stretch 10 minutes']},
+      {day:'Sunday',type:'Rest',focus:'Complete rest or easy walk only.',exercises:[]}
+    ]
+  }];
+  loading=false;
+  apiErr=null;
+  generatingWeek=0;
+  dash.tab='overview';
+  dash.week=0;
+  dash.day=0;
+  loadAllLogs();
+  step=5;
+  render();
+  window.scrollTo(0,0);
 }
 
 function syncClientData(){
@@ -1788,9 +2260,9 @@ function downloadPlan(){
     +'</style>'
     +'</head><body><div class="page">'
     +'<div class="cover">'
-      +'<div style="font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#7E98BC;margin-bottom:10px">ReBourne Performance Programme</div>'
+      +'<img src="assets/rebourne-logo-transparent.png" alt="ReBourne" style="width:260px;height:auto;display:block;margin:0 auto 10px">'
+      +'<div style="font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#7E98BC;margin-bottom:10px">Performance Programme</div>'
       +'<div style="font-size:32px;font-weight:600;color:#fff;margin-bottom:4px">'+form.name+'</div>'
-      +'<div style="font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:#5a6a82;margin-bottom:14px">Reinvent Your Potential</div>'
       +'<div style="font-size:13px;color:#5a6a82;line-height:1.8">'
         +'<strong style="color:#D6D8DC">'+form.planWeeks+'-Week '+planLabel2()+'</strong> &bull; '+gl+' &bull; '+dietLabel+'<br>'
         +calc.target.toLocaleString()+' kcal/day &bull; '+form.trainingDays+' training days/week &bull; '+Number(form.steps).toLocaleString()+' steps/day<br>'
@@ -1847,6 +2319,7 @@ var dash = {
   checkedShop: {},
   checkedIngredients: {},
   recipeCache: {},
+  savedMeals: [],
   swapLoading: {},
   selectedExercise: '',
   calOffset: 0
@@ -1881,16 +2354,26 @@ function calcSleepHours(bed,wake){
 }
 function sleepScoreColor(h){ return h>=8?'var(--green)':h>=7?'var(--steel3)':h>=6?'var(--gold)':'var(--red)'; }
 
+function getNutritionTargets(){
+  var offset=parseInt(dash.calOffset||0)||0;
+  var target=Math.max(1200,(calc?calc.target:0)+offset);
+  var protein=calc?calc.protein:0;
+  var fat=calc?calc.fat:0;
+  var carbs=Math.max(0,(calc?calc.carbs:0)+Math.round(offset/4));
+  return {target:target,protein:protein,carbs:carbs,fat:fat,offset:offset};
+}
+
 function getTodayNutrition(){
   var key=dayKey();
   var log=dash.nutritionLogs[key]||{eaten:{}};
   var wk=allWeeks[dash.week]||{};
   var dayData=(wk.mealPlan||[])[dash.day]||{meals:[]};
+  var targets=getNutritionTargets();
   var cals=0,protein=0,carbs=0,fat=0;
   (dayData.meals||[]).forEach(function(m,mi){
     if(log.eaten&&log.eaten[mi]){cals+=m.calories||0;protein+=m.protein||0;carbs+=m.carbs||0;fat+=m.fat||0;}
   });
-  return{cals:cals,protein:protein,carbs:carbs,fat:fat,target:calc.target,targetProtein:calc.protein,targetCarbs:calc.carbs,targetFat:calc.fat};
+  return{cals:cals,protein:protein,carbs:carbs,fat:fat,target:targets.target,targetProtein:targets.protein,targetCarbs:targets.carbs,targetFat:targets.fat,offset:targets.offset};
 }
 
 function saveAllLogs(){
@@ -1907,6 +2390,8 @@ function saveAllLogs(){
     localStorage.setItem('rb_photo_logs',JSON.stringify(dash.photoLogs));
     localStorage.setItem('rb_workout_logs',JSON.stringify(dash.workoutLogs));
     localStorage.setItem('rb_measurements',JSON.stringify(dash.measurements));
+    localStorage.setItem('rb_cal_offset',String(dash.calOffset||0));
+    localStorage.setItem('rb_saved_meals',JSON.stringify(dash.savedMeals||[]));
   }catch(e){}
   syncClientData();
 }
@@ -1916,19 +2401,21 @@ function loadAllLogs(){
     'rb_nutrition_logs':'nutritionLogs','rb_water_logs':'waterLogs','rb_cardio_logs':'cardioLogs',
     'rb_sleep_logs':'sleepLogs','rb_morning_logs':'morningLogs','rb_meal_timings':'mealTimings',
     'rb_hunger':'hungerRatings','rb_session_logs':'sessionLogs','rb_alcohol':'alcoholLogs',
-    'rb_photo_logs':'photoLogs','rb_workout_logs':'workoutLogs','rb_measurements':'measurements'
+    'rb_photo_logs':'photoLogs','rb_workout_logs':'workoutLogs','rb_measurements':'measurements',
+    'rb_saved_meals':'savedMeals'
   };
   Object.keys(map).forEach(function(k){
     try{var v=localStorage.getItem(k);if(v)dash[map[k]]=JSON.parse(v);}catch(e){}
   });
+  try{var off=localStorage.getItem('rb_cal_offset');if(off!==null)dash.calOffset=parseInt(off)||0;}catch(e){}
 }
 
 // ── RING SVG ──────────────────────────────────────────────────────────────────
 function renderRing(pct,color,size){
-  size=size||52;var r=20,cx=size/2,cy=size/2,circ=2*Math.PI*r;
+  size=size||52;var r=Math.max(16,(size/2)-7),cx=size/2,cy=size/2,circ=2*Math.PI*r;
   return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'" style="transform:rotate(-90deg)" aria-hidden="true">'
-    +'<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="3.5"/>'
-    +'<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+color+'" stroke-width="3.5" '
+    +'<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="4"/>'
+    +'<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+color+'" stroke-width="4" '
     +'stroke-dasharray="'+(circ*Math.min(pct,1))+' '+circ+'" stroke-linecap="round"/>'
     +'</svg>';
 }
@@ -2104,14 +2591,153 @@ function generateInsights(){
 // ══════════════════════════════════════════════════════════════════════════
 // RENDER DASHBOARD
 // ══════════════════════════════════════════════════════════════════════════
+function getWeeklyCoachReview(weekIndex){
+  var wk=allWeeks[weekIndex]||{};
+  var plannedSessions=0,doneSessions=0,plannedMeals=0,eatenMeals=0,plannedCals=0,loggedCals=0;
+  (wk.trainingPlan||[]).forEach(function(day,di){
+    if(day.exercises&&day.exercises.length){
+      plannedSessions++;
+      if(dash.adherence['train-w'+weekIndex+'d'+di])doneSessions++;
+    }
+  });
+  (wk.mealPlan||[]).forEach(function(day,di){
+    var log=dash.nutritionLogs['w'+weekIndex+'d'+di]||{eaten:{}};
+    (day.meals||[]).forEach(function(meal,mi){
+      plannedMeals++;
+      plannedCals+=meal.calories||0;
+      if(log.eaten&&log.eaten[mi]){
+        eatenMeals++;
+        loggedCals+=meal.calories||0;
+      }
+    });
+  });
+  var adherence=plannedSessions?Math.round(doneSessions/plannedSessions*100):0;
+  var mealAdherence=plannedMeals?Math.round(eatenMeals/plannedMeals*100):0;
+  var calAdherence=plannedCals?Math.round(loggedCals/plannedCals*100):0;
+  var meas=dash.measurements[weekIndex]||{};
+  var prevMeas=dash.measurements[weekIndex-1]||{};
+  var weight=parseFloat(meas.weight||0)||0;
+  var prevWeight=parseFloat(prevMeas.weight||0)||0;
+  var weightDelta=(weight&&prevWeight)?Math.round((weight-prevWeight)*10)/10:null;
+  var sleepVals=[],energyVals=[],stressVals=[],volume=0,sets=0,bestSet=0,runPaces=[];
+  for(var di2=0;di2<7;di2++){
+    var dayKey2='w'+weekIndex+'d'+di2;
+    var sl=dash.sleepLogs[dayKey2];
+    if(sl&&sl.hours)sleepVals.push(parseFloat(sl.hours));
+    var ml=dash.morningLogs[dayKey2];
+    if(ml&&ml.energy)energyVals.push(parseFloat(ml.energy));
+    if(ml&&ml.stress)stressVals.push(parseFloat(ml.stress));
+    (dash.cardioLogs[dayKey2]||[]).forEach(function(log){
+      if((log.type||'').toLowerCase().indexOf('running')>=0&&log.distance&&log.duration){
+        runPaces.push(parseFloat(log.duration)/parseFloat(log.distance));
+      }
+    });
+  }
+  Object.keys(dash.workoutLogs).forEach(function(k){
+    if(k.indexOf('w'+weekIndex+'d')!==0)return;
+    (dash.workoutLogs[k]||[]).forEach(function(set){
+      var wt=parseFloat(set.weight||0)||0,reps=parseFloat(set.reps||0)||0;
+      if(wt||reps)sets++;
+      if(wt&&reps)volume+=wt*reps;
+      if(wt>bestSet)bestSet=wt;
+    });
+  });
+  function avg(vals){return vals.length?vals.reduce(function(a,b){return a+b;},0)/vals.length:null;}
+  var avgSleep=avg(sleepVals),avgEnergy=avg(energyVals),avgStress=avg(stressVals);
+  var bestPace=runPaces.length?Math.min.apply(null,runPaces):null;
+  var ci=dash.checkins[weekIndex]||{};
+  var readinessParts=[];
+  readinessParts.push(adherence);
+  readinessParts.push(mealAdherence||50);
+  readinessParts.push(avgSleep?Math.min(100,Math.round(avgSleep/8*100)):60);
+  readinessParts.push(avgEnergy?Math.round(avgEnergy/5*100):60);
+  readinessParts.push(avgStress?Math.max(20,Math.round((6-avgStress)/5*100)):60);
+  if(ci.energy)readinessParts.push(Math.round(ci.energy/5*100));
+  if(ci.sleep)readinessParts.push(Math.round(ci.sleep/5*100));
+  var readiness=Math.round(readinessParts.reduce(function(a,b){return a+b;},0)/readinessParts.length);
+  var actions=[];
+  if(adherence>=80)actions.push({level:'high',title:'Progress training load',body:'Adherence is strong. Next similar strength sessions should aim for a small lift: add 1 rep per set or 2.5kg where form stays clean.'});
+  else if(plannedSessions)actions.push({level:'medium',title:'Protect consistency first',body:'Training adherence is '+adherence+'%. Keep the same plan structure next week and prioritise completing the planned sessions before increasing volume.'});
+  if(mealAdherence>=80&&form.goal==='lose'&&weightDelta!==null&&weightDelta>-0.2)actions.push({level:'medium',title:'Tighten the calorie target',body:'Food logging is solid but weight has not moved much. Consider reducing the daily target by 100-150 kcal or adding 1,500-2,000 steps.'});
+  else if(mealAdherence>=80&&form.goal==='gain'&&weightDelta!==null&&weightDelta<0.2)actions.push({level:'medium',title:'Increase fuel slightly',body:'Logging is consistent but weight gain is slow. Add 150-200 kcal per day, preferably around training.'});
+  else if(mealAdherence<60)actions.push({level:'medium',title:'Improve nutrition signal',body:'Only '+mealAdherence+'% of planned meals are marked eaten. Aim for at least 80% logging so future calorie changes are based on useful data.'});
+  if(avgSleep&&avgSleep<6.5)actions.push({level:'low',title:'Prioritise recovery',body:'Average sleep is '+Math.round(avgSleep*10)/10+'h. Hold training intensity steady and move one hard session away from the poorest sleep night.'});
+  if(avgStress&&avgStress>=4)actions.push({level:'low',title:'Watch recovery pressure',body:'Stress is trending high. Keep the plan, but use lower RPE targets and extra warm-up work this week.'});
+  if(weightDelta===null)actions.push({level:'low',title:'Log weekly weight',body:'Add this week and last week weight measurements to unlock calorie adjustment advice.'});
+  if(sets>0)actions.push({level:'high',title:'Track overload from logged sets',body:'You have '+sets+' logged sets this week. Use the strongest clean set as the target to beat next time.'});
+  if(!actions.length)actions.push({level:'low',title:'Build the first data loop',body:'Complete a few workouts, mark meals eaten, and add sleep or weight data. ReBourne will turn that into a weekly adjustment.'});
+  return {readiness:readiness,adherence:adherence,mealAdherence:mealAdherence,calAdherence:calAdherence,weightDelta:weightDelta,avgSleep:avgSleep,avgEnergy:avgEnergy,avgStress:avgStress,volume:volume,sets:sets,bestSet:bestSet,bestPace:bestPace,actions:actions.slice(0,4)};
+}
+
+function getCalorieAdjustment(review){
+  if(!review||review.weightDelta===null||review.mealAdherence<80)return {delta:0,title:'',body:''};
+  if(form.goal==='lose'){
+    if(review.weightDelta>-0.2)return {delta:-150,title:'Adaptive calorie adjustment',body:'Food logging is consistent, but weight loss has stalled. Reduce the daily target slightly and reassess next week.'};
+    if(review.weightDelta<-1)return {delta:100,title:'Adaptive calorie adjustment',body:'Weight is dropping quickly. Add a small amount back to protect training performance and recovery.'};
+  }
+  if(form.goal==='gain'){
+    if(review.weightDelta<0.2)return {delta:150,title:'Adaptive calorie adjustment',body:'Logging is consistent, but gain is slow. Add calories around training to support muscle growth.'};
+    if(review.weightDelta>0.7)return {delta:-100,title:'Adaptive calorie adjustment',body:'Weight is rising quickly. Pull calories back slightly to keep the gain leaner.'};
+  }
+  if(form.goal==='maintain'&&Math.abs(review.weightDelta)>0.5){
+    return {delta:review.weightDelta>0?-100:100,title:'Adaptive calorie adjustment',body:'Weight is drifting away from maintenance. Use a small calorie correction and review again next week.'};
+  }
+  return {delta:0,title:'',body:''};
+}
+
+function renderWeeklyCoachReview(weekIndex){
+  var review=getWeeklyCoachReview(weekIndex);
+  var calRec=getCalorieAdjustment(review);
+  var weightTxt=review.weightDelta===null?'--':(review.weightDelta>0?'+':'')+review.weightDelta+'kg';
+  var sleepTxt=review.avgSleep?Math.round(review.avgSleep*10)/10+'h':'--';
+  var stressTxt=review.avgStress?Math.round(review.avgStress*10)/10+'/5':'--';
+  var html='<div class="coach-review-card">';
+  html+='<div class="coach-review-hd"><div><div class="coach-review-kicker">Weekly coach review</div><div class="coach-review-title">Week '+(weekIndex+1)+' adjustment signals</div></div>';
+  html+='<div class="coach-readiness"><div class="coach-readiness-val">'+review.readiness+'%</div><div class="coach-readiness-lbl">Ready</div></div></div>';
+  html+='<div class="coach-review-grid">';
+  html+='<div class="coach-review-stat"><div class="coach-review-stat-val">'+review.adherence+'%</div><div class="coach-review-stat-lbl">Training complete</div></div>';
+  html+='<div class="coach-review-stat"><div class="coach-review-stat-val">'+review.mealAdherence+'%</div><div class="coach-review-stat-lbl">Meals logged</div></div>';
+  html+='<div class="coach-review-stat"><div class="coach-review-stat-val">'+weightTxt+'</div><div class="coach-review-stat-lbl">Weight change</div></div>';
+  html+='<div class="coach-review-stat"><div class="coach-review-stat-val">'+sleepTxt+'</div><div class="coach-review-stat-lbl">Avg sleep</div></div>';
+  html+='<div class="coach-review-stat"><div class="coach-review-stat-val">'+stressTxt+'</div><div class="coach-review-stat-lbl">Stress</div></div>';
+  html+='<div class="coach-review-stat"><div class="coach-review-stat-val">'+(review.sets||0)+'</div><div class="coach-review-stat-lbl">Sets logged</div></div>';
+  html+='</div><div class="coach-action-list">';
+  review.actions.forEach(function(a){
+    html+='<div class="coach-action '+a.level+'"><div class="coach-action-dot"></div><div><div class="coach-action-title">'+a.title+'</div><div class="coach-action-body">'+a.body+'</div></div></div>';
+  });
+  if(calRec.delta&&calRec.delta!==dash.calOffset){
+    html+='<div class="coach-adjust-card"><div class="coach-adjust-title">'+calRec.title+'</div><div class="coach-adjust-body">'+calRec.body+'</div><div class="coach-adjust-actions">';
+    html+='<button class="coach-adjust-btn" id="apply-cal-adjust">Set '+(calRec.delta>0?'+':'')+calRec.delta+' kcal</button>';
+    if(dash.calOffset)html+='<button class="coach-adjust-btn coach-adjust-reset" id="reset-cal-adjust">Reset target</button>';
+    html+='</div></div>';
+  }else if(dash.calOffset){
+    html+='<div class="coach-adjust-card"><div class="coach-adjust-title">Adaptive target active</div><div class="coach-adjust-body">Your daily calorie target is currently adjusted by '+(dash.calOffset>0?'+':'')+dash.calOffset+' kcal from the original plan.</div><div class="coach-adjust-actions"><button class="coach-adjust-btn coach-adjust-reset" id="reset-cal-adjust">Reset target</button></div></div>';
+  }
+  html+='</div><div class="coach-review-foot">These recommendations use the data already logged in this plan. The more meals, workouts, sleep and measurements added, the sharper the weekly adjustment becomes.</div></div>';
+  return html;
+}
+
+function navIcon(k){
+  var common='<svg class="dbn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
+  var icons={
+    overview:'<path d="M4 19V5"/><path d="M4 19h16"/><path d="M8 16v-5"/><path d="M12 16V8"/><path d="M16 16v-3"/><path d="M20 16V6"/>',
+    today:'<path d="M4 10.5 12 4l8 6.5"/><path d="M6.5 10v9h11v-9"/><path d="M10 19v-5h4v5"/>',
+    nutrition:'<path d="M12 21c4-3.5 7-7 7-11a5 5 0 0 0-9-3 5 5 0 0 0-5 5c0 4 3 7 7 9Z"/><path d="M12 8c1.5 1.5 2 3 1.5 5"/>',
+    training:'<path d="M4 10v4"/><path d="M20 10v4"/><path d="M7 8v8"/><path d="M17 8v8"/><path d="M7 12h10"/>',
+    shopping:'<path d="M6 7h15l-2 8H8L6 7Z"/><path d="M6 7 5 4H3"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/>',
+    progress:'<path d="M4 18 9 13l3 3 8-9"/><path d="M15 7h5v5"/><path d="M4 5h6"/>'
+  };
+  return common+(icons[k]||icons.overview)+'</svg>';
+}
+
 function renderDashboard(container){
   var navItems=[
-    {k:'overview', icon:'ti-chart-bar',  l:'Overview'},
-    {k:'today',    icon:'ti-home',       l:'Today'},
-    {k:'nutrition',icon:'ti-salad',      l:'Food'},
-    {k:'training', icon:'ti-barbell',    l:'Train'},
-    {k:'shopping', icon:'ti-shopping-cart',l:'Shop'},
-    {k:'progress', icon:'ti-camera',     l:'Progress'}
+    {k:'overview', l:'Overview'},
+    {k:'today',    l:'Today'},
+    {k:'nutrition',l:'Food'},
+    {k:'training', l:'Train'},
+    {k:'shopping', l:'Shop'},
+    {k:'progress', l:'Progress'}
   ];
   var tabMeta={
     overview: {l:'Plan overview', sub:form.planWeeks+'-week '+planLabel2()},
@@ -2141,7 +2767,7 @@ function renderDashboard(container){
   html+='<nav class="dash-bottom-nav" aria-label="Dashboard navigation">';
   navItems.forEach(function(n){
     html+='<button class="dbn'+(dash.tab===n.k?' active':'')+'" id="dbn-'+n.k+'">'
-      +'<i class="ti '+n.icon+'" aria-hidden="true"></i>'
+      +navIcon(n.k)
       +'<span>'+n.l+'</span>'
       +'</button>';
   });
@@ -2176,6 +2802,8 @@ function renderOverviewTab(){
   var totalPlanCals=0;
   allWeeks.forEach(function(wk){(wk.mealPlan||[]).forEach(function(d){(d.meals||[]).forEach(function(m){totalPlanCals+=m.calories||0;});});});
   var avgDailyCals=totalDays>0?Math.round(totalPlanCals/totalDays):calc.target;
+  var targets=getNutritionTargets();
+  var targetBadge=targets.offset?'<span class="target-offset-pill">'+(targets.offset>0?'+':'')+targets.offset+' adaptive</span>':'';
 
   // Coach note
   if(allWeeks[0]&&allWeeks[0].coachNotes){
@@ -2186,48 +2814,49 @@ function renderOverviewTab(){
   // Key metrics grid
   html+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px">';
   [
-    {l:'Daily target',v:calc.target.toLocaleString(),u:'kcal',hi:true},
-    {l:'Protein',v:calc.protein+'g',u:'per day',hi:false},
-    {l:'Programme',v:form.planWeeks+'wk',u:planLabel2(),hi:false},
-    {l:'Training days',v:form.trainingDays,u:'per week',hi:false},
-    {l:'Step goal',v:Number(form.steps).toLocaleString(),u:'per day',hi:false},
-    {l:'Plan price',v:formatPrice(getPlanPrice(form.planType,form.planWeeks)),u:'one-off',hi:false}
+    {l:'Daily target',v:targets.target.toLocaleString(),u:'kcal',hi:true,icon:'&#9889;',m:100},
+    {l:'Protein',v:targets.protein+'g',u:'per day',hi:false,icon:'&#9670;',m:Math.min(targets.protein/180*100,100)},
+    {l:'Programme',v:form.planWeeks+'wk',u:planLabel2(),hi:false,icon:'&#9673;',m:Math.min(form.planWeeks/12*100,100)},
+    {l:'Training days',v:form.trainingDays,u:'per week',hi:false,icon:'&#9878;',m:Math.min(parseInt(form.trainingDays)/7*100,100)},
+    {l:'Step goal',v:Number(form.steps).toLocaleString(),u:'per day',hi:false,icon:'&#8599;',m:Math.min(parseInt(form.steps)/12000*100,100)},
+    {l:'Plan price',v:formatPrice(getPlanPrice(form.planType,form.planWeeks)),u:'one-off',hi:false,icon:'&#163;',m:Math.min(getPlanPrice(form.planType,form.planWeeks)/109*100,100)}
   ].forEach(function(s){
-    html+='<div class="ov-card'+(s.hi?' hi':'')+'"><div class="ov-val">'+s.v+'</div><div class="ov-lbl">'+s.l+'</div>'
-      +'<div style="font-size:10px;color:'+(s.hi?'rgba(255,255,255,.6)':'var(--muted)')+'">'+s.u+'</div></div>';
+    html+='<div class="ov-card'+(s.hi?' hi':'')+'"><div class="ov-icon">'+s.icon+'</div><div class="ov-val">'+s.v+'</div><div class="ov-lbl">'+s.l+(s.l==='Daily target'?targetBadge:'')+'</div>'
+      +'<div style="font-size:10px;color:'+(s.hi?'rgba(255,255,255,.6)':'var(--muted)')+'">'+s.u+'</div>'
+      +'<div class="ov-meter"><div class="ov-meter-fill" style="width:'+Math.round(s.m)+'%"></div></div></div>';
   });
   html+='</div>';
 
   // Macro donut
-  html+='<div class="chart-wrap"><div class="chart-title">Macro split</div>';
-  var p=calc.protein*4,c=calc.carbs*4,f=calc.fat*9,tot=p+c+f||1;
-  var donutSvg='<svg viewBox="0 0 120 120" width="120" height="120" aria-label="Macro split donut chart">';
+  html+='<div class="chart-wrap macro-card"><div class="chart-title">Macro split</div>';
+  var p=targets.protein*4,c=targets.carbs*4,f=targets.fat*9,tot=p+c+f||1;
+  var pPct=Math.round(p/tot*100),cPct=Math.round(c/tot*100),fPct=100-pPct-cPct;
+  var donutSvg='<svg class="macro-donut" viewBox="0 0 120 120" aria-label="Macro split donut chart">';
   donutSvg+=renderDonut([
-    {val:p,color:'#3A5F96'},{val:c,color:'#4ECCA3'},{val:f,color:'#7E98BC'}
-  ],60,60,48,18);
-  donutSvg+='<text x="60" y="56" text-anchor="middle" font-size="13" font-weight="700" fill="#F0F4FF" font-family="inherit">'+calc.target.toLocaleString()+'</text>';
-  donutSvg+='<text x="60" y="70" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.4)" font-family="inherit">kcal/day</text>';
+    {val:p,color:'#5B7DB5'},{val:c,color:'#C9A96E'},{val:f,color:'#7E98BC'}
+  ],60,60,50,20);
+  donutSvg+='<text x="60" y="55" text-anchor="middle" font-size="14" font-weight="800" fill="#F0F4FF" font-family="inherit">'+targets.target.toLocaleString()+'</text>';
+  donutSvg+='<text x="60" y="70" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.48)" font-family="inherit">kcal/day</text>';
   donutSvg+='</svg>';
-  html+='<div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">'+donutSvg;
-  html+='<div style="flex:1"><div style="display:flex;flex-direction:column;gap:8px">';
-  [{l:'Protein',v:calc.protein+'g',p:Math.round(p/tot*100),c:'#3A5F96'},
-   {l:'Carbs',v:calc.carbs+'g',p:Math.round(c/tot*100),c:'#4ECCA3'},
-   {l:'Fat',v:calc.fat+'g',p:Math.round(f/tot*100),c:'#7E98BC'}
+  html+='<div class="macro-layout">'+donutSvg;
+  html+='<div class="macro-list">';
+  [{l:'Protein',v:targets.protein+'g',p:pPct,c:'#5B7DB5'},
+   {l:'Carbs',v:targets.carbs+'g',p:cPct,c:'#C9A96E'},
+   {l:'Fat',v:targets.fat+'g',p:fPct,c:'#7E98BC'}
   ].forEach(function(m){
-    html+='<div style="display:flex;align-items:center;gap:8px;font-size:12px">'
-      +'<div style="width:10px;height:10px;border-radius:2px;background:'+m.c+';flex-shrink:0"></div>'
-      +'<span style="color:var(--silver);flex:1">'+m.l+'</span>'
-      +'<span style="font-weight:600;color:var(--white)">'+m.v+'</span>'
-      +'<span style="color:var(--muted);width:32px;text-align:right">'+m.p+'%</span>'
+    html+='<div class="macro-row">'
+      +'<div class="macro-dot" style="background:'+m.c+'"></div>'
+      +'<div class="macro-name">'+m.l+'</div>'
+      +'<div class="macro-value">'+m.v+'</div>'
+      +'<div class="macro-percent">'+m.p+'%</div>'
+      +'<div class="macro-track"><div class="macro-fill" style="width:'+m.p+'%;background:'+m.c+'"></div></div>'
       +'</div>';
   });
-  html+='</div></div></div></div>';
+  html+='</div></div></div>';
 
   // Training adherence
-  html+='<div class="chart-wrap"><div class="chart-title"><span>Training adherence</span><span class="chart-badge" style="'+(adhPct>=70?'color:var(--green);background:rgba(78,204,163,.1)':'color:var(--gold);background:rgba(201,169,110,.1)')+'">'+adhPct+'% complete</span></div>';
-  html+='<div style="height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;margin-bottom:8px"><div style="height:100%;width:'+adhPct+'%;background:'+(adhPct>=70?'var(--green)':'var(--steel2)')+';border-radius:3px;transition:width .8s"></div></div>';
-  html+='<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted)"><span>'+doneSessions+' sessions completed</span><span>'+totalSessions+' total sessions</span></div>';
-  html+='</div>';
+  html+='<div class="adh-wheel-card"><div class="ring">'+renderRing(adhPct/100,adhPct>=70?'var(--green)':'var(--gold)',76)+'<div class="ring-label">'+adhPct+'%</div></div>';
+  html+='<div><div class="adh-wheel-title">Training adherence</div><div class="adh-wheel-sub">'+doneSessions+' of '+totalSessions+' sessions completed. This wheel updates as users mark workouts complete.</div></div></div>';
 
   // Weekly calorie adherence chart
   var calData=[];
@@ -2242,7 +2871,7 @@ function renderOverviewTab(){
   if(calData.length>0){
     html+='<div class="chart-wrap"><div class="chart-title">Calories logged per day</div>';
     html+=renderBarChart(calData,'val','day','#3A5F96');
-    html+='<div style="font-size:11px;color:var(--muted);margin-top:6px">Target: '+calc.target.toLocaleString()+' kcal/day</div></div>';
+    html+='<div style="font-size:11px;color:var(--muted);margin-top:6px">Target: '+targets.target.toLocaleString()+' kcal/day</div></div>';
   }
 
   // Weight trend chart
@@ -2275,11 +2904,13 @@ function renderOverviewTab(){
 
   // Supplements
   html+='<div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--steel3);margin:20px 0 12px;display:flex;align-items:center;gap:9px">Supplements<div style="flex:1;height:1px;background:var(--border)"></div></div>';
+  html+='<div class="supp-compact-grid">';
   getSupplements().forEach(function(s){
-    html+='<div class="supp-card"><div class="supp-icon">'+s.icon+'</div><div><div class="supp-name">'+s.name+'</div><div class="supp-desc">'+s.desc+'</div><div class="supp-dose">'+s.dose+'</div></div></div>';
+    html+='<div class="supp-compact"><div class="supp-compact-icon">'+s.icon+'</div><div><div class="supp-compact-name">'+s.name+'</div><div class="supp-compact-dose">'+s.dose+'</div></div></div>';
   });
+  html+='</div>';
 
-  html+='<div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap">';
+  html+='<div class="ov-actions">';
   html+='<button class="dl-btn-sm" id="ov-dl">&#11015; Download programme</button>';
   html+='<button class="reset-btn" id="ov-reset">Start new plan</button>';
   html+='</div>';
@@ -2310,30 +2941,29 @@ function renderTodayTab(){
   html+='</div>';
 
   // Progress rings
+  var fibreTarget=30;
+  var fibreLogged=nutri.cals>0?Math.min(fibreTarget,Math.round(nutri.carbs*0.12)):0;
+  var wk=allWeeks[dash.week]||{},dayData=(wk.mealPlan||[])[dash.day]||{meals:[]};
+  var totalMeals=(dayData.meals||[]).length,eatenMeals=0;
+  (dayData.meals||[]).forEach(function(m,mi){if(nLog.eaten&&nLog.eaten[mi])eatenMeals++;});
   html+='<div class="today-section"><div class="today-section-hd">Today at a glance</div>';
-  html+='<div class="ring-row">';
-  [{title:'Calories',sub:nutri.cals+' / '+nutri.target,pct:calPct,col:'#3A5F96'},
-   {title:'Water',   sub:water+'ml / '+wGoal+'ml',       pct:wPct,  col:'#7E98BC'},
-   {title:'Steps',   sub:(parseInt(todayMeas.steps||0)||'—')+' / '+stepGoal.toLocaleString(),pct:stepPct,col:'#C9A96E'}
+  html+='<div class="today-glance-panel">';
+  html+='<div class="today-glance-top">';
+  html+='<div class="today-hero"><div class="today-hero-title">Nutrition progress</div><div class="today-hero-main">'+Math.round(calPct*100)+'%</div><div class="today-hero-sub">'+nutri.cals+' of '+nutri.target+' kcal logged today.</div></div>';
+  html+='<div class="today-target-card"><div class="ring">'+renderRing(calPct,'#3A5F96',72)+'<div class="ring-label">'+Math.round(calPct*100)+'%</div></div><div><div class="macro-ring-title">Calorie target</div><div class="macro-ring-sub">'+nutri.cals+' / '+nutri.target+' kcal<br>Meal cards update this panel.</div></div></div>';
+  html+='</div>';
+  html+='<div class="macro-ring-grid">';
+  [{title:'Protein', sub:nutri.protein+'g / '+nutri.targetProtein+'g',pct:nutri.targetProtein?Math.min(nutri.protein/nutri.targetProtein,1):0,col:'#5B7DB5',cls:''},
+   {title:'Carbs',   sub:nutri.carbs+'g / '+nutri.targetCarbs+'g',pct:nutri.targetCarbs?Math.min(nutri.carbs/nutri.targetCarbs,1):0,col:'#4ECCA3',cls:''},
+   {title:'Fats',    sub:nutri.fat+'g / '+nutri.targetFat+'g',pct:nutri.targetFat?Math.min(nutri.fat/nutri.targetFat,1):0,col:'#7E98BC',cls:''},
+   {title:'Fibre',   sub:fibreLogged+'g / '+fibreTarget+'g',pct:Math.min(fibreLogged/fibreTarget,1),col:'#C9A96E',cls:''},
+   {title:'Meals',   sub:eatenMeals+' / '+totalMeals+' eaten',pct:totalMeals?Math.min(eatenMeals/totalMeals,1):0,col:'#4ECCA3',cls:''},
+   {title:'Steps',   sub:(parseInt(todayMeas.steps||0)||'?')+' / '+stepGoal.toLocaleString(),pct:stepPct,col:'#8B5CF6',cls:''}
   ].forEach(function(r){
-    html+='<div class="ring-card"><div class="ring">'+renderRing(r.pct,r.col,48)+'<div class="ring-label">'+Math.round(r.pct*100)+'%</div></div>';
-    html+='<div><div class="ring-info-title">'+r.title+'</div><div class="ring-info-sub">'+r.sub+'</div></div></div>';
+    html+='<div class="macro-ring-card'+r.cls+'"><div class="ring">'+renderRing(r.pct,r.col,54)+'<div class="ring-label">'+Math.round(r.pct*100)+'%</div></div>';
+    html+='<div><div class="macro-ring-title">'+r.title+'</div><div class="macro-ring-sub">'+r.sub+'</div></div></div>';
   });
-  html+='</div></div>';
-
-  // Macro bars
-  html+='<div class="today-section"><div class="today-section-hd">Macros</div>';
-  html+='<div class="mb-card">';
-  [{l:'Protein',v:nutri.protein,t:nutri.targetProtein,c:'#3A5F96'},
-   {l:'Carbs',  v:nutri.carbs,  t:nutri.targetCarbs,  c:'#4ECCA3'},
-   {l:'Fat',    v:nutri.fat,    t:nutri.targetFat,    c:'#7E98BC'}
-  ].forEach(function(m){
-    var p=m.t>0?Math.min(m.v/m.t,1):0;
-    html+='<div class="mb-row"><div class="mb-label" style="color:'+m.c+'">'+m.l+'</div>';
-    html+='<div class="mb-track"><div class="mb-fill" style="width:'+Math.round(p*100)+'%;background:'+m.c+'"></div></div>';
-    html+='<div class="mb-num">'+m.v+'g / '+m.t+'g</div></div>';
-  });
-  html+='</div></div>';
+  html+='</div></div></div>';
 
   // Compact water tracker
   html+='<div class="today-section"><div class="today-section-hd">Hydration</div>';
@@ -2358,15 +2988,21 @@ function renderTodayTab(){
 
   // Meals
   html+='<div class="today-section"><div class="today-section-hd">Meals <span style="font-size:10px;font-weight:400;color:var(--muted);letter-spacing:0;text-transform:none">tap to mark eaten</span></div>';
-  var wk=allWeeks[dash.week]||{},dayData=(wk.mealPlan||[])[dash.day]||{meals:[]};
+  html+='<button class="quick-add-meal" id="today-add-meal">+ Add meal manually</button>';
   html+='<div style="display:flex;flex-direction:column;gap:7px">';
   (dayData.meals||[]).forEach(function(m,mi){
     var eaten=nLog.eaten&&nLog.eaten[mi];
+    var mealKey='w'+dash.week+'d'+dash.day+'m'+mi;
+    var isSwapping=dash.swapLoading&&dash.swapLoading[mealKey];
     html+='<div class="meal-card'+(eaten?' eaten':'')+'" id="eat-'+key+'-'+mi+'">';
     html+='<div class="meal-card-top"><div><div class="meal-card-type">'+m.type+'</div>';
     html+='<div class="meal-card-name" style="'+(eaten?'text-decoration:line-through;color:var(--muted)':'')+'">'+m.name+'</div>';
     html+='<div class="meal-card-macros">P:'+m.protein+'g &middot; C:'+m.carbs+'g &middot; F:'+m.fat+'g</div></div>';
     html+='<div style="text-align:right;flex-shrink:0;margin-left:12px"><div style="font-size:15px;font-weight:700;color:'+(eaten?'var(--green)':'var(--white)')+'">'+m.calories+'</div><div style="font-size:9px;color:var(--muted)">kcal</div></div></div>';
+    html+='<div class="meal-card-actions">';
+    html+='<button class="meal-action-btn meal-action-recipe" id="today-recipe-'+mealKey+'">&#128196; Recipe</button>';
+    html+='<button class="meal-action-btn meal-action-swap'+(isSwapping?' loading':'')+'" id="today-swap-'+mealKey+'">'+(isSwapping?'&#8635; Swapping...':'&#8635; Swap')+'</button>';
+    html+='</div>';
     html+='</div>';
   });
   html+='</div></div>';
@@ -2419,6 +3055,16 @@ function renderTodayTab(){
   html+='<div class="today-section" style="margin-top:4px"><div class="today-section-hd">Morning check-in</div>';
   var ml=dash.morningLogs[key]||{rhr:'',soreness:0,energy:0,stress:0,supplements:{}};
   html+='<div class="morning-card">';
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">';
+  html+='<div><div style="font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--silver);margin-bottom:6px">&#9829; Resting heart rate</div>';
+  html+='<div style="display:flex;align-items:center;gap:8px"><input type="number" class="rhr-input" id="rhr-input" value="'+(ml.rhr||'')+'" placeholder="60" style="width:82px;padding:9px;border:1px solid var(--border2);border-radius:var(--r);background:rgba(13,21,37,.8);color:var(--white);font-family:inherit;font-size:18px;font-weight:700;outline:none;text-align:center"><span style="font-size:11px;color:var(--muted)">bpm</span></div></div>';
+  html+='<div class="slider-metric"><div class="slider-top"><div class="slider-title">&#9889; Energy</div><div class="slider-value" id="eng-val">'+(ml.energy||3)+'/5</div></div><input type="range" min="1" max="5" step="1" value="'+(ml.energy||3)+'" class="wellness-slider" id="eng-slider"></div>';
+  html+='</div>';
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">';
+  html+='<div class="slider-metric"><div class="slider-top"><div class="slider-title">&#9670; Soreness</div><div class="slider-value" id="sor-val">'+(ml.soreness||3)+'/5</div></div><input type="range" min="1" max="5" step="1" value="'+(ml.soreness||3)+'" class="wellness-slider" id="sor-slider"></div>';
+  html+='<div class="slider-metric"><div class="slider-top"><div class="slider-title">&#9673; Stress</div><div class="slider-value" id="str-val">'+(ml.stress||3)+'/5</div></div><input type="range" min="1" max="5" step="1" value="'+(ml.stress||3)+'" class="wellness-slider" id="str-slider"></div>';
+  html+='</div>';
+  html+='<div style="display:none">';
   html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">';
   // RHR
   html+='<div><div style="font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--silver);margin-bottom:6px">💓 Resting heart rate</div>';
@@ -2439,6 +3085,7 @@ function renderTodayTab(){
   html+='<div style="display:flex;gap:4px">';
   [1,2,3,4,5].forEach(function(v){html+='<button class="metric-btn'+(ml.stress===v?(v>=4?' sel-red':v>=3?' sel-gold':' sel-green'):'')+'" id="str-'+v+'" style="flex:1;padding:7px 2px;font-size:10px">'+v+'</button>';});
   html+='</div></div></div>';
+  html+='</div>';
   html+='<button class="log-btn" id="save-morning">Save check-in</button>';
   html+='</div></div>';
   return html;
@@ -2449,6 +3096,7 @@ function renderTodayTab(){
 // ══════════════════════════════════════════════════════════════════════════
 function renderNutritionTab(){
   var html='';
+  var targets=getNutritionTargets();
   var wk=allWeeks[dash.week]||{};
   var dayData=(wk.mealPlan||[])[dash.day]||{meals:[]};
   var dayTotal=(dayData.meals||[]).reduce(function(s,m){return s+(m.calories||0);},0);
@@ -2457,8 +3105,10 @@ function renderNutritionTab(){
   html+='</div><div class="day-nav">';
   DAYS.forEach(function(d,i){html+='<button class="day-btn'+(dash.day===i?' active':'')+'" id="nday-'+i+'">'+d.slice(0,3)+'</button>';});
   html+='</div>';
-  var pct=calc.target>0?Math.min(Math.round(dayTotal/calc.target*100),100):0;
-  html+='<div class="meal-day-total"><span>'+( dayData.day||'')+' &mdash; '+dayTotal+' kcal</span><span style="color:'+(Math.abs(dayTotal-calc.target)<50?'var(--green)':'var(--steel2)')+'">'+pct+'% of target</span></div>';
+  var pct=targets.target>0?Math.min(Math.round(dayTotal/targets.target*100),100):0;
+  var addMealButton='<button class="quick-add-meal" id="nutrition-add-meal">+ Add meal manually</button>';
+  html+=addMealButton;
+  html+='<div class="meal-day-total"><span>'+( dayData.day||'')+' &mdash; '+dayTotal+' kcal</span><span style="color:'+(Math.abs(dayTotal-targets.target)<50?'var(--green)':'var(--steel2)')+'">'+pct+'% of target'+(targets.offset?' · '+(targets.offset>0?'+':'')+targets.offset+' kcal':'')+'</span></div>';
   (dayData.meals||[]).forEach(function(m,mi){
     var key='w'+dash.week+'d'+dash.day+'m'+mi;
     var isSwapping=dash.swapLoading&&dash.swapLoading[key];
@@ -2484,13 +3134,122 @@ function getTrainingType(day){
   return d?d.type:'';
 }
 
-function getPersonalBestForEx(exName){
-  var best=0;
-  Object.keys(dash.workoutLogs).forEach(function(key){
-    var logs=dash.workoutLogs[key];
-    if(logs) logs.forEach(function(s){if(parseFloat(s.weight||0)>best)best=parseFloat(s.weight);});
+function cleanExerciseName(ex){
+  return (ex||'')
+    .split('\u2014')[0]
+    .split('\u2013')[0]
+    .split('(')[0]
+    .replace(/\b\d+\s*x\s*\d+\b/ig,'')
+    .replace(/\bRPE\s*\d+\b/ig,'')
+    .replace(/[^a-z0-9 ]/ig,' ')
+    .replace(/\s+/g,' ')
+    .trim()
+    .toLowerCase();
+}
+
+function parseRepTarget(ex){
+  var txt=ex||'';
+  var range=txt.match(/x\s*(\d+)\s*[-–]\s*(\d+)/i);
+  if(range)return parseInt(range[2]);
+  var single=txt.match(/x\s*(\d+)/i);
+  if(single)return parseInt(single[1]);
+  return 8;
+}
+
+function parseWorkoutKey(key){
+  var m=key.match(/w(\d+)d(\d+)ex(\d+)/);
+  return m?{week:parseInt(m[1]),day:parseInt(m[2]),exercise:parseInt(m[3]),order:parseInt(m[1])*7+parseInt(m[2])}:null;
+}
+
+function setScore(set){
+  var wt=parseFloat(set.weight||0)||0,reps=parseFloat(set.reps||0)||0;
+  if(!wt&&!reps)return 0;
+  return wt*(1+(reps/30));
+}
+
+function bestSetFromLogs(logs){
+  var best=null;
+  (logs||[]).forEach(function(set){
+    var wt=parseFloat(set.weight||0)||0,reps=parseFloat(set.reps||0)||0;
+    if(!wt&&!reps)return;
+    var candidate={weight:wt,reps:reps,score:setScore(set)};
+    if(!best||candidate.score>best.score)best=candidate;
   });
   return best;
+}
+
+function getExerciseHistory(ex,currentKey){
+  var name=cleanExerciseName(ex);
+  var current=parseWorkoutKey(currentKey)||{order:9999};
+  var history=[];
+  Object.keys(dash.workoutLogs).forEach(function(key){
+    var parsed=parseWorkoutKey(key);
+    if(!parsed||parsed.order>current.order||key===currentKey)return;
+    var logs=dash.workoutLogs[key]||[];
+    var loggedName=cleanExerciseName((logs[0]&&logs[0].exercise)||'');
+    if(!loggedName||loggedName!==name)return;
+    var best=bestSetFromLogs(logs);
+    if(best)history.push({key:key,week:parsed.week,day:parsed.day,order:parsed.order,best:best,logs:logs});
+  });
+  history.sort(function(a,b){return a.order-b.order;});
+  return history;
+}
+
+function getProgressiveTarget(ex,currentKey){
+  var history=getExerciseHistory(ex,currentKey);
+  var repTarget=parseRepTarget(ex);
+  var last=history.length?history[history.length-1]:null;
+  var best=null;
+  history.forEach(function(h){if(!best||h.best.score>best.score)best=h.best;});
+  if(!last){
+    return {status:'empty',last:null,best:null,historyCount:0,target:'Log a baseline today',note:'Record clean working sets. ReBourne will use these to suggest the next progression.'};
+  }
+  var lastBest=last.best;
+  var suggestedWeight=lastBest.weight;
+  var suggestedReps=lastBest.reps;
+  var status='progress';
+  var target='';
+  var note='';
+  if(lastBest.weight&&lastBest.reps>=repTarget){
+    suggestedWeight=Math.round((lastBest.weight+2.5)*2)/2;
+    suggestedReps=Math.max(1,repTarget-1);
+    target='Aim for '+suggestedWeight+'kg x '+suggestedReps+'-'+repTarget;
+    note='You hit the top end last time, so the next clean step is a small load increase.';
+  }else if(lastBest.weight){
+    suggestedReps=lastBest.reps+1;
+    target='Repeat '+lastBest.weight+'kg and aim for '+suggestedReps+' reps';
+    note='Build reps before adding load. Move up once you can hit '+repTarget+' clean reps.';
+  }else{
+    target='Beat last session by 1 clean rep';
+    note='No load was logged, so progression is based on reps for now.';
+  }
+  if(history.length>=2){
+    var prev=history[history.length-2].best;
+    var flat=Math.abs(lastBest.score-prev.score)<1;
+    if(flat){
+      status='hold';
+      note='Progress has been flat across the last two logs. Keep the target controlled and focus on form, tempo and full range.';
+    }
+  }
+  return {status:status,last:lastBest,best:best,historyCount:history.length,target:target,note:note};
+}
+
+function renderOverloadPanel(ex,currentKey){
+  var o=getProgressiveTarget(ex,currentKey);
+  if(o.status==='empty'){
+    return '<div class="overload-panel empty"><div class="overload-top"><div class="overload-title">Progressive overload</div><div class="overload-badge">Baseline</div></div><div class="overload-target"><strong>'+o.target+'</strong></div><div class="overload-note">'+o.note+'</div></div>';
+  }
+  var lastTxt=o.last.weight?o.last.weight+'kg x '+o.last.reps:o.last.reps+' reps';
+  var bestTxt=o.best&&o.best.weight?o.best.weight+'kg x '+o.best.reps:'--';
+  var trendTxt=o.historyCount+' log'+(o.historyCount===1?'':'s');
+  var badge=o.status==='hold'?'Hold':'Progress';
+  var html='<div class="overload-panel"><div class="overload-top"><div class="overload-title">Progressive overload</div><div class="overload-badge '+o.status+'">'+badge+'</div></div>';
+  html+='<div class="overload-grid">';
+  html+='<div class="overload-stat"><div class="overload-stat-val">'+lastTxt+'</div><div class="overload-stat-lbl">Last best set</div></div>';
+  html+='<div class="overload-stat"><div class="overload-stat-val">'+bestTxt+'</div><div class="overload-stat-lbl">Exercise PB</div></div>';
+  html+='<div class="overload-stat"><div class="overload-stat-val">'+trendTxt+'</div><div class="overload-stat-lbl">History</div></div>';
+  html+='</div><div class="overload-target"><strong>Today:</strong> '+o.target+'</div><div class="overload-note">'+o.note+'</div></div>';
+  return html;
 }
 
 function saveWorkoutLogs(){
@@ -2512,6 +3271,11 @@ function renderTrainingTab(){
   var wk=allWeeks[dash.week]||{};
   var dayData=(wk.trainingPlan||[])[dash.day]||{};
   var isRest=!dayData.exercises||!dayData.exercises.length;
+  var weekSessions=(wk.trainingPlan||[]).filter(function(d){return d.exercises&&d.exercises.length;}).length;
+  var doneThisWeek=0;for(var ad=0;ad<7;ad++){if(dash.adherence['train-w'+dash.week+'d'+ad])doneThisWeek++;}
+  html+='<div class="training-hero"><div class="training-hero-title">'+(isRest?'Recovery day':(dayData.type||'Training'))+'</div>';
+  html+='<div class="training-hero-sub">Week '+(dash.week+1)+' &bull; '+(dayData.day||DAYS[dash.day])+' &bull; '+doneThisWeek+' of '+weekSessions+' sessions complete</div>';
+  html+='<div class="training-hero-tags"><span class="training-tag">'+(form.planType||'Programme')+'</span><span class="training-tag">'+(dayData.focus||'Log sets and mark complete')+'</span></div></div>';
   html+='<div class="week-nav">';
   allWeeks.forEach(function(w,i){html+='<button class="week-btn'+(dash.week===i?' active':'')+'" id="twk-'+i+'">Week '+(i+1)+'</button>';});
   html+='</div><div class="day-nav">';
@@ -2539,6 +3303,7 @@ function renderTrainingTab(){
     html+='<div class="ex-row"><span class="ex-num">'+(ei+1)+'</span>';
     html+='<div style="flex:1"><div style="font-size:12px;color:var(--white);font-weight:500;margin-bottom:3px">'+ex+'</div>';
     html+='<a href="'+ytUrl+'" target="_blank" rel="noopener" style="font-size:10px;color:var(--steel2);text-decoration:none">&#9654; Watch tutorial</a>';
+    html+=renderOverloadPanel(ex,exKey);
     html+='<div class="ex-log-wrap"><div class="ex-log-title">Log your sets</div>';
     logs.forEach(function(set,si){
       html+='<div class="set-row"><span class="set-num">Set '+(si+1)+'</span>';
@@ -2606,6 +3371,39 @@ function renderShoppingTab(){
 // ══════════════════════════════════════════════════════════════════════════
 function renderProgressTab(){
   var html='';
+  var totalSessions=0,doneSessions=0;
+  allWeeks.forEach(function(wk,wi){
+    (wk.trainingPlan||[]).forEach(function(day,di){
+      if(day.exercises&&day.exercises.length){totalSessions++;if(dash.adherence['train-w'+wi+'d'+di])doneSessions++;}
+    });
+  });
+  var adhPct=totalSessions?Math.round(doneSessions/totalSessions*100):0;
+  var loggedSets=0,bestWeight=0;
+  Object.keys(dash.workoutLogs).forEach(function(k){
+    (dash.workoutLogs[k]||[]).forEach(function(set){
+      if(set.weight||set.reps)loggedSets++;
+      bestWeight=Math.max(bestWeight,parseFloat(set.weight||0)||0);
+    });
+  });
+  var runCount=0,bestPace=null;
+  Object.keys(dash.cardioLogs).forEach(function(k){
+    (dash.cardioLogs[k]||[]).forEach(function(log){
+      if((log.type||'').toLowerCase().indexOf('running')>=0&&log.distance&&log.duration){
+        runCount++;
+        var pace=parseFloat(log.duration)/parseFloat(log.distance);
+        if(!bestPace||pace<bestPace)bestPace=pace;
+      }
+    });
+  });
+  var paceTxt=bestPace?Math.floor(bestPace)+':'+String(Math.round((bestPace%1)*60)).padStart(2,'0'):'--';
+  html+='<div class="progress-hero"><div class="progress-hero-title">Progress</div><div class="progress-hero-sub">Training, nutrition and performance trends in one place.</div><div class="training-hero-tags"><span class="training-tag">'+doneSessions+' workouts complete</span><span class="training-tag">'+loggedSets+' sets logged</span><span class="training-tag">'+runCount+' runs tracked</span></div></div>';
+  html+='<div class="performance-grid">';
+  html+='<div class="performance-card"><div class="performance-val">'+adhPct+'%</div><div class="performance-lbl">Adherence</div><div class="performance-sub">'+doneSessions+' of '+totalSessions+' planned sessions complete.</div></div>';
+  html+='<div class="performance-card"><div class="performance-val">'+(bestWeight?bestWeight+'kg':'--')+'</div><div class="performance-lbl">Strength peak</div><div class="performance-sub">Highest logged set weight. This will surface lift progress.</div></div>';
+  html+='<div class="performance-card"><div class="performance-val">'+paceTxt+'</div><div class="performance-lbl">Best run pace</div><div class="performance-sub">'+(bestPace?'min/km from logged runs.':'Log running distance and time to track pace.')+'</div></div>';
+  html+='<div class="performance-card"><div class="performance-val">'+loggedSets+'</div><div class="performance-lbl">Workout volume</div><div class="performance-sub">Logged strength sets across the programme.</div></div>';
+  html+='</div>';
+  html+=renderWeeklyCoachReview(dash.week);
   // Adherence
   html+='<div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--steel3);margin-bottom:14px;display:flex;align-items:center;gap:9px">Training adherence<div style="flex:1;height:1px;background:var(--border)"></div></div>';
   allWeeks.forEach(function(wk,wi){
@@ -2688,16 +3486,24 @@ function bindDashTab(){
   // Today
   if(dash.tab==='today'){
     var key2=dayKey();
+    bnd('today-add-meal',function(){showAddMealModal();});
     allWeeks.forEach(function(w,i){bnd('tdwk-'+i,function(){dash.week=i;dash.day=0;renderDashboard(g('app'));});});
     DAYS.forEach(function(d,i){bnd('tdday-'+i,function(){dash.day=i;renderDashboard(g('app'));});});
     var wk2=allWeeks[dash.week]||{},dm=(wk2.mealPlan||[])[dash.day]||{meals:[]};
     (dm.meals||[]).forEach(function(m,mi){
-      bnd('eat-'+key2+'-'+mi,function(){
+      bnd('eat-'+key2+'-'+mi,function(ev){
+        if(ev&&ev.target&&ev.target.closest&&ev.target.closest('button'))return;
         if(!dash.nutritionLogs[key2])dash.nutritionLogs[key2]={eaten:{}};
         if(!dash.nutritionLogs[key2].eaten)dash.nutritionLogs[key2].eaten={};
         dash.nutritionLogs[key2].eaten[mi]=!dash.nutritionLogs[key2].eaten[mi];
         saveAllLogs();renderDashboard(g('app'));
       });
+      var todayMealKey='w'+dash.week+'d'+dash.day+'m'+mi;
+      bnd('today-recipe-'+todayMealKey,function(){openRecipeModal(m,todayMealKey);});
+      (function(meal,k){bnd('today-swap-'+k,function(){
+        if(dash.swapLoading&&dash.swapLoading[k])return;
+        openSwapChoiceModal(meal,k);
+      });})(m,todayMealKey);
     });
     bnd('water-add',function(){if(!dash.waterLogs[key2])dash.waterLogs[key2]=0;dash.waterLogs[key2]+=250;saveAllLogs();renderDashboard(g('app'));});
     bnd('water-500',function(){if(!dash.waterLogs[key2])dash.waterLogs[key2]=0;dash.waterLogs[key2]+=500;saveAllLogs();renderDashboard(g('app'));});
@@ -2722,6 +3528,10 @@ function bindDashTab(){
       setTimeout(function(){renderDashboard(g('app'));},700);
     });
     for(var qi=1;qi<=5;qi++){(function(q){bnd('slq-'+q,function(){if(!dash.sleepLogs[key2])dash.sleepLogs[key2]={};dash.sleepLogs[key2].quality=q;saveAllLogs();renderDashboard(g('app'));});})(qi);}
+    ['eng','sor','str'].forEach(function(prefix,pi){
+      var slider=g(prefix+'-slider'),valEl=g(prefix+'-val');
+      if(slider&&valEl)slider.oninput=function(){valEl.textContent=slider.value+'/5';};
+    });
     ['sor','eng','str'].forEach(function(prefix,pi){
       var field=['soreness','energy','stress'][pi];
       for(var v=1;v<=5;v++){(function(val){bnd(prefix+'-'+val,function(){if(!dash.morningLogs[key2])dash.morningLogs[key2]={rhr:'',soreness:0,energy:0,stress:0,supplements:{}};dash.morningLogs[key2][field]=val;saveAllLogs();renderDashboard(g('app'));});})(v);}
@@ -2729,6 +3539,10 @@ function bindDashTab(){
     bnd('save-morning',function(){
       if(!dash.morningLogs[key2])dash.morningLogs[key2]={rhr:'',soreness:0,energy:0,stress:0,supplements:{}};
       var rhrEl=g('rhr-input');if(rhrEl)dash.morningLogs[key2].rhr=rhrEl.value;
+      var engSl=g('eng-slider'),sorSl=g('sor-slider'),strSl=g('str-slider');
+      if(engSl)dash.morningLogs[key2].energy=parseInt(engSl.value)||0;
+      if(sorSl)dash.morningLogs[key2].soreness=parseInt(sorSl.value)||0;
+      if(strSl)dash.morningLogs[key2].stress=parseInt(strSl.value)||0;
       saveAllLogs();var btn=g('save-morning');if(btn){btn.textContent='Saved!';btn.style.background='var(--green)';btn.style.color='#000';}
       setTimeout(function(){renderDashboard(g('app'));},700);
     });
@@ -2737,6 +3551,7 @@ function bindDashTab(){
   // Nutrition
   if(dash.tab==='nutrition'){
     var wkN=allWeeks[dash.week]||{},dayN=(wkN.mealPlan||[])[dash.day]||{meals:[]};
+    bnd('nutrition-add-meal',function(){showAddMealModal();});
     allWeeks.forEach(function(w,i){bnd('nwk-'+i,function(){dash.week=i;dash.day=0;renderDashboard(g('app'));});});
     DAYS.forEach(function(d,i){bnd('nday-'+i,function(){dash.day=i;renderDashboard(g('app'));});});
     (dayN.meals||[]).forEach(function(m,mi){
@@ -2744,8 +3559,7 @@ function bindDashTab(){
       bnd('recipe-'+key3,function(){openRecipeModal(m,key3);});
       (function(meal,k){bnd('swap-'+k,function(){
         if(dash.swapLoading&&dash.swapLoading[k])return;
-        if(!dash.swapLoading)dash.swapLoading={};
-        dash.swapLoading[k]=true;renderDashboard(g('app'));swapMealDirect(meal,k);
+        openSwapChoiceModal(meal,k);
       });})(m,key3);
     });
   }
@@ -2782,6 +3596,11 @@ function bindDashTab(){
   // Progress
   if(dash.tab==='progress'){
     allWeeks.forEach(function(w,i){bnd('pwk-'+i,function(){dash.week=i;renderDashboard(g('app'));});});
+    bnd('apply-cal-adjust',function(){
+      var rec=getCalorieAdjustment(getWeeklyCoachReview(dash.week));
+      if(rec.delta){dash.calOffset=rec.delta;saveAllLogs();renderDashboard(g('app'));}
+    });
+    bnd('reset-cal-adjust',function(){dash.calOffset=0;saveAllLogs();renderDashboard(g('app'));});
     bnd('save-meas',function(){
       if(!dash.measurements[dash.week])dash.measurements[dash.week]={};
       ['weight','waist','chest','hips','thigh','arm','bodyfat'].forEach(function(f2){var el=g('meas-'+f2);if(el&&el.value)dash.measurements[dash.week][f2]=el.value;});
@@ -2807,9 +3626,11 @@ function showRecipeLoadingModal(meal,key){var overlay=document.createElement('di
 async function generateRecipe(meal,key){
   try{
     var prompt='Generate a recipe for: '+meal.name+'. Macros: '+meal.calories+' kcal, P:'+meal.protein+'g C:'+meal.carbs+'g F:'+meal.fat+'g. Diet: '+form.dietType+'. Allergies: '+(form.allergies||'None')+'. Return ONLY valid JSON: {"servings":1,"prepTime":"10 mins","cookTime":"20 mins","ingredients":[{"name":"...","amount":"...","category":"Protein"}],"method":["Step 1..."],"tips":"..."}';
-    var res=await fetch('/api/message',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,messages:[{role:'user',content:prompt}]})});
+    var res=await apiMessage({model:'claude-sonnet-4-20250514',max_tokens:1500,messages:[{role:'user',content:prompt}]});
+    if(!res.ok)throw new Error('Recipe API error '+res.status);
     var data=await res.json();
-    var text=(data.content.find(function(b){return b.type==='text';})||{}).text||'';
+    var blocks=Array.isArray(data.content)?data.content:[];
+    var text=(blocks.find(function(b){return b.type==='text';})||{}).text||'';
     var s=text.indexOf('{'),e2=text.lastIndexOf('}');
     var recipe=JSON.parse(text.slice(s,e2+1));
     saveRecipeToStorage(meal,recipe);closeModal();showRecipeModal(meal,recipe,key);
@@ -2832,30 +3653,172 @@ function showRecipeModal(meal,recipe,key){
   overlay.innerHTML=html;document.body.appendChild(overlay);
   var mx=g('modal-x');if(mx)mx.onclick=closeModal;overlay.onclick=function(e){if(e.target===overlay)closeModal();};
   (recipe.ingredients||[]).forEach(function(ing,ii){var ikey=key+'-ing-'+ii;var el=g('ing-'+ikey);if(el)el.onclick=function(){dash.checkedIngredients[ikey]=!dash.checkedIngredients[ikey];showRecipeModal(meal,recipe,key);};});
-  var swapBtn=g('swap-btn-modal');if(swapBtn)swapBtn.onclick=function(){swapMeal(meal,key);};
+  var swapBtn=g('swap-btn-modal');if(swapBtn)swapBtn.onclick=function(){openSwapChoiceModal(meal,key);};
+}
+function applyMealSwap(originalMeal,key,newMeal){
+  var parts=key.match(/w(\d+)d(\d+)m(\d+)/);
+  if(parts){
+    var wi=parseInt(parts[1]),di=parseInt(parts[2]),mi=parseInt(parts[3]);
+    if(allWeeks[wi]&&allWeeks[wi].mealPlan&&allWeeks[wi].mealPlan[di]){
+      newMeal.type=originalMeal.type;
+      allWeeks[wi].mealPlan[di].meals[mi]=newMeal;
+      delete dash.recipeCache[recipeCacheKey(originalMeal)];
+      saveAllLogs();
+      return true;
+    }
+  }
+  return false;
+}
+
+function applyManualMealAdd(key,newMeal){
+  var parts=key.match(/add-w(\d+)d(\d+)/);
+  if(!parts)return false;
+  var wi=parseInt(parts[1]),di=parseInt(parts[2]);
+  if(!allWeeks[wi])return false;
+  if(!allWeeks[wi].mealPlan)allWeeks[wi].mealPlan=[];
+  if(!allWeeks[wi].mealPlan[di])allWeeks[wi].mealPlan[di]={day:DAYS[di],meals:[]};
+  if(!allWeeks[wi].mealPlan[di].meals)allWeeks[wi].mealPlan[di].meals=[];
+  allWeeks[wi].mealPlan[di].meals.push(newMeal);
+  var mi=allWeeks[wi].mealPlan[di].meals.length-1;
+  var dKey='w'+wi+'d'+di;
+  if(!dash.nutritionLogs[dKey])dash.nutritionLogs[dKey]={eaten:{}};
+  if(!dash.nutritionLogs[dKey].eaten)dash.nutritionLogs[dKey].eaten={};
+  dash.nutritionLogs[dKey].eaten[mi]=true;
+  saveAllLogs();
+  return true;
+}
+
+function showAddMealModal(){
+  showManualMealModal({type:'SNACK',name:'Manual meal',calories:420,protein:30,carbs:45,fat:14},'add-w'+dash.week+'d'+dash.day);
+}
+
+function rememberSavedMeal(meal){
+  if(!meal||!meal.name)return;
+  if(!dash.savedMeals)dash.savedMeals=[];
+  var key=meal.name.toLowerCase().replace(/\s+/g,' ').trim();
+  dash.savedMeals=dash.savedMeals.filter(function(m){return (m.name||'').toLowerCase().replace(/\s+/g,' ').trim()!==key;});
+  dash.savedMeals.unshift({type:meal.type||'SNACK',name:meal.name,calories:meal.calories||0,protein:meal.protein||0,carbs:meal.carbs||0,fat:meal.fat||0,notes:meal.notes||''});
+  if(dash.savedMeals.length>18)dash.savedMeals=dash.savedMeals.slice(0,18);
+}
+
+function fillManualMealFromSaved(meal){
+  var nameEl=g('manual-meal-name'),descEl=g('manual-meal-desc'),typeEl=g('manual-meal-type');
+  if(typeEl&&meal.type)typeEl.value=meal.type;
+  if(nameEl)nameEl.value=meal.name||'';
+  if(descEl)descEl.value=meal.notes||'';
+  [['manual-calories','calories'],['manual-protein','protein'],['manual-carbs','carbs'],['manual-fat','fat']].forEach(function(pair){
+    var el=g(pair[0]);if(el)el.value=Math.round(parseFloat(meal[pair[1]]||0));
+  });
+}
+
+function openSwapChoiceModal(originalMeal,key){
+  closeModal();
+  var overlay=document.createElement('div');overlay.className='modal-overlay';overlay.id='modal-overlay';
+  overlay.innerHTML='<div class="modal"><div class="modal-hd"><div><div class="modal-title">Swap '+originalMeal.type+'</div><div style="font-size:11px;color:var(--muted);margin-top:2px">'+originalMeal.name+'</div></div><button class="modal-close" id="modal-x">&times;</button></div>'
+    +'<div class="modal-body">'
+    +'<div class="swap-choice-grid">'
+      +'<button id="swap-ai-choice" class="entry-card" style="min-height:150px"><div class="entry-card-title">AI-generated meal</div><div class="entry-card-copy">Find a similar alternative that keeps the calories and macros close to this meal.</div><div class="entry-card-meta">&#8635; Generate swap</div></button>'
+      +'<button id="swap-manual-choice" class="entry-card" style="min-height:150px"><div class="entry-card-title">Manual meal input</div><div class="entry-card-copy">Type what you actually ate. ReBourne estimates calories, protein, carbs and fats for you.</div><div class="entry-card-meta">Enter meal</div></button>'
+    +'</div></div></div>';
+  document.body.appendChild(overlay);
+  var mx=g('modal-x');if(mx)mx.onclick=closeModal;overlay.onclick=function(e){if(e.target===overlay)closeModal();};
+  var ai=g('swap-ai-choice');if(ai)ai.onclick=function(){if(!dash.swapLoading)dash.swapLoading={};dash.swapLoading[key]=true;closeModal();renderDashboard(g('app'));swapMealDirect(originalMeal,key);};
+  var manual=g('swap-manual-choice');if(manual)manual.onclick=function(){showManualMealModal(originalMeal,key);};
+}
+function showManualMealModal(originalMeal,key){
+  closeModal();
+  var isAdd=key&&key.indexOf('add-')===0;
+  var savedHtml='';
+  if(isAdd&&dash.savedMeals&&dash.savedMeals.length){
+    savedHtml+='<div class="modal-section-lbl">Saved meals</div><div class="saved-meal-grid">';
+    dash.savedMeals.slice(0,6).forEach(function(meal,i){
+      savedHtml+='<button class="saved-meal-btn" id="saved-meal-'+i+'"><div class="saved-meal-name">'+meal.name+'</div><div class="saved-meal-meta">'+meal.calories+' kcal &bull; P:'+meal.protein+' C:'+meal.carbs+' F:'+meal.fat+'</div></button>';
+    });
+    savedHtml+='</div>';
+  }
+  var overlay=document.createElement('div');overlay.className='modal-overlay';overlay.id='modal-overlay';
+  overlay.innerHTML='<div class="modal"><div class="modal-hd"><div><div class="modal-title">'+(isAdd?'Add manual meal':'Manual meal input')+'</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Macros will be estimated automatically.</div></div><button class="modal-close" id="modal-x">&times;</button></div>'
+    +'<div class="modal-body">'
+      +savedHtml
+      +(isAdd?'<div class="field"><label>Meal type</label><select id="manual-meal-type"><option>BREAKFAST</option><option>LUNCH</option><option>DINNER</option><option selected>SNACK</option><option>POST-WORKOUT</option></select></div>':'')
+      +'<div class="field"><label>Meal name</label><input type="text" id="manual-meal-name" placeholder="e.g. Chicken burrito bowl"></div>'
+      +'<div class="field"><label>What was in it?</label><textarea id="manual-meal-desc" placeholder="Add ingredients, portion sizes, brands or restaurant details if you know them."></textarea><div class="field-hint">More detail gives a better estimate. You can still edit the generated numbers before saving.</div></div>'
+      +'<button class="swap-btn" id="manual-estimate">Generate macros</button>'
+      +'<div class="modal-macros" style="margin-top:14px">'
+        +'<div class="modal-macro"><input type="number" id="manual-calories" placeholder="0" style="text-align:center;font-weight:800"><div class="modal-macro-lbl">Kcal</div></div>'
+        +'<div class="modal-macro"><input type="number" id="manual-protein" placeholder="0" style="text-align:center;font-weight:800"><div class="modal-macro-lbl">Protein g</div></div>'
+        +'<div class="modal-macro"><input type="number" id="manual-carbs" placeholder="0" style="text-align:center;font-weight:800"><div class="modal-macro-lbl">Carbs g</div></div>'
+        +'<div class="modal-macro"><input type="number" id="manual-fat" placeholder="0" style="text-align:center;font-weight:800"><div class="modal-macro-lbl">Fat g</div></div>'
+      +'</div>'
+      +(isAdd?'<label class="save-fav-row"><input type="checkbox" id="manual-save-fav" checked> Save to my meals</label>':'')
+      +'<button class="log-btn" id="manual-save">'+(isAdd?'Add meal and mark eaten':'Save manual meal')+'</button>'
+    +'</div></div>';
+  document.body.appendChild(overlay);
+  var mx=g('modal-x');if(mx)mx.onclick=closeModal;overlay.onclick=function(e){if(e.target===overlay)closeModal();};
+  if(isAdd&&dash.savedMeals){dash.savedMeals.slice(0,6).forEach(function(meal,i){var btn=g('saved-meal-'+i);if(btn)btn.onclick=function(){fillManualMealFromSaved(meal);};});}
+  var est=g('manual-estimate');if(est)est.onclick=function(){estimateManualMacros(originalMeal,key);};
+  var save=g('manual-save');if(save)save.onclick=function(){saveManualMeal(originalMeal,key);};
+}
+function manualMealFallback(name,desc,originalMeal){
+  var txt=(name+' '+desc).toLowerCase(),base=originalMeal||{calories:520,protein:35,carbs:55,fat:18};
+  var calories=base.calories||520,protein=base.protein||35,carbs=base.carbs||55,fat=base.fat||18;
+  if(txt.indexOf('salad')>=0){calories-=120;carbs-=20;fat-=4;}
+  if(txt.indexOf('pizza')>=0||txt.indexOf('burger')>=0){calories+=180;fat+=12;carbs+=18;}
+  if(txt.indexOf('rice')>=0||txt.indexOf('pasta')>=0||txt.indexOf('wrap')>=0){carbs+=25;calories+=110;}
+  if(txt.indexOf('chicken')>=0||txt.indexOf('turkey')>=0||txt.indexOf('tuna')>=0){protein+=18;calories+=80;}
+  if(txt.indexOf('protein')>=0||txt.indexOf('whey')>=0){protein+=25;calories+=120;}
+  if(txt.indexOf('oil')>=0||txt.indexOf('avocado')>=0||txt.indexOf('cheese')>=0){fat+=12;calories+=120;}
+  return{calories:Math.max(150,Math.round(calories)),protein:Math.max(5,Math.round(protein)),carbs:Math.max(5,Math.round(carbs)),fat:Math.max(3,Math.round(fat))};
+}
+async function estimateManualMacros(originalMeal,key){
+  var nameEl=g('manual-meal-name'),descEl=g('manual-meal-desc'),btn=g('manual-estimate');
+  var name=(nameEl&&nameEl.value.trim())||'Manual meal',desc=(descEl&&descEl.value.trim())||'';
+  if(btn){btn.disabled=true;btn.textContent='Estimating...';}
+  var macros=null;
+  try{
+    var prompt='Estimate nutrition macros for this meal. Meal name: '+name+'. Details: '+desc+'. Return ONLY valid JSON: {"calories":0,"protein":0,"carbs":0,"fat":0}. Use grams for protein/carbs/fat.';
+    var res=await apiMessage({model:'claude-haiku-4-5-20251001',max_tokens:160,messages:[{role:'user',content:prompt}]});
+    if(res.ok){
+      var data=await res.json(),blocks=Array.isArray(data.content)?data.content:[],text=(blocks.find(function(b){return b.type==='text';})||{}).text||'';
+      var s=text.indexOf('{'),e=text.lastIndexOf('}');
+      if(s>=0&&e>s)macros=JSON.parse(text.slice(s,e+1));
+    }
+  }catch(err){}
+  if(!macros)macros=manualMealFallback(name,desc,originalMeal);
+  [['manual-calories','calories'],['manual-protein','protein'],['manual-carbs','carbs'],['manual-fat','fat']].forEach(function(pair){var el=g(pair[0]);if(el)el.value=Math.round(parseFloat(macros[pair[1]]||0));});
+  if(btn){btn.disabled=false;btn.textContent='Regenerate macros';}
+}
+async function saveManualMeal(originalMeal,key){
+  var nameEl=g('manual-meal-name'),descEl=g('manual-meal-desc'),typeEl=g('manual-meal-type'),favEl=g('manual-save-fav');
+  var name=(nameEl&&nameEl.value.trim())||'Manual meal';
+  if(!g('manual-calories')||!g('manual-calories').value)await estimateManualMacros(originalMeal,key);
+  var newMeal={type:typeEl?typeEl.value:originalMeal.type,name:name,calories:parseInt((g('manual-calories')||{}).value)||0,protein:parseInt((g('manual-protein')||{}).value)||0,carbs:parseInt((g('manual-carbs')||{}).value)||0,fat:parseInt((g('manual-fat')||{}).value)||0,manual:true,notes:(descEl&&descEl.value.trim())||''};
+  if(key&&key.indexOf('add-')===0&&(!favEl||favEl.checked))rememberSavedMeal(newMeal);
+  var ok=(key&&key.indexOf('add-')===0)?applyManualMealAdd(key,newMeal):applyMealSwap(originalMeal,key,newMeal);
+  if(ok){closeModal();renderDashboard(g('app'));}
 }
 async function swapMeal(originalMeal,key){
   var btn=g('swap-btn-modal');if(btn){btn.disabled=true;btn.textContent='Finding alternative...';}
   try{
     var prompt='Suggest ONE alternative meal with similar macros for a '+form.dietType+' diet. Original: '+originalMeal.name+' ('+originalMeal.calories+' kcal P:'+originalMeal.protein+'g C:'+originalMeal.carbs+'g F:'+originalMeal.fat+'g). Meal type: '+originalMeal.type+'. Allergies: '+(form.allergies||'None')+'. Return ONLY valid JSON no markdown: {"name":"...","calories":0,"protein":0,"carbs":0,"fat":0}';
-    var res=await fetch('/api/message',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:200,messages:[{role:'user',content:prompt}]})});
+    var res=await apiMessage({model:'claude-haiku-4-5-20251001',max_tokens:200,messages:[{role:'user',content:prompt}]});
+    if(!res.ok)throw new Error('Meal swap API error '+res.status);
     var data=await res.json();
-    var text=(data.content.find(function(b){return b.type==='text';})||{}).text||'';
+    var blocks=Array.isArray(data.content)?data.content:[];
+    var text=(blocks.find(function(b){return b.type==='text';})||{}).text||'';
     var s=text.indexOf('{'),e2=text.lastIndexOf('}');
     var newMeal=JSON.parse(text.slice(s,e2+1));newMeal.type=originalMeal.type;
-    var parts=key.match(/w(\d+)d(\d+)m(\d+)/);
-    if(parts){var wi=parseInt(parts[1]),di=parseInt(parts[2]),mi2=parseInt(parts[3]);if(allWeeks[wi]&&allWeeks[wi].mealPlan&&allWeeks[wi].mealPlan[di])allWeeks[wi].mealPlan[di].meals[mi2]=newMeal;}
-    closeModal();renderDashboard(g('app'));
+    if(applyMealSwap(originalMeal,key,newMeal)){closeModal();renderDashboard(g('app'));}
   }catch(err){if(btn){btn.disabled=false;btn.textContent='Swap this meal for an alternative';}alert('Could not swap meal.');}
 }
 async function swapMealDirect(originalMeal,key){
   try{
     var prompt='Suggest ONE alternative meal with similar macros for a '+form.dietType+' diet. Original: '+originalMeal.name+' ('+originalMeal.calories+' kcal P:'+originalMeal.protein+'g C:'+originalMeal.carbs+'g F:'+originalMeal.fat+'g). Type: '+originalMeal.type+'. Allergies: '+(form.allergies||'None')+'. Return ONLY valid JSON: {"name":"...","calories":0,"protein":0,"carbs":0,"fat":0}';
-    var res=await fetch('/api/message',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:200,messages:[{role:'user',content:prompt}]})});
-    var data=await res.json();var text=(data.content.find(function(b){return b.type==='text';})||{}).text||'';
+    var res=await apiMessage({model:'claude-haiku-4-5-20251001',max_tokens:200,messages:[{role:'user',content:prompt}]});
+    if(!res.ok)throw new Error('Meal swap API error '+res.status);
+    var data=await res.json();var blocks=Array.isArray(data.content)?data.content:[];var text=(blocks.find(function(b){return b.type==='text';})||{}).text||'';
     var s=text.indexOf('{'),e2=text.lastIndexOf('}');var newMeal=JSON.parse(text.slice(s,e2+1));newMeal.type=originalMeal.type;
-    var parts=key.match(/w(\d+)d(\d+)m(\d+)/);
-    if(parts){var wi=parseInt(parts[1]),di=parseInt(parts[2]),mi2=parseInt(parts[3]);if(allWeeks[wi]&&allWeeks[wi].mealPlan&&allWeeks[wi].mealPlan[di])allWeeks[wi].mealPlan[di].meals[mi2]=newMeal;delete dash.recipeCache[recipeCacheKey(originalMeal)];}
+    applyMealSwap(originalMeal,key,newMeal);
   }catch(err){alert('Could not swap meal. Please try again.');}
   if(!dash.swapLoading)dash.swapLoading={};dash.swapLoading[key]=false;renderDashboard(g('app'));
 }
@@ -2885,7 +3848,7 @@ function renderSubscriptionPage(container){
     {
       id:'free', name:'Pay as you go', badge:'pay-as-you-go', badgeClass:'plan-badge-free',
       price:{monthly:0,annual:0}, period:'No commitment', annualNote:'',
-      desc:'Perfect for trying ReBourne. Buy individual plans whenever you need them at standard pricing.',
+      desc:'Best if you want a focused plan for a specific training block, event or transformation phase.',
       featured:false,
       features:[
         {t:'1-week plan from', v:'£19',      tick:true},
@@ -2902,7 +3865,7 @@ function renderSubscriptionPage(container){
     {
       id:'pro', name:'Pro', badge:'Most popular', badgeClass:'plan-badge-pop',
       price:{monthly:24.99,annual:199.99}, period:'/month', annualNote:'£'+(199.99/12).toFixed(2)+'/mo billed annually',
-      desc:'Unlimited access to all plan types. New plans generate automatically each month, adjusting to your progress.',
+      desc:'Best for consistent progress. New plans generate each month, adapting around logged training, nutrition and recovery data.',
       featured:true,
       features:[
         {t:'Unlimited plans — all types',  tick:true},
@@ -2919,7 +3882,7 @@ function renderSubscriptionPage(container){
     {
       id:'elite', name:'Elite', badge:'For serious athletes', badgeClass:'plan-badge-elite',
       price:{monthly:44.99,annual:349.99}, period:'/month', annualNote:'£'+(349.99/12).toFixed(2)+'/mo billed annually',
-      desc:'Everything in Pro, plus coach dashboard for your trainer, weekly AI check-in analysis, and priority support.',
+      desc:'Best for serious athletes. Adds deeper review loops, coach visibility and specialist planning support.',
       featured:false,
       features:[
         {t:'Everything in Pro',            tick:true},
@@ -2963,27 +3926,24 @@ function renderSubscriptionPage(container){
   // Header nav
   html+='<div style="padding:16px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:rgba(5,8,15,.8);backdrop-filter:blur(20px);position:sticky;top:0;z-index:50">';
   html+='<div style="display:flex;align-items:center;gap:10px">';
-  html+='<svg width="28" height="28" viewBox="140 150 540 510"><defs><linearGradient id="sg1" x1="180" y1="120" x2="650" y2="680" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#7E98BC"/><stop offset="45%" stop-color="#3A5F96"/><stop offset="100%" stop-color="#162A46"/></linearGradient></defs><path fill="url(#sg1)" fill-rule="evenodd" d="M205 170 L475 170 C565 170 625 223 625 306 C625 372 586 421 521 438 L657 630 L534 630 L412 452 L362 452 L362 630 L240 630 L240 240 L205 170 Z M362 260 L362 372 L470 372 C510 372 535 351 535 316 C535 282 510 260 470 260 L362 260 Z M205 170 L363 347 L318 347 L165 170 L205 170 Z"/></svg>';
-  html+='<span style="font-size:12px;letter-spacing:.18em;font-weight:700;color:var(--white)"><span style="color:var(--steel3);font-weight:300">RE</span>BOURNE</span>';
+  html+='<img src="assets/rebourne-logo-transparent.png" alt="ReBourne" style="width:156px;height:auto;display:block">';
   html+='</div>';
   html+='<button id="sub-back" style="background:transparent;border:1px solid var(--border);border-radius:var(--r);padding:7px 16px;color:var(--silver);font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;letter-spacing:.04em">&larr; Back</button>';
   html+='</div>';
 
   // Hero
-  html+='<div class="sub-hero">';
-  html+='<div class="sub-hero-eyebrow">Membership plans</div>';
-  html+='<h1 class="sub-hero-title">One platform.<br><em>Unlimited potential.</em></h1>';
-  html+='<p class="sub-hero-sub">Get a new personalised plan every month that adapts to your progress. Unlimited access to every programme type, full tracking dashboard, and AI coaching insights that improve over time.</p>';
-
-  // Billing toggle
+  html+='<div class="sub-hero"><div class="sub-hero-panel">';
+  html+='<div><div class="sub-hero-eyebrow">Membership</div>';
+  html+='<h1 class="sub-hero-title">Choose how ReBourne adapts with you.</h1>';
+  html+='<p class="sub-hero-sub">Membership turns ReBourne from a one-time plan builder into an ongoing performance system: new plans, adaptive updates and progress-led coaching signals.</p></div>';
   html+='<div class="sub-toggle">';
   html+='<button class="sub-toggle-btn'+(isAnnual?'':' active')+'" id="sub-monthly">Monthly</button>';
   html+='<button class="sub-toggle-btn'+(isAnnual?' active':'')+'" id="sub-annual">Annual <span class="sub-toggle-save">Save 33%</span></button>';
-  html+='</div>';
-  html+='</div>';
+  html+='</div></div></div>';
 
   // Plans grid
   html+='<div class="plans-wrap">';
+  html+='<div class="membership-guide"><div><span>Not sure?</span><strong>Start with one programme, upgrade when consistency becomes the goal.</strong></div><button id="sub-oneoff" type="button">Build one-off plan</button></div>';
   html+='<div class="plans-grid">';
 
   plans.forEach(function(plan){
@@ -3065,6 +4025,7 @@ function renderSubscriptionPage(container){
   // Bind
   function bnd2(id,fn){var el=g(id);if(el)el.onclick=fn;}
   bnd2('sub-back', function(){ step=-2; render(); window.scrollTo(0,0); });
+  bnd2('sub-oneoff', function(){ step=-1; render(); window.scrollTo(0,0); });
   bnd2('sub-monthly', function(){ subBilling='monthly'; renderSubscriptionPage(container); });
   bnd2('sub-annual',  function(){ subBilling='annual';  renderSubscriptionPage(container); });
   // Plan CTAs - for now go to plan builder; in future these would trigger Stripe
@@ -3080,8 +4041,20 @@ function renderSubscriptionPage(container){
   });
 }
 
-
-render();
+var initialParams = new URLSearchParams(window.location.search);
+if(initialParams.get('front')==='1'){
+  step=-2;
+  render();
+} else if(initialParams.get('demo')==='1'){
+  loadSamplePlan();
+} else {
+  render();
+}
+if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost')){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  });
+}
 </script>
 </body>
 </html>

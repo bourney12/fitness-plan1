@@ -23,6 +23,7 @@ body{font-family:'Montserrat',sans-serif;background:var(--midnight);color:var(--
 .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
 .login-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--rl);padding:40px;width:100%;max-width:400px;text-align:center}
 .login-logo{margin-bottom:24px}
+.login-brand-logo{width:260px;height:auto;display:block;margin:0 auto;filter:drop-shadow(0 14px 36px rgba(58,95,150,.22))}
 .login-title{font-size:20px;font-weight:600;margin-bottom:6px}
 .login-sub{font-size:13px;color:var(--ink3);margin-bottom:28px}
 .login-input{width:100%;padding:12px 14px;border:1px solid var(--border2);border-radius:var(--r);background:var(--midnight2);color:var(--white);font-family:inherit;font-size:14px;outline:none;margin-bottom:12px;text-align:center;letter-spacing:.08em}
@@ -32,6 +33,7 @@ body{font-family:'Montserrat',sans-serif;background:var(--midnight);color:var(--
 /* HEADER */
 .coach-header{background:#050a12;border-bottom:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
 .coach-logo{display:flex;align-items:center;gap:12px}
+.coach-brand-logo{width:172px;height:48px;object-fit:contain;display:block}
 .coach-badge{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,169,110,.3);padding:4px 12px;border-radius:100px}
 .logout-btn{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);cursor:pointer;background:none;border:1px solid var(--border);border-radius:var(--r);padding:7px 14px;font-family:inherit}
 .logout-btn:hover{color:var(--white);border-color:var(--border2)}
@@ -107,6 +109,19 @@ body{font-family:'Montserrat',sans-serif;background:var(--midnight);color:var(--
 .detail-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:20px}
 .dt-btn{padding:10px 18px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);cursor:pointer;border:none;background:transparent;border-bottom:2px solid transparent;margin-bottom:-1px;font-family:inherit;transition:all .15s}
 .dt-btn.active{color:var(--steel2);border-bottom-color:var(--steel2)}
+@media(max-width:760px){
+  .coach-header{padding:12px 14px;align-items:flex-start;gap:12px}
+  .coach-badge{display:none}
+  .coach-wrap{padding:18px 12px 64px}
+  .stats-bar,.detail-grid{grid-template-columns:1fr 1fr}
+  .client-table{display:block;overflow-x:auto;white-space:nowrap}
+  .detail-tabs{overflow-x:auto}
+  .dt-btn{padding:10px 12px;white-space:nowrap}
+}
+@media(max-width:480px){
+  .stats-bar,.detail-grid{grid-template-columns:1fr}
+  .login-card{padding:28px 22px}
+}
 </style>
 </head>
 <body>
@@ -116,16 +131,7 @@ body{font-family:'Montserrat',sans-serif;background:var(--midnight);color:var(--
   <div class="login-wrap">
     <div class="login-card">
       <div class="login-logo">
-        <svg width="56" height="56" viewBox="140 150 540 510" aria-label="ReBourne logo">
-          <defs>
-            <linearGradient id="g1" x1="180" y1="120" x2="650" y2="680" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#7E98BC"/>
-              <stop offset="45%" stop-color="#3A5F96"/>
-              <stop offset="100%" stop-color="#162A46"/>
-            </linearGradient>
-          </defs>
-          <path fill="url(#g1)" fill-rule="evenodd" d="M205 170 L475 170 C565 170 625 223 625 306 C625 372 586 421 521 438 L657 630 L534 630 L412 452 L362 452 L362 630 L240 630 L240 240 L205 170 Z M362 260 L362 372 L470 372 C510 372 535 351 535 316 C535 282 510 260 470 260 L362 260 Z M205 170 L363 347 L318 347 L165 170 L205 170 Z"/>
-        </svg>
+        <img class="login-brand-logo" src="/assets/rebourne-logo-transparent.png" alt="ReBourne">
       </div>
       <div class="login-title">Coach Dashboard</div>
       <div class="login-sub">ReBourne — Reinvent Your Potential</div>
@@ -141,14 +147,7 @@ body{font-family:'Montserrat',sans-serif;background:var(--midnight);color:var(--
 
   <header class="coach-header">
     <div class="coach-logo">
-      <svg width="32" height="32" viewBox="140 150 540 510" aria-label="ReBourne">
-        <defs><linearGradient id="g2" x1="180" y1="120" x2="650" y2="680" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#7E98BC"/><stop offset="45%" stop-color="#3A5F96"/><stop offset="100%" stop-color="#162A46"/></linearGradient></defs>
-        <path fill="url(#g2)" fill-rule="evenodd" d="M205 170 L475 170 C565 170 625 223 625 306 C625 372 586 421 521 438 L657 630 L534 630 L412 452 L362 452 L362 630 L240 630 L240 240 L205 170 Z M362 260 L362 372 L470 372 C510 372 535 351 535 316 C535 282 510 260 470 260 L362 260 Z M205 170 L363 347 L318 347 L165 170 L205 170 Z"/>
-      </svg>
-      <div>
-        <div style="font-size:13px;letter-spacing:.18em;color:var(--white)"><span style="font-weight:300;color:var(--steel2)">RE</span><span style="font-weight:700">BOURNE</span></div>
-        <div style="font-size:8px;letter-spacing:.15em;color:var(--ink3);text-transform:uppercase">Coach dashboard</div>
-      </div>
+      <img class="coach-brand-logo" src="/assets/rebourne-logo-transparent.png" alt="ReBourne">
       <div class="coach-badge">Coach</div>
     </div>
     <button class="logout-btn" id="logout-btn">Log out</button>
@@ -272,6 +271,11 @@ var coachNotes = {};
 
 // ── LOGIN ─────────────────────────────────────────────────────────────────────
 function g(id){ return document.getElementById(id); }
+function esc(v){
+  return String(v==null?'':v).replace(/[&<>"']/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
 
 g('login-btn').onclick = function(){
   var pw = g('pw-input').value;
@@ -347,8 +351,11 @@ function loadDashboard(){
   var tbody = g('client-tbody');
   if(clients.length === 0){
     tbody.innerHTML = '<tr><td colspan="7" class="empty">No client data yet. Plans appear here after clients generate them.</td></tr>';
+    g('no-clients').style.display = 'block';
+    g('client-detail').style.display = 'none';
     return;
   }
+  g('no-clients').style.display = 'none';
 
   tbody.innerHTML = '';
   clients.forEach(function(client, idx){
@@ -367,10 +374,10 @@ function loadDashboard(){
 
     var tr = document.createElement('tr');
     tr.className = 'ct-row';
-    tr.innerHTML = '<td><div class="ct-name">'+client.name+'</div><div style="font-size:11px;color:var(--ink3);margin-top:2px">'+client.email+'</div></td>'
-      +'<td><span class="ct-badge b-gold">'+client.planType+'</span></td>'
-      +'<td>'+client.planWeeks+' weeks</td>'
-      +'<td>'+client.goal+'</td>'
+    tr.innerHTML = '<td><div class="ct-name">'+esc(client.name)+'</div><div style="font-size:11px;color:var(--ink3);margin-top:2px">'+esc(client.email||'')+'</div></td>'
+      +'<td><span class="ct-badge b-gold">'+esc(client.planType)+'</span></td>'
+      +'<td>'+esc(client.planWeeks)+' weeks</td>'
+      +'<td>'+esc(client.goal)+'</td>'
       +'<td style="font-size:11px">'+date+'</td>'
       +'<td style="font-weight:600;color:'+(adhRate==='—'?'var(--ink3)':parseInt(adhRate)>=70?'var(--green)':'var(--steel2)')+'">'+adhRate+'</td>'
       +'<td>'+statusBadge+'</td>';
@@ -383,7 +390,7 @@ function loadDashboard(){
 function selectClient(idx){
   var clients = getAllClients();
   selectedClient = clients[idx];
-  g('detail-name').textContent = selectedClient.name;
+  g('detail-name').textContent = selectedClient.name || 'Client';
   g('client-detail').style.display = 'block';
 
   // Highlight row
@@ -428,14 +435,14 @@ function renderDetailOverview(){
     {l:'Plan weeks',      v:(c.planWeeks||'—')+' weeks'}
   ];
   var html = stats.map(function(s){
-    return '<div class="detail-item"><div class="di-lbl">'+s.l+'</div><div class="di-val">'+s.v+'</div></div>';
+    return '<div class="detail-item"><div class="di-lbl">'+esc(s.l)+'</div><div class="di-val">'+esc(s.v)+'</div></div>';
   }).join('');
   g('detail-stats').innerHTML = html;
 
   var suppHtml = '<div style="margin-top:16px"><div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--steel2);margin-bottom:10px">Client info</div>';
-  if(c.injuries) suppHtml += '<div style="background:var(--midnight2);border-radius:var(--r);padding:12px;margin-bottom:8px"><div style="font-size:10px;color:var(--ink3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em;font-weight:600">Injuries / limitations</div><div style="font-size:13px;color:var(--ink2)">'+c.injuries+'</div></div>';
-  if(c.allergies) suppHtml += '<div style="background:var(--midnight2);border-radius:var(--r);padding:12px;margin-bottom:8px"><div style="font-size:10px;color:var(--ink3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em;font-weight:600">Allergies</div><div style="font-size:13px;color:var(--ink2)">'+c.allergies+'</div></div>';
-  if(c.dislikes) suppHtml += '<div style="background:var(--midnight2);border-radius:var(--r);padding:12px"><div style="font-size:10px;color:var(--ink3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em;font-weight:600">Dislikes</div><div style="font-size:13px;color:var(--ink2)">'+c.dislikes+'</div></div>';
+  if(c.injuries) suppHtml += '<div style="background:var(--midnight2);border-radius:var(--r);padding:12px;margin-bottom:8px"><div style="font-size:10px;color:var(--ink3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em;font-weight:600">Injuries / limitations</div><div style="font-size:13px;color:var(--ink2)">'+esc(c.injuries)+'</div></div>';
+  if(c.allergies) suppHtml += '<div style="background:var(--midnight2);border-radius:var(--r);padding:12px;margin-bottom:8px"><div style="font-size:10px;color:var(--ink3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em;font-weight:600">Allergies</div><div style="font-size:13px;color:var(--ink2)">'+esc(c.allergies)+'</div></div>';
+  if(c.dislikes) suppHtml += '<div style="background:var(--midnight2);border-radius:var(--r);padding:12px"><div style="font-size:10px;color:var(--ink3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em;font-weight:600">Dislikes</div><div style="font-size:13px;color:var(--ink2)">'+esc(c.dislikes)+'</div></div>';
   suppHtml += '</div>';
   g('detail-supplements').innerHTML = suppHtml;
 }

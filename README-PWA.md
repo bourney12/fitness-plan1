@@ -6,7 +6,8 @@ This is the fastest iPhone testing route without a Mac.
 
 - `manifest.webmanifest` for Home Screen install metadata.
 - `sw.js` for app shell caching.
-- PWA metadata is injected by `server.js` when it serves `fitness-plan-app.html`.
+- iPhone safe-area metadata and Apple Home Screen icon tags.
+- PWA icons in `assets/icons/`.
 - `render.yaml` for a simple hosted Node deployment.
 
 ## Deploy

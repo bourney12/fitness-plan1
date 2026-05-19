@@ -5,6 +5,7 @@
   function byId(id){return document.getElementById(id);}
   function n(v,fallback){var x=parseFloat(v);return isFinite(x)?x:(fallback||0);}
   function week(){return window.dash&&typeof dash.week==='number'?dash.week:0;}
+  function dayKey(w,d){return 'w'+w+'d'+d;}
   function cleanExerciseName(ex){return String(ex||'').split('\u2014')[0].split('\u2013')[0].split('(')[0].trim();}
   function parseWorkoutKey(key){var m=String(key||'').match(/w(\d+)d(\d+)ex(\d+)/);return m?{w:+m[1],d:+m[2],ex:+m[3]}:null;}
   function rerender(){
