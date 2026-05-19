@@ -97,6 +97,7 @@ function injectPwa(html) {
     .replace(/<link rel="icon"[^>]+href="[^"]+">/g, '<link rel="icon" type="image/svg+xml" href="/assets/icons/icon.svg?v=12">')
     .replace(/navigator\.serviceWorker\.register\(['"](?:\.\/)?sw\.js(?:\?v=\d+)?['"]\)/g, "navigator.serviceWorker.register('/sw.js?v=12')")
     .replace(/navigator\.serviceWorker\.register\(['"]\/sw\.js(?:\?v=\d+)?['"]\)/g, "navigator.serviceWorker.register('/sw.js?v=12')")
+    .replace(/\/assets\/readiness-habits\.js(?:\?v=\d+)?/g, "/assets/readiness-habits-v2.js?v=12")
     .replace(/assets\/rebourne-logo-transparent\.png(?:\?v=\d+)?/g, 'assets/rebourne-logo-transparent.png?v=12')
     .replace(/assets\/rebourne-logo\.png(?:\?v=\d+)?/g, 'assets/rebourne-logo.png?v=12');
   if (!output.includes("serviceWorker.register")) output = output.replace("</body>", PWA_SCRIPT + "</body>");
