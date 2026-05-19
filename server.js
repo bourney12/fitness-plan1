@@ -31,6 +31,11 @@ if('serviceWorker' in navigator && (location.protocol==='https:' || location.hos
 const FEATURE_SCRIPT = `
 <script src="/assets/feature-upgrades.js?v=4"></script>
 <script src="/assets/progress-analytics.js?v=1"></script>
+<script src="/assets/readiness-habits.js?v=1"></script>
+`;
+
+const THEME_HEAD = `
+<link rel="stylesheet" href="/assets/rebourne-premium-theme.css?v=3">
 `;
 
 const RESET_HTML = `<!doctype html>
@@ -54,13 +59,38 @@ const RESET_HTML = `<!doctype html>
 })();
 </script></body></html>`;
 
+const FRONT_PREVIEW_SCRIPT = `
+<script>
+window.__REB_FRONT_PREVIEW = true;
+(function(){
+  function forceFront(){
+    try{
+      step = -2;
+      allWeeks = [];
+      calc = null;
+      loading = false;
+      apiErr = null;
+      generatingWeek = 0;
+      if (typeof render === 'function') render();
+    }catch(e){}
+  }
+  forceFront();
+  setTimeout(forceFront, 80);
+  setTimeout(forceFront, 300);
+})();
+</script>
+`;
+
 const R_PATH = "M138 112h205c63 0 105 38 105 96 0 47-27 82-73 95l92 137h-88l-82-126h-34v126h-87V162h-38v-50Zm125 64v80h77c29 0 47-15 47-40 0-24-18-40-47-40h-77ZM138 112l113 126h-32L110 112h28Z";
 
 const ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" fill="#05080F"/><defs><linearGradient id="g" x1="90" y1="70" x2="420" y2="440" gradientUnits="userSpaceOnUse"><stop stop-color="#7E98BC"/><stop offset="0.48" stop-color="#3A5F96"/><stop offset="1" stop-color="#162A46"/></linearGradient></defs><path fill="url(#g)" d="${R_PATH}"/><text x="256" y="482" fill="#F0F4FF" font-family="Arial, sans-serif" font-size="36" letter-spacing="14" text-anchor="middle">REBOURNE</text></svg>`;
 
+const LOGO_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 560" role="img" aria-label="ReBourne"><defs><linearGradient id="rb" x1="280" y1="70" x2="690" y2="420" gradientUnits="userSpaceOnUse"><stop stop-color="#86A2CF"/><stop offset="0.46" stop-color="#456AA3"/><stop offset="1" stop-color="#162A46"/></linearGradient><filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#3A5F96" flood-opacity=".22"/></filter></defs><g filter="url(#soft)"><g transform="translate(260 58) scale(.88)"><path fill="url(#rb)" d="${R_PATH}"/></g><text x="490" y="414" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="76" font-weight="300" letter-spacing="44" fill="#EEF4FF">REBOURNE</text><g fill="#86A2CF"><rect x="108" y="484" width="142" height="3" rx="1.5"/><rect x="730" y="484" width="142" height="3" rx="1.5"/></g><text x="490" y="496" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="23" font-weight="600" letter-spacing="20" fill="#F5F7FF">REINVENT YOUR POTENTIAL</text></g></svg>`;
+
 function injectPwa(html) {
   let output = html;
   if (!output.includes("manifest.webmanifest")) output = output.replace("</head>", PWA_HEAD + "</head>");
+  if (!output.includes("rebourne-premium-theme.css")) output = output.replace("</head>", THEME_HEAD + "</head>");
   output = output
     .replace(/<link rel="manifest" href="[^"]+">/g, '<link rel="manifest" href="/manifest.webmanifest?v=10">')
     .replace(/<link rel="apple-touch-icon" href="[^"]+">/g, '<link rel="apple-touch-icon" href="/assets/icons/icon.svg?v=10">')
@@ -71,6 +101,32 @@ function injectPwa(html) {
     .replace(/assets\/rebourne-logo\.png(?:\?v=\d+)?/g, 'assets/rebourne-logo.png?v=10');
   if (!output.includes("serviceWorker.register")) output = output.replace("</body>", PWA_SCRIPT + "</body>");
   if (!output.includes("/assets/feature-upgrades.js")) output = output.replace("</body>", FEATURE_SCRIPT + "</body>");
+  return output;
+}
+
+function applyFrontendPolish(html) {
+  let output = html;
+  const splashTimeline = [
+    "'<div class=\"splash-timeline\">'",
+    "'<div class=\"splash-timeline-item\"><span class=\"timeline-dot\"></span><strong>Training</strong><em>Strength, running and hybrid sessions.</em></div>'",
+    "'<div class=\"splash-timeline-line\" aria-hidden=\"true\"></div>'",
+    "'<div class=\"splash-timeline-item\"><span class=\"timeline-dot\"></span><strong>Nutrition</strong><em>Calories, macros, meals and shopping.</em></div>'",
+    "'<div class=\"splash-timeline-line\" aria-hidden=\"true\"></div>'",
+    "'<div class=\"splash-timeline-item\"><span class=\"timeline-dot\"></span><strong>Progress</strong><em>Readiness, overload and analytics.</em></div>'",
+    "'</div>'",
+  ].join(",\n          ");
+
+  output = output
+    .replace("{k:'Profile',t:'Who are we building around?'", "{k:'Profile',t:'Who are we building this around?'")
+    .replace(/\s+\+'<p>'\+meta\.d\+'<\/p>'\r?\n\s+\+guidedProgress/g, "\n      +guidedProgress")
+    .replace(
+      /'<div class="splash-signal-row">',\s*'<div class="splash-signal"><span>[^<]*<\/span><strong>Training<\/strong><em>Strength, running and hybrid sessions\.<\/em><\/div>',\s*'<div class="splash-signal"><span>[^<]*<\/span><strong>Nutrition<\/strong><em>Calories, macros, meals and shopping\.<\/em><\/div>',\s*'<div class="splash-signal"><span>[^<]*<\/span><strong>Progress<\/strong><em>Readiness, overload and analytics\.<\/em><\/div>',\s*'<\/div>'/g,
+      splashTimeline
+    )
+    .replace(
+      "+'<div class=\"assessment-side-content\">'\n          +'<div><div class=\"assessment-side-title\">Why this matters</div><p>'+meta.d+'</p></div>'\n          +'<div class=\"confidence-cue\">'+meta.cue+'</div>'\n          +'<div class=\"assessment-side-mini\"><strong>'+Math.max(1,step+1)+'/5</strong><span>Structured inputs before plan generation</span></div>'\n        +'</div>'",
+      "+'<div class=\"assessment-insight-grid\">'\n          +'<div class=\"assessment-insight-card insight-main\"><span>Context</span><strong>Why this matters</strong><p>'+meta.d+'</p></div>'\n          +'<div class=\"assessment-insight-card\"><span>Engine logic</span><p>'+meta.cue+'</p></div>'\n          +'<div class=\"assessment-insight-card insight-progress\"><span>Progress</span><strong>'+Math.max(1,step+1)+'/5</strong><p>Structured inputs before plan generation</p></div>'\n        +'</div>'"
+    );
   return output;
 }
 
@@ -99,7 +155,7 @@ function serveFile(res, filename, contentType) {
     }
     let body = content;
     if (filename === "fitness-plan-app.html") {
-      body = Buffer.from(injectPwa(hardenDownloadHtmlStrings(content.toString("utf8"))));
+      body = Buffer.from(injectPwa(applyFrontendPolish(hardenDownloadHtmlStrings(content.toString("utf8")))));
     }
     const type = contentType.startsWith("image/") || contentType === "application/octet-stream"
       ? contentType
@@ -113,6 +169,25 @@ function serveFile(res, filename, contentType) {
     }
     res.writeHead(200, headers);
     res.end(body);
+  });
+}
+
+function serveFrontPreview(res) {
+  const filePath = path.join(__dirname, "fitness-plan-app.html");
+  fs.readFile(filePath, (err, content) => {
+    if (err) {
+      res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8", ...noStoreHeaders() });
+      res.end("fitness-plan-app.html not found");
+      return;
+    }
+    let html = injectPwa(applyFrontendPolish(hardenDownloadHtmlStrings(content.toString("utf8"))));
+    html = html.replace("</body>", FRONT_PREVIEW_SCRIPT + "</body>");
+    res.writeHead(200, {
+      "Content-Type": "text/html; charset=utf-8",
+      "X-Content-Type-Options": "nosniff",
+      ...noStoreHeaders(),
+    });
+    res.end(html);
   });
 }
 
@@ -165,6 +240,10 @@ const server = http.createServer(async (req, res) => {
 
   if (req.method === "GET" && (reqUrl.pathname === "/" || reqUrl.pathname === "/index.html" || reqUrl.pathname === "/fitness-plan-app.html" || reqUrl.pathname === "/app")) {
     return serveFile(res, "fitness-plan-app.html", "text/html");
+  }
+
+  if (req.method === "GET" && reqUrl.pathname === "/front-preview") {
+    return serveFrontPreview(res);
   }
 
   if (req.method === "GET" && reqUrl.pathname === "/reset-app") {
