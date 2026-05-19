@@ -13,7 +13,7 @@
   function rerender(){
     try{
       var app=byId('app');
-      if(app&&typeof renderDashboard==='function')renderDashboard(app);
+      if(app&&typeof renderDashboard==='function'&&window.allWeeks&&allWeeks.length)renderDashboard(app);
     }catch(e){}
   }
 
@@ -150,7 +150,10 @@
         bindReadiness();
       };
     }
-    setTimeout(function(){bindReadiness();rerender();},0);
+    setTimeout(function(){
+      bindReadiness();
+      if(window.allWeeks&&allWeeks.length)rerender();
+    },0);
   }
   install();
   setTimeout(install,250);

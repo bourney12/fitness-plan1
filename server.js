@@ -1,4 +1,4 @@
-﻿const http = require("http");
+const http = require("http");
 const fs   = require("fs");
 const path = require("path");
 
@@ -13,16 +13,16 @@ const PWA_HEAD = `
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="ReBourne">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="manifest" href="/manifest.webmanifest?v=11">
-<link rel="apple-touch-icon" href="/assets/icons/icon.svg?v=11">
-<link rel="icon" type="image/svg+xml" href="/assets/icons/icon.svg?v=11">
+<link rel="manifest" href="/manifest.webmanifest?v=12">
+<link rel="apple-touch-icon" href="/assets/icons/icon.svg?v=12">
+<link rel="icon" type="image/svg+xml" href="/assets/icons/icon.svg?v=12">
 `;
 
 const PWA_SCRIPT = `
 <script>
 if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost')){
   window.addEventListener('load',function(){
-    navigator.serviceWorker.register('/sw.js?v=11').then(function(reg){ return reg.update(); }).catch(function(){});
+    navigator.serviceWorker.register('/sw.js?v=12').then(function(reg){ return reg.update(); }).catch(function(){});
   });
 }
 </script>
@@ -31,7 +31,7 @@ if('serviceWorker' in navigator && (location.protocol==='https:' || location.hos
 const FEATURE_SCRIPT = `
 <script src="/assets/feature-upgrades.js?v=4"></script>
 <script src="/assets/progress-analytics.js?v=1"></script>
-<script src="/assets/readiness-habits.js?v=1"></script>
+<script src="/assets/readiness-habits.js?v=2"></script>
 `;
 
 const THEME_HEAD = `
@@ -55,7 +55,7 @@ const RESET_HTML = `<!doctype html>
       await Promise.all(keys.map(function(key){return caches.delete(key);}));
     }
   }catch(e){}
-  location.replace('/?v=11&fresh=1');
+  location.replace('/?v=12&fresh=1');
 })();
 </script></body></html>`;
 
@@ -92,13 +92,13 @@ function injectPwa(html) {
   if (!output.includes("manifest.webmanifest")) output = output.replace("</head>", PWA_HEAD + "</head>");
   if (!output.includes("rebourne-premium-theme.css")) output = output.replace("</head>", THEME_HEAD + "</head>");
   output = output
-    .replace(/<link rel="manifest" href="[^"]+">/g, '<link rel="manifest" href="/manifest.webmanifest?v=11">')
-    .replace(/<link rel="apple-touch-icon" href="[^"]+">/g, '<link rel="apple-touch-icon" href="/assets/icons/icon.svg?v=11">')
-    .replace(/<link rel="icon"[^>]+href="[^"]+">/g, '<link rel="icon" type="image/svg+xml" href="/assets/icons/icon.svg?v=11">')
-    .replace(/navigator\.serviceWorker\.register\(['"](?:\.\/)?sw\.js(?:\?v=\d+)?['"]\)/g, "navigator.serviceWorker.register('/sw.js?v=11')")
-    .replace(/navigator\.serviceWorker\.register\(['"]\/sw\.js(?:\?v=\d+)?['"]\)/g, "navigator.serviceWorker.register('/sw.js?v=11')")
-    .replace(/assets\/rebourne-logo-transparent\.png(?:\?v=\d+)?/g, 'assets/rebourne-logo-transparent.png?v=11')
-    .replace(/assets\/rebourne-logo\.png(?:\?v=\d+)?/g, 'assets/rebourne-logo.png?v=11');
+    .replace(/<link rel="manifest" href="[^"]+">/g, '<link rel="manifest" href="/manifest.webmanifest?v=12">')
+    .replace(/<link rel="apple-touch-icon" href="[^"]+">/g, '<link rel="apple-touch-icon" href="/assets/icons/icon.svg?v=12">')
+    .replace(/<link rel="icon"[^>]+href="[^"]+">/g, '<link rel="icon" type="image/svg+xml" href="/assets/icons/icon.svg?v=12">')
+    .replace(/navigator\.serviceWorker\.register\(['"](?:\.\/)?sw\.js(?:\?v=\d+)?['"]\)/g, "navigator.serviceWorker.register('/sw.js?v=12')")
+    .replace(/navigator\.serviceWorker\.register\(['"]\/sw\.js(?:\?v=\d+)?['"]\)/g, "navigator.serviceWorker.register('/sw.js?v=12')")
+    .replace(/assets\/rebourne-logo-transparent\.png(?:\?v=\d+)?/g, 'assets/rebourne-logo-transparent.png?v=12')
+    .replace(/assets\/rebourne-logo\.png(?:\?v=\d+)?/g, 'assets/rebourne-logo.png?v=12');
   if (!output.includes("serviceWorker.register")) output = output.replace("</body>", PWA_SCRIPT + "</body>");
   if (!output.includes("/assets/feature-upgrades.js")) output = output.replace("</body>", FEATURE_SCRIPT + "</body>");
   return output;
