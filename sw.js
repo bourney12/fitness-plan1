@@ -1,12 +1,12 @@
-const CACHE_NAME = "rebourne-shell-v9";
+const CACHE_NAME = "rebourne-shell-v11";
 const FEATURE_SCRIPT = '<script src="/assets/feature-upgrades.js?v=4"></script><script src="/assets/progress-analytics.js?v=1"></script><script src="/assets/readiness-habits.js?v=1"></script>';
 const THEME_HEAD = '<link rel="stylesheet" href="/assets/rebourne-premium-theme.css?v=3">';
 const PROGRESS_SCRIPT = '<script src="/assets/progress-analytics.js?v=1"></script>';
 const READINESS_SCRIPT = '<script src="/assets/readiness-habits.js?v=1"></script>';
 const STATIC_ASSETS = [
-  "/assets/rebourne-logo-transparent.png?v=10",
-  "/assets/icons/icon.svg?v=10",
-  "/manifest.webmanifest?v=10",
+  "/assets/rebourne-logo-transparent.png?v=11",
+  "/assets/icons/icon.svg?v=11",
+  "/manifest.webmanifest?v=11",
   "/assets/rebourne-premium-theme.css?v=3",
   "/assets/feature-upgrades.js?v=4",
   "/assets/progress-analytics.js?v=1",
