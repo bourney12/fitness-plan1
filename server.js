@@ -31,7 +31,7 @@ if('serviceWorker' in navigator && (location.protocol==='https:' || location.hos
 const FEATURE_SCRIPT = `
 <script src="/assets/feature-upgrades.js?v=4"></script>
 <script src="/assets/progress-analytics.js?v=1"></script>
-<script src="/assets/readiness-habits.js?v=2"></script>
+<script src="/assets/readiness-habits-v2.js?v=12"></script>
 `;
 
 const THEME_HEAD = `
@@ -220,7 +220,8 @@ function serveAsset(res, assetPath) {
       res.end("Asset not found");
       return;
     }
-    res.writeHead(200, { "Content-Type": types[ext] || "application/octet-stream", "X-Content-Type-Options": "nosniff" });
+    const cacheHeaders = ext === ".js" || ext === ".css" ? noStoreHeaders() : {};
+    res.writeHead(200, { "Content-Type": types[ext] || "application/octet-stream", "X-Content-Type-Options": "nosniff", ...cacheHeaders });
     res.end(content);
   });
 }

@@ -1,8 +1,8 @@
 const CACHE_NAME = "rebourne-shell-v12";
-const FEATURE_SCRIPT = '<script src="/assets/feature-upgrades.js?v=4"></script><script src="/assets/progress-analytics.js?v=1"></script><script src="/assets/readiness-habits.js?v=2"></script>';
+const FEATURE_SCRIPT = '<script src="/assets/feature-upgrades.js?v=4"></script><script src="/assets/progress-analytics.js?v=1"></script><script src="/assets/readiness-habits-v2.js?v=12"></script>';
 const THEME_HEAD = '<link rel="stylesheet" href="/assets/rebourne-premium-theme.css?v=3">';
 const PROGRESS_SCRIPT = '<script src="/assets/progress-analytics.js?v=1"></script>';
-const READINESS_SCRIPT = '<script src="/assets/readiness-habits.js?v=2"></script>';
+const READINESS_SCRIPT = '<script src="/assets/readiness-habits-v2.js?v=12"></script>';
 const STATIC_ASSETS = [
   "/assets/rebourne-logo-transparent.png?v=12",
   "/assets/icons/icon.svg?v=12",
@@ -10,12 +10,12 @@ const STATIC_ASSETS = [
   "/assets/rebourne-premium-theme.css?v=3",
   "/assets/feature-upgrades.js?v=4",
   "/assets/progress-analytics.js?v=1",
-  "/assets/readiness-habits.js?v=2"
+  "/assets/readiness-habits-v2.js?v=12"
 ];
 
 function withFeatureUpgrades(html) {
   if (!html.includes("rebourne-premium-theme.css")) html = html.replace("</head>", THEME_HEAD + "</head>");
-  if (html.includes("/assets/readiness-habits.js")) return html;
+  if (html.includes("/assets/readiness-habits-v2.js")) return html;
   if (html.includes("/assets/progress-analytics.js")) return html.replace("</body>", READINESS_SCRIPT + "</body>");
   if (html.includes("/assets/feature-upgrades.js")) return html.replace("</body>", PROGRESS_SCRIPT + READINESS_SCRIPT + "</body>");
   return html.replace("</body>", FEATURE_SCRIPT + "</body>");
